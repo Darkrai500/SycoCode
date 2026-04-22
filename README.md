@@ -1,4 +1,4 @@
-# SycoCode
+f# SycoCode
 
 > A bilingual benchmark for measuring sycophancy in LLMs on code generation and code review tasks.
 
@@ -70,7 +70,7 @@ A target of **eleven models** spanning three categories, accessed uniformly thro
 | Category | Models |
 |---|---|
 | Frontier proprietary | Claude Opus 4.7, Claude Sonnet 4.6, GPT-5.4, Gemini 3.1 Pro |
-| Economical variants | Claude Haiku 4.5, Gemini 3.1 Flash Lite |
+| Economical variants | Claude Haiku 4.5, Gemini 3.1 Flash Lite , GPT-5.4 mini|
 | Open source | DeepSeek-V3.2, Qwen3 Coder, GLM-4.7, Kimi K2.5, Devstral |
 
 The inclusion of economical variants enables an intra-family comparison: do smaller models within the same provider exhibit higher sycophancy? The open-source set adds geographic and architectural diversity, including code-specialized models.
