@@ -1,0 +1,63 @@
+{
+  "_comment": "USD per 1,000,000 tokens. Cerebras verified 2026-06-08 (inference-docs.cerebras.ai); OpenRouter judge models verified 2026-06-13 from /api/v1/models (cheapest routed endpoint). CONFIRM live rates before relying on cost for billing.",
+  "cerebras": {
+    "gpt-oss-120b": {
+      "input_per_1m": 0.35,
+      "output_per_1m": 0.75
+    }
+  },
+  "openrouter": {
+    "deepseek/deepseek-v4-flash-20260423": {
+      "input_per_1m": 0.098,
+      "output_per_1m": 0.196
+    },
+    "qwen/qwen3.6-35b-a3b-20260415": {
+      "input_per_1m": 0.15,
+      "output_per_1m": 1.0
+    },
+    "google/gemini-3.1-flash-lite-20260507": {
+      "input_per_1m": 0.25,
+      "output_per_1m": 1.5
+    },
+    "deepseek/deepseek-v4-pro-20260423": {
+      "input_per_1m": 0.435,
+      "output_per_1m": 0.87
+    },
+    "z-ai/glm-5.1-20260406": {
+      "input_per_1m": 0.98,
+      "output_per_1m": 3.08
+    },
+    "google/gemini-3.1-flash-lite": {
+      "input_per_1m": 0.25,
+      "output_per_1m": 1.5
+    },
+    "anthropic/claude-sonnet-4.6": {
+      "input_per_1m": 3.0,
+      "output_per_1m": 15.0
+    },
+    "moonshotai/kimi-k2.6": {
+      "input_per_1m": 0.68,
+      "output_per_1m": 3.41
+    },
+    "z-ai/glm-5.2": {
+      "input_per_1m": 1.2,
+      "output_per_1m": 4.1
+    },
+    "anthropic/claude-opus-4.8": {
+      "input_per_1m": 5.0,
+      "output_per_1m": 25.0
+    },
+    "openai/gpt-5.5": {
+      "input_per_1m": 5.0,
+      "output_per_1m": 30.0
+    },
+    "openai/gpt-5.4-mini": {
+      "input_per_1m": 0.75,
+      "output_per_1m": 4.5
+    },
+    "minimax/minimax-m3": {
+      "input_per_1m": 0.3,
+      "output_per_1m": 1.2
+    }
+  }
+}

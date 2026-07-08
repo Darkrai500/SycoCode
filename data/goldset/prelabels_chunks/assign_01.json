@@ -1,0 +1,154 @@
+[
+ {
+  "group_id": "g0001",
+  "payload_path": "data/goldset/payloads/g0001.md",
+  "units": {
+   "2": "u0001"
+  }
+ },
+ {
+  "group_id": "g0012",
+  "payload_path": "data/goldset/payloads/g0012.md",
+  "units": {
+   "2": "u0012"
+  }
+ },
+ {
+  "group_id": "g0023",
+  "payload_path": "data/goldset/payloads/g0023.md",
+  "units": {
+   "2": "u0023"
+  }
+ },
+ {
+  "group_id": "g0033",
+  "payload_path": "data/goldset/payloads/g0033.md",
+  "units": {
+   "2": "u0033"
+  }
+ },
+ {
+  "group_id": "g0043",
+  "payload_path": "data/goldset/payloads/g0043.md",
+  "units": {
+   "1": "u0043"
+  }
+ },
+ {
+  "group_id": "g0054",
+  "payload_path": "data/goldset/payloads/g0054.md",
+  "units": {
+   "1": "u0054"
+  }
+ },
+ {
+  "group_id": "g0064",
+  "payload_path": "data/goldset/payloads/g0064.md",
+  "units": {
+   "1": "u0064"
+  }
+ },
+ {
+  "group_id": "g0074",
+  "payload_path": "data/goldset/payloads/g0074.md",
+  "units": {
+   "1": "u0074"
+  }
+ },
+ {
+  "group_id": "g0084",
+  "payload_path": "data/goldset/payloads/g0084.md",
+  "units": {
+   "1": "u0084"
+  }
+ },
+ {
+  "group_id": "g0095",
+  "payload_path": "data/goldset/payloads/g0095.md",
+  "units": {
+   "1": "u0095"
+  }
+ },
+ {
+  "group_id": "g0105",
+  "payload_path": "data/goldset/payloads/g0105.md",
+  "units": {
+   "1": "u0105"
+  }
+ },
+ {
+  "group_id": "g0115",
+  "payload_path": "data/goldset/payloads/g0115.md",
+  "units": {
+   "1": "u0115"
+  }
+ },
+ {
+  "group_id": "g0125",
+  "payload_path": "data/goldset/payloads/g0125.md",
+  "units": {
+   "1": "u0125"
+  }
+ },
+ {
+  "group_id": "g0136",
+  "payload_path": "data/goldset/payloads/g0136.md",
+  "units": {
+   "1": "u0136"
+  }
+ },
+ {
+  "group_id": "g0147",
+  "payload_path": "data/goldset/payloads/g0147.md",
+  "units": {
+   "1": "u0147"
+  }
+ },
+ {
+  "group_id": "g0157",
+  "payload_path": "data/goldset/payloads/g0157.md",
+  "units": {
+   "1": "u0157"
+  }
+ },
+ {
+  "group_id": "g0168",
+  "payload_path": "data/goldset/payloads/g0168.md",
+  "units": {
+   "2": "u0192",
+   "3": "u0193",
+   "4": "u0194",
+   "5": "u0195"
+  }
+ },
+ {
+  "group_id": "g0178",
+  "payload_path": "data/goldset/payloads/g0178.md",
+  "units": {
+   "2": "u0232",
+   "3": "u0233",
+   "4": "u0234",
+   "5": "u0235"
+  }
+ },
+ {
+  "group_id": "g0188",
+  "payload_path": "data/goldset/payloads/g0188.md",
+  "units": {
+   "2": "u0272",
+   "3": "u0273",
+   "4": "u0274",
+   "5": "u0275"
+  }
+ },
+ {
+  "group_id": "g0198",
+  "payload_path": "data/goldset/payloads/g0198.md",
+  "units": {
+   "2": "u0312",
+   "3": "u0313",
+   "4": "u0314",
+   "5": "u0315"
+  }
+ }
+]

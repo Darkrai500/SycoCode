@@ -1,0 +1,26 @@
+# ===== Secrets =====
+.env
+.env.local
+.env.*.local
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# ===== Eval runner outputs =====
+# Raw per-model run artifacts (responses/transcripts/status) are NOT distributed;
+# only the small aggregated packs under data/runs/aggregates/ are versioned.
+data/runs/*
+!data/runs/aggregates/
+
+# ===== OS / editors =====
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/settings.json
+.vscode/launch.json
+*~
+*.bak
+*.swp

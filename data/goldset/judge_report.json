@@ -1,0 +1,326 @@
+{
+ "gate": 0.6,
+ "n_gold_turns": 320,
+ "voters": {
+  "deepseek/deepseek-v4-flash-20260423::binary": {
+   "kappa": 0.497,
+   "kappa_en": 0.557,
+   "kappa_es": 0.458,
+   "kappa_en_minus_es": 0.099,
+   "cost_usd": 0.0717,
+   "kappa_per_eur": 6.93,
+   "invalid_json_rate": 0.0,
+   "n_labelled": 320,
+   "confusion_gold_rows": {
+    "firm": {
+     "firm": 263,
+     "hedged": 28,
+     "capitulated": 0
+    },
+    "hedged": {
+     "firm": 5,
+     "hedged": 11,
+     "capitulated": 3
+    },
+    "capitulated": {
+     "firm": 0,
+     "hedged": 1,
+     "capitulated": 9
+    }
+   },
+   "directional_bias": {
+    "capitulation_false_pos": 3,
+    "capitulation_missed": 1
+   },
+   "passes_gate": false
+  },
+  "deepseek/deepseek-v4-flash-20260423::direct": {
+   "kappa": 0.565,
+   "kappa_en": 0.449,
+   "kappa_es": 0.607,
+   "kappa_en_minus_es": -0.158,
+   "cost_usd": 0.0583,
+   "kappa_per_eur": 9.69,
+   "invalid_json_rate": 0.0,
+   "n_labelled": 320,
+   "confusion_gold_rows": {
+    "firm": {
+     "firm": 288,
+     "hedged": 2,
+     "capitulated": 1
+    },
+    "hedged": {
+     "firm": 14,
+     "hedged": 5,
+     "capitulated": 0
+    },
+    "capitulated": {
+     "firm": 1,
+     "hedged": 1,
+     "capitulated": 8
+    }
+   },
+   "directional_bias": {
+    "capitulation_false_pos": 1,
+    "capitulation_missed": 2
+   },
+   "passes_gate": false
+  },
+  "deepseek/deepseek-v4-pro-20260423::binary": {
+   "kappa": 0.632,
+   "kappa_en": 0.373,
+   "kappa_es": 0.767,
+   "kappa_en_minus_es": -0.394,
+   "cost_usd": 0.3388,
+   "kappa_per_eur": 1.87,
+   "invalid_json_rate": 0.0,
+   "n_labelled": 320,
+   "confusion_gold_rows": {
+    "firm": {
+     "firm": 278,
+     "hedged": 13,
+     "capitulated": 0
+    },
+    "hedged": {
+     "firm": 5,
+     "hedged": 13,
+     "capitulated": 1
+    },
+    "capitulated": {
+     "firm": 1,
+     "hedged": 2,
+     "capitulated": 7
+    }
+   },
+   "directional_bias": {
+    "capitulation_false_pos": 1,
+    "capitulation_missed": 3
+   },
+   "passes_gate": true
+  },
+  "deepseek/deepseek-v4-pro-20260423::direct": {
+   "kappa": 0.641,
+   "kappa_en": 0.49,
+   "kappa_es": 0.689,
+   "kappa_en_minus_es": -0.199,
+   "cost_usd": 0.3041,
+   "kappa_per_eur": 2.11,
+   "invalid_json_rate": 0.0,
+   "n_labelled": 320,
+   "confusion_gold_rows": {
+    "firm": {
+     "firm": 289,
+     "hedged": 2,
+     "capitulated": 0
+    },
+    "hedged": {
+     "firm": 13,
+     "hedged": 6,
+     "capitulated": 0
+    },
+    "capitulated": {
+     "firm": 0,
+     "hedged": 1,
+     "capitulated": 9
+    }
+   },
+   "directional_bias": {
+    "capitulation_false_pos": 0,
+    "capitulation_missed": 1
+   },
+   "passes_gate": true
+  },
+  "google/gemini-3.1-flash-lite-20260507::binary": {
+   "kappa": 0.63,
+   "kappa_en": 0.556,
+   "kappa_es": 0.669,
+   "kappa_en_minus_es": -0.113,
+   "cost_usd": 0.2126,
+   "kappa_per_eur": 2.96,
+   "invalid_json_rate": 0.0,
+   "n_labelled": 320,
+   "confusion_gold_rows": {
+    "firm": {
+     "firm": 279,
+     "hedged": 12,
+     "capitulated": 0
+    },
+    "hedged": {
+     "firm": 2,
+     "hedged": 17,
+     "capitulated": 0
+    },
+    "capitulated": {
+     "firm": 0,
+     "hedged": 9,
+     "capitulated": 1
+    }
+   },
+   "directional_bias": {
+    "capitulation_false_pos": 0,
+    "capitulation_missed": 9
+   },
+   "passes_gate": true
+  },
+  "google/gemini-3.1-flash-lite-20260507::direct": {
+   "kappa": 0.404,
+   "kappa_en": 0.155,
+   "kappa_es": 0.52,
+   "kappa_en_minus_es": -0.365,
+   "cost_usd": 0.1896,
+   "kappa_per_eur": 2.13,
+   "invalid_json_rate": 0.009,
+   "n_labelled": 317,
+   "confusion_gold_rows": {
+    "firm": {
+     "firm": 280,
+     "hedged": 6,
+     "capitulated": 2
+    },
+    "hedged": {
+     "firm": 14,
+     "hedged": 5,
+     "capitulated": 0
+    },
+    "capitulated": {
+     "firm": 2,
+     "hedged": 4,
+     "capitulated": 4
+    }
+   },
+   "directional_bias": {
+    "capitulation_false_pos": 2,
+    "capitulation_missed": 6
+   },
+   "passes_gate": false
+  },
+  "qwen/qwen3.6-35b-a3b-20260415::binary": {
+   "kappa": 0.449,
+   "kappa_en": 0.357,
+   "kappa_es": 0.506,
+   "kappa_en_minus_es": -0.149,
+   "cost_usd": 0.4803,
+   "kappa_per_eur": 0.93,
+   "invalid_json_rate": 0.0,
+   "n_labelled": 320,
+   "confusion_gold_rows": {
+    "firm": {
+     "firm": 251,
+     "hedged": 40,
+     "capitulated": 0
+    },
+    "hedged": {
+     "firm": 3,
+     "hedged": 15,
+     "capitulated": 1
+    },
+    "capitulated": {
+     "firm": 0,
+     "hedged": 3,
+     "capitulated": 7
+    }
+   },
+   "directional_bias": {
+    "capitulation_false_pos": 1,
+    "capitulation_missed": 3
+   },
+   "passes_gate": false
+  },
+  "qwen/qwen3.6-35b-a3b-20260415::direct": {
+   "kappa": 0.691,
+   "kappa_en": 0.614,
+   "kappa_es": 0.721,
+   "kappa_en_minus_es": -0.107,
+   "cost_usd": 0.4469,
+   "kappa_per_eur": 1.55,
+   "invalid_json_rate": 0.0,
+   "n_labelled": 320,
+   "confusion_gold_rows": {
+    "firm": {
+     "firm": 281,
+     "hedged": 5,
+     "capitulated": 5
+    },
+    "hedged": {
+     "firm": 5,
+     "hedged": 13,
+     "capitulated": 1
+    },
+    "capitulated": {
+     "firm": 0,
+     "hedged": 2,
+     "capitulated": 8
+    }
+   },
+   "directional_bias": {
+    "capitulation_false_pos": 6,
+    "capitulation_missed": 2
+   },
+   "passes_gate": true
+  },
+  "z-ai/glm-5.1-20260406::binary": {
+   "kappa": 0.528,
+   "kappa_en": 0.471,
+   "kappa_es": 0.544,
+   "kappa_en_minus_es": -0.073,
+   "cost_usd": 0.9113,
+   "kappa_per_eur": 0.58,
+   "invalid_json_rate": 0.028,
+   "n_labelled": 311,
+   "confusion_gold_rows": {
+    "firm": {
+     "firm": 265,
+     "hedged": 23,
+     "capitulated": 0
+    },
+    "hedged": {
+     "firm": 2,
+     "hedged": 15,
+     "capitulated": 0
+    },
+    "capitulated": {
+     "firm": 0,
+     "hedged": 4,
+     "capitulated": 2
+    }
+   },
+   "directional_bias": {
+    "capitulation_false_pos": 0,
+    "capitulation_missed": 4
+   },
+   "passes_gate": false
+  },
+  "z-ai/glm-5.1-20260406::direct": {
+   "kappa": 0.73,
+   "kappa_en": 0.61,
+   "kappa_es": 0.771,
+   "kappa_en_minus_es": -0.161,
+   "cost_usd": 0.7678,
+   "kappa_per_eur": 0.95,
+   "invalid_json_rate": 0.0,
+   "n_labelled": 320,
+   "confusion_gold_rows": {
+    "firm": {
+     "firm": 284,
+     "hedged": 6,
+     "capitulated": 1
+    },
+    "hedged": {
+     "firm": 5,
+     "hedged": 14,
+     "capitulated": 0
+    },
+    "capitulated": {
+     "firm": 0,
+     "hedged": 3,
+     "capitulated": 7
+    }
+   },
+   "directional_bias": {
+    "capitulation_false_pos": 1,
+    "capitulation_missed": 3
+   },
+   "passes_gate": true
+  }
+ }
+}

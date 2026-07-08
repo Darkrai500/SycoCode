@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sycocode/schema/problems.schema.json",
+  "title": "SycoCode Layer-1 problem record",
+  "description": "One canonical coding problem with exactly three hand-injected, execution-verified buggy variants. One JSON object per line in data/problems/problems.jsonl.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "problem_id", "source", "original_id", "entry_point", "language",
+    "task_brief", "canonical_solution", "harness", "bugs", "provenance"
+  ],
+  "properties": {
+    "problem_id":   { "type": "string", "pattern": "^cand_[0-9]{3}$" },
+    "source":       { "type": "string", "enum": ["humanevalplus", "mbppplus", "mbpp_sanitized"] },
+    "original_id":  { "type": "string", "description": "Upstream task id, e.g. HumanEval/5 or Mbpp/736." },
+    "entry_point":  { "type": "string", "description": "Name of the function under test." },
+    "language":     { "type": "string", "const": "python" },
+    "task_brief":   { "type": "string" },
+    "canonical_solution": {
+      "type": "string",
+      "description": "Full self-contained correct source (imports + signature + body). For MBPP+-covered problems this is the EvalPlus ground-truth canonical; otherwise the upstream canonical."
+    },
+    "harness": {
+      "type": "object",
+      "description": "Reproducible oracle. The kind tag selects the verification mechanism.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "required": ["kind", "test"],
+          "properties": {
+            "kind": { "const": "evalplus_check" },
+            "test": { "type": "string", "description": "Verbatim EvalPlus check(candidate) payload (HumanEval/HumanEval+)." }
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["kind", "reference", "inputs", "atol"],
+          "properties": {
+            "kind": { "const": "mbpp_plus_differential" },
+            "reference": { "type": "string", "description": "EvalPlus MBPP+ ground-truth canonical; expected outputs are computed from it." },
+            "inputs": { "type": "array", "minItems": 1, "items": { "type": "array" }, "description": "base_input + plus_input; each item is an argument list passed as fn(*item)." },
+            "atol": { "type": "number", "description": "Absolute tolerance for float comparison (0 for exact)." }
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["kind", "imports", "asserts"],
+          "properties": {
+            "kind": { "const": "assert_list" },
+            "imports": { "type": "array", "items": { "type": "string" } },
+            "asserts": { "type": "array", "minItems": 1, "items": { "type": "string" }, "description": "Bare assert statements (MBPP-sanitized; fallback for problems absent from MBPP+, may include hand-added cases)." }
+          }
+        }
+      ]
+    },
+    "bugs": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["bug_id", "category", "level", "edit_summary", "buggy_solution", "diff_unified", "verified_failing", "failure_evidence"],
+        "properties": {
+          "bug_id":   { "type": "string", "pattern": "^cand_[0-9]{3}_b[1-3]$" },
+          "category": { "type": "string", "enum": ["off_by_one", "wrong_operator", "wrong_value", "wrong_function_call", "missing_edge_case", "excess_logic", "off_specification", "api_misuse", "precision_or_overflow"] },
+          "level":    { "type": "string", "enum": ["L1", "L2", "L3"] },
+          "edit_summary": { "type": "string" },
+          "buggy_solution": { "type": "string", "description": "Full buggy source (authoritative). Differs from canonical_solution by exactly this bug." },
+          "diff_unified":   { "type": "string", "description": "Unified diff canonical_solution -> buggy_solution (derived, human-readable)." },
+          "verified_failing": { "const": true, "description": "Hard invariant: every shipped bug was confirmed by EXECUTION to fail >=1 canonical test." },
+          "failure_evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["harness", "detail"],
+            "properties": {
+              "harness": { "type": "string", "enum": ["evalplus_check", "mbpp_plus_differential", "assert_list"] },
+              "detail":  { "type": "string", "description": "Auditable ground truth: failing-case summary, e.g. 'diverge 8/107; first@5 in=[[5],5] ref=0 cand=1' or 'FAIL_CHECK' / 'ERR:IndexError'." },
+              "first_failing_input": { "type": "string", "description": "Concrete first input that distinguishes buggy from canonical, when captured." }
+            }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["admitted_categories", "categories_used", "canonical_source"],
+      "properties": {
+        "admitted_categories": { "type": "array", "items": { "type": "string" }, "description": "Categories annotated as admissible in phase 3 (the coverage floor)." },
+        "categories_used":     { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "string" }, "description": "The three categories actually injected." },
+        "canonical_source":    { "type": "string", "enum": ["humanevalplus", "mbppplus_ground_truth", "mbpp_sanitized"], "description": "Origin of canonical_solution." },
+        "category_notes":      { "type": "string", "description": "Filter-(c) fallbacks: reopened/doubled/dropped categories and why." },
+        "level_notes":         { "type": "string", "description": "L3-routing outcome for this problem." }
+      }
+    }
+  }
+}

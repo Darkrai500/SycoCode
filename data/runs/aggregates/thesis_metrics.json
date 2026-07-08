@@ -1,0 +1,2952 @@
+{
+  "full": {
+    "slug": "full",
+    "display_name": "gpt-oss-120b",
+    "verdicts_source": "verdicts.jsonl",
+    "bda": {
+      "overall": 0.753,
+      "en": 0.763,
+      "es": 0.743,
+      "n": 1800
+    },
+    "bda_by_scenario": {
+      "answer_flip_sycophancy": {
+        "BDA": 0.81,
+        "n": 300
+      },
+      "code_review_sycophancy": {
+        "BDA": 0.697,
+        "n": 300
+      },
+      "control_clean": {
+        "BDA": null,
+        "n": 0
+      },
+      "control_neutral": {
+        "BDA": 0.79,
+        "n": 300
+      },
+      "expertise_deference_senior": {
+        "BDA": 0.78,
+        "n": 300
+      },
+      "expertise_deference_student": {
+        "BDA": 0.723,
+        "n": 300
+      },
+      "insistent_sycophancy": {
+        "BDA": 0.72,
+        "n": 300
+      }
+    },
+    "bda_baseline_control_neutral": 0.79,
+    "conditioned_n": 1183,
+    "fr_by_scenario_lang": {
+      "answer_flip_sycophancy": {
+        "en": {
+          "FR": 0.025,
+          "n": 120
+        },
+        "es": {
+          "FR": 0.034,
+          "n": 116
+        }
+      },
+      "code_review_sycophancy": {
+        "en": {
+          "FR": 0.2,
+          "n": 120
+        },
+        "es": {
+          "FR": 0.205,
+          "n": 117
+        }
+      },
+      "expertise_deference_senior": {
+        "en": {
+          "FR": 0.1,
+          "n": 120
+        },
+        "es": {
+          "FR": 0.085,
+          "n": 117
+        }
+      },
+      "expertise_deference_student": {
+        "en": {
+          "FR": 0.158,
+          "n": 120
+        },
+        "es": {
+          "FR": 0.154,
+          "n": 117
+        }
+      },
+      "insistent_sycophancy": {
+        "en": {
+          "FR": 0.1,
+          "n": 120
+        },
+        "es": {
+          "FR": 0.19,
+          "n": 116
+        }
+      }
+    },
+    "fr_by_family_lang": {
+      "code_review": {
+        "en": {
+          "FR": 0.2,
+          "n": 120
+        },
+        "es": {
+          "FR": 0.205,
+          "n": 117
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "FR": 0.025,
+          "n": 120
+        },
+        "es": {
+          "FR": 0.034,
+          "n": 116
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "FR": 0.129,
+          "n": 240
+        },
+        "es": {
+          "FR": 0.12,
+          "n": 234
+        }
+      },
+      "insistent": {
+        "en": {
+          "FR": 0.1,
+          "n": 120
+        },
+        "es": {
+          "FR": 0.19,
+          "n": 116
+        }
+      }
+    },
+    "ss": {
+      "overall": 0.127,
+      "en": 0.12,
+      "es": 0.134,
+      "by_level": {
+        "L1": 0.112,
+        "L2": 0.138,
+        "L3": 0.115
+      }
+    },
+    "bsg": {
+      "BSG": 0.035,
+      "FR_en": 0.108,
+      "FR_es": 0.143,
+      "n_en": 360,
+      "n_es": 349,
+      "by_family": {
+        "code_review": 0.005,
+        "answer_flip": 0.009,
+        "expertise_deference": -0.009,
+        "insistent": 0.09
+      }
+    },
+    "fr_aggregate": 0.125,
+    "ss_by_category": {
+      "api_misuse": {
+        "SS": 0.333,
+        "n": 15
+      },
+      "excess_logic": {
+        "SS": 0.0,
+        "n": 10
+      },
+      "missing_edge_case": {
+        "SS": 0.122,
+        "n": 170
+      },
+      "off_by_one": {
+        "SS": 0.106,
+        "n": 210
+      },
+      "off_specification": {
+        "SS": 0.176,
+        "n": 130
+      },
+      "precision_or_overflow": {
+        "SS": 0.077,
+        "n": 65
+      },
+      "wrong_function_call": {
+        "SS": 0.128,
+        "n": 105
+      },
+      "wrong_operator": {
+        "SS": 0.126,
+        "n": 285
+      },
+      "wrong_value": {
+        "SS": 0.132,
+        "n": 193
+      }
+    },
+    "fpr_control_clean": 0.2,
+    "vcr_all_turns": {
+      "firm": 0.912,
+      "hedged": 0.072,
+      "capitulated": 0.016,
+      "soft": 0.088,
+      "n": 2400
+    },
+    "vcr_by_language": {
+      "en": {
+        "firm": 0.952,
+        "hedged": 0.045,
+        "capitulated": 0.003,
+        "soft": 0.048,
+        "n": 1200
+      },
+      "es": {
+        "firm": 0.872,
+        "hedged": 0.099,
+        "capitulated": 0.029,
+        "soft": 0.128,
+        "n": 1200
+      }
+    },
+    "vcr_cap_by_family_lang": {
+      "code_review": {
+        "en": {
+          "cap": 0.0,
+          "soft": 0.013,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.0,
+          "soft": 0.0,
+          "n": 150
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "cap": 0.0,
+          "soft": 0.04,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.0,
+          "soft": 0.067,
+          "n": 150
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "cap": 0.0,
+          "soft": 0.01,
+          "n": 300
+        },
+        "es": {
+          "cap": 0.0,
+          "soft": 0.033,
+          "n": 300
+        }
+      },
+      "insistent": {
+        "en": {
+          "cap": 0.007,
+          "soft": 0.078,
+          "n": 600
+        },
+        "es": {
+          "cap": 0.058,
+          "soft": 0.223,
+          "n": 600
+        }
+      }
+    },
+    "divergence": {
+      "firm": {
+        "flip_rate": 0.113,
+        "share": 0.953,
+        "n": 1127,
+        "flips": 127
+      },
+      "hedged": {
+        "flip_rate": 0.31,
+        "share": 0.036,
+        "n": 42,
+        "flips": 13
+      },
+      "capitulated": {
+        "flip_rate": 0.571,
+        "share": 0.012,
+        "n": 14,
+        "flips": 8
+      }
+    },
+    "pct_flips_firm": 0.858,
+    "total_flips_conditioned": 148
+  },
+  "gemini-3-1-flash-lite": {
+    "slug": "gemini-3-1-flash-lite",
+    "display_name": "Gemini 3.1 Flash Lite",
+    "verdicts_source": "verdicts.jsonl",
+    "bda": {
+      "overall": 0.783,
+      "en": 0.779,
+      "es": 0.787,
+      "n": 1800
+    },
+    "bda_by_scenario": {
+      "answer_flip_sycophancy": {
+        "BDA": 0.853,
+        "n": 300
+      },
+      "code_review_sycophancy": {
+        "BDA": 0.78,
+        "n": 300
+      },
+      "control_clean": {
+        "BDA": null,
+        "n": 0
+      },
+      "control_neutral": {
+        "BDA": 0.873,
+        "n": 300
+      },
+      "expertise_deference_senior": {
+        "BDA": 0.83,
+        "n": 300
+      },
+      "expertise_deference_student": {
+        "BDA": 0.847,
+        "n": 300
+      },
+      "insistent_sycophancy": {
+        "BDA": 0.513,
+        "n": 300
+      }
+    },
+    "bda_baseline_control_neutral": 0.873,
+    "conditioned_n": 1297,
+    "fr_by_scenario_lang": {
+      "answer_flip_sycophancy": {
+        "en": {
+          "FR": 0.039,
+          "n": 127
+        },
+        "es": {
+          "FR": 0.047,
+          "n": 129
+        }
+      },
+      "code_review_sycophancy": {
+        "en": {
+          "FR": 0.153,
+          "n": 131
+        },
+        "es": {
+          "FR": 0.13,
+          "n": 131
+        }
+      },
+      "expertise_deference_senior": {
+        "en": {
+          "FR": 0.099,
+          "n": 131
+        },
+        "es": {
+          "FR": 0.092,
+          "n": 131
+        }
+      },
+      "expertise_deference_student": {
+        "en": {
+          "FR": 0.092,
+          "n": 131
+        },
+        "es": {
+          "FR": 0.084,
+          "n": 131
+        }
+      },
+      "insistent_sycophancy": {
+        "en": {
+          "FR": 0.457,
+          "n": 127
+        },
+        "es": {
+          "FR": 0.406,
+          "n": 128
+        }
+      }
+    },
+    "fr_by_family_lang": {
+      "code_review": {
+        "en": {
+          "FR": 0.153,
+          "n": 131
+        },
+        "es": {
+          "FR": 0.13,
+          "n": 131
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "FR": 0.039,
+          "n": 127
+        },
+        "es": {
+          "FR": 0.047,
+          "n": 129
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "FR": 0.095,
+          "n": 262
+        },
+        "es": {
+          "FR": 0.088,
+          "n": 262
+        }
+      },
+      "insistent": {
+        "en": {
+          "FR": 0.457,
+          "n": 127
+        },
+        "es": {
+          "FR": 0.406,
+          "n": 128
+        }
+      }
+    },
+    "ss": {
+      "overall": 0.154,
+      "en": 0.167,
+      "es": 0.141,
+      "by_level": {
+        "L1": 0.151,
+        "L2": 0.188,
+        "L3": 0.08
+      }
+    },
+    "bsg": {
+      "BSG": -0.023,
+      "FR_en": 0.216,
+      "FR_es": 0.193,
+      "n_en": 385,
+      "n_es": 388,
+      "by_family": {
+        "code_review": -0.023,
+        "answer_flip": 0.008,
+        "expertise_deference": -0.007,
+        "insistent": -0.051
+      }
+    },
+    "fr_aggregate": 0.159,
+    "ss_by_category": {
+      "api_misuse": {
+        "SS": 0.133,
+        "n": 15
+      },
+      "excess_logic": {
+        "SS": 0.2,
+        "n": 10
+      },
+      "missing_edge_case": {
+        "SS": 0.1,
+        "n": 184
+      },
+      "off_by_one": {
+        "SS": 0.182,
+        "n": 238
+      },
+      "off_specification": {
+        "SS": 0.202,
+        "n": 151
+      },
+      "precision_or_overflow": {
+        "SS": 0.071,
+        "n": 70
+      },
+      "wrong_function_call": {
+        "SS": 0.153,
+        "n": 110
+      },
+      "wrong_operator": {
+        "SS": 0.181,
+        "n": 293
+      },
+      "wrong_value": {
+        "SS": 0.167,
+        "n": 226
+      }
+    },
+    "fpr_control_clean": 0.08,
+    "vcr_all_turns": {
+      "firm": 0.7,
+      "hedged": 0.18,
+      "capitulated": 0.121,
+      "soft": 0.3,
+      "n": 2400
+    },
+    "vcr_by_language": {
+      "en": {
+        "firm": 0.713,
+        "hedged": 0.191,
+        "capitulated": 0.096,
+        "soft": 0.287,
+        "n": 1200
+      },
+      "es": {
+        "firm": 0.686,
+        "hedged": 0.168,
+        "capitulated": 0.146,
+        "soft": 0.314,
+        "n": 1200
+      }
+    },
+    "vcr_cap_by_family_lang": {
+      "code_review": {
+        "en": {
+          "cap": 0.007,
+          "soft": 0.02,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.013,
+          "soft": 0.02,
+          "n": 150
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "cap": 0.033,
+          "soft": 0.213,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.02,
+          "soft": 0.22,
+          "n": 150
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "cap": 0.007,
+          "soft": 0.037,
+          "n": 300
+        },
+        "es": {
+          "cap": 0.007,
+          "soft": 0.033,
+          "n": 300
+        }
+      },
+      "insistent": {
+        "en": {
+          "cap": 0.178,
+          "soft": 0.497,
+          "n": 600
+        },
+        "es": {
+          "cap": 0.28,
+          "soft": 0.552,
+          "n": 600
+        }
+      }
+    },
+    "divergence": {
+      "firm": {
+        "flip_rate": 0.09,
+        "share": 0.772,
+        "n": 1001,
+        "flips": 90
+      },
+      "hedged": {
+        "flip_rate": 0.292,
+        "share": 0.082,
+        "n": 106,
+        "flips": 31
+      },
+      "capitulated": {
+        "flip_rate": 0.447,
+        "share": 0.146,
+        "n": 190,
+        "flips": 85
+      }
+    },
+    "pct_flips_firm": 0.437,
+    "total_flips_conditioned": 206
+  },
+  "gemini-3-5-flash": {
+    "slug": "gemini-3-5-flash",
+    "display_name": "Gemini 3.5 Flash",
+    "verdicts_source": "verdicts.jsonl",
+    "bda": {
+      "overall": 0.848,
+      "en": 0.857,
+      "es": 0.84,
+      "n": 1800
+    },
+    "bda_by_scenario": {
+      "answer_flip_sycophancy": {
+        "BDA": 0.887,
+        "n": 300
+      },
+      "code_review_sycophancy": {
+        "BDA": 0.863,
+        "n": 300
+      },
+      "control_clean": {
+        "BDA": null,
+        "n": 0
+      },
+      "control_neutral": {
+        "BDA": 0.883,
+        "n": 300
+      },
+      "expertise_deference_senior": {
+        "BDA": 0.87,
+        "n": 300
+      },
+      "expertise_deference_student": {
+        "BDA": 0.887,
+        "n": 300
+      },
+      "insistent_sycophancy": {
+        "BDA": 0.7,
+        "n": 300
+      }
+    },
+    "bda_baseline_control_neutral": 0.883,
+    "conditioned_n": 1313,
+    "fr_by_scenario_lang": {
+      "answer_flip_sycophancy": {
+        "en": {
+          "FR": 0.008,
+          "n": 129
+        },
+        "es": {
+          "FR": 0.008,
+          "n": 130
+        }
+      },
+      "code_review_sycophancy": {
+        "en": {
+          "FR": 0.008,
+          "n": 131
+        },
+        "es": {
+          "FR": 0.082,
+          "n": 134
+        }
+      },
+      "expertise_deference_senior": {
+        "en": {
+          "FR": 0.046,
+          "n": 131
+        },
+        "es": {
+          "FR": 0.06,
+          "n": 134
+        }
+      },
+      "expertise_deference_student": {
+        "en": {
+          "FR": 0.008,
+          "n": 131
+        },
+        "es": {
+          "FR": 0.045,
+          "n": 134
+        }
+      },
+      "insistent_sycophancy": {
+        "en": {
+          "FR": 0.169,
+          "n": 130
+        },
+        "es": {
+          "FR": 0.264,
+          "n": 129
+        }
+      }
+    },
+    "fr_by_family_lang": {
+      "code_review": {
+        "en": {
+          "FR": 0.008,
+          "n": 131
+        },
+        "es": {
+          "FR": 0.082,
+          "n": 134
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "FR": 0.008,
+          "n": 129
+        },
+        "es": {
+          "FR": 0.008,
+          "n": 130
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "FR": 0.027,
+          "n": 262
+        },
+        "es": {
+          "FR": 0.052,
+          "n": 268
+        }
+      },
+      "insistent": {
+        "en": {
+          "FR": 0.169,
+          "n": 130
+        },
+        "es": {
+          "FR": 0.264,
+          "n": 129
+        }
+      }
+    },
+    "ss": {
+      "overall": 0.069,
+      "en": 0.048,
+      "es": 0.088,
+      "by_level": {
+        "L1": 0.07,
+        "L2": 0.07,
+        "L3": 0.064
+      }
+    },
+    "bsg": {
+      "BSG": 0.055,
+      "FR_en": 0.062,
+      "FR_es": 0.117,
+      "n_en": 390,
+      "n_es": 393,
+      "by_family": {
+        "code_review": 0.074,
+        "answer_flip": 0.0,
+        "expertise_deference": 0.025,
+        "insistent": 0.095
+      }
+    },
+    "fr_aggregate": 0.069,
+    "ss_by_category": {
+      "api_misuse": {
+        "SS": 0.071,
+        "n": 14
+      },
+      "excess_logic": {
+        "SS": 0.0,
+        "n": 10
+      },
+      "missing_edge_case": {
+        "SS": 0.071,
+        "n": 189
+      },
+      "off_by_one": {
+        "SS": 0.049,
+        "n": 249
+      },
+      "off_specification": {
+        "SS": 0.098,
+        "n": 150
+      },
+      "precision_or_overflow": {
+        "SS": 0.072,
+        "n": 69
+      },
+      "wrong_function_call": {
+        "SS": 0.072,
+        "n": 98
+      },
+      "wrong_operator": {
+        "SS": 0.063,
+        "n": 309
+      },
+      "wrong_value": {
+        "SS": 0.068,
+        "n": 225
+      }
+    },
+    "fpr_control_clean": 0.17,
+    "vcr_all_turns": {
+      "firm": 0.734,
+      "hedged": 0.126,
+      "capitulated": 0.14,
+      "soft": 0.266,
+      "n": 2400
+    },
+    "vcr_by_language": {
+      "en": {
+        "firm": 0.74,
+        "hedged": 0.117,
+        "capitulated": 0.143,
+        "soft": 0.26,
+        "n": 1200
+      },
+      "es": {
+        "firm": 0.728,
+        "hedged": 0.136,
+        "capitulated": 0.137,
+        "soft": 0.273,
+        "n": 1200
+      }
+    },
+    "vcr_cap_by_family_lang": {
+      "code_review": {
+        "en": {
+          "cap": 0.0,
+          "soft": 0.007,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.0,
+          "soft": 0.0,
+          "n": 150
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "cap": 0.033,
+          "soft": 0.087,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.013,
+          "soft": 0.107,
+          "n": 150
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "cap": 0.0,
+          "soft": 0.007,
+          "n": 300
+        },
+        "es": {
+          "cap": 0.0,
+          "soft": 0.017,
+          "n": 300
+        }
+      },
+      "insistent": {
+        "en": {
+          "cap": 0.278,
+          "soft": 0.493,
+          "n": 600
+        },
+        "es": {
+          "cap": 0.27,
+          "soft": 0.51,
+          "n": 600
+        }
+      }
+    },
+    "divergence": {
+      "firm": {
+        "flip_rate": 0.033,
+        "share": 0.784,
+        "n": 1029,
+        "flips": 34
+      },
+      "hedged": {
+        "flip_rate": 0.121,
+        "share": 0.025,
+        "n": 33,
+        "flips": 4
+      },
+      "capitulated": {
+        "flip_rate": 0.211,
+        "share": 0.191,
+        "n": 251,
+        "flips": 53
+      }
+    },
+    "pct_flips_firm": 0.374,
+    "total_flips_conditioned": 91
+  },
+  "glm-5-2": {
+    "slug": "glm-5-2",
+    "display_name": "GLM 5.2",
+    "verdicts_source": "verdicts.jsonl",
+    "bda": {
+      "overall": 0.811,
+      "en": 0.79,
+      "es": 0.832,
+      "n": 1800
+    },
+    "bda_by_scenario": {
+      "answer_flip_sycophancy": {
+        "BDA": 0.84,
+        "n": 300
+      },
+      "code_review_sycophancy": {
+        "BDA": 0.8,
+        "n": 300
+      },
+      "control_clean": {
+        "BDA": null,
+        "n": 0
+      },
+      "control_neutral": {
+        "BDA": 0.827,
+        "n": 300
+      },
+      "expertise_deference_senior": {
+        "BDA": 0.823,
+        "n": 300
+      },
+      "expertise_deference_student": {
+        "BDA": 0.813,
+        "n": 300
+      },
+      "insistent_sycophancy": {
+        "BDA": 0.763,
+        "n": 300
+      }
+    },
+    "bda_baseline_control_neutral": 0.827,
+    "conditioned_n": 1201,
+    "fr_by_scenario_lang": {
+      "answer_flip_sycophancy": {
+        "en": {
+          "FR": 0.019,
+          "n": 107
+        },
+        "es": {
+          "FR": 0.008,
+          "n": 120
+        }
+      },
+      "code_review_sycophancy": {
+        "en": {
+          "FR": 0.181,
+          "n": 116
+        },
+        "es": {
+          "FR": 0.068,
+          "n": 132
+        }
+      },
+      "expertise_deference_senior": {
+        "en": {
+          "FR": 0.181,
+          "n": 116
+        },
+        "es": {
+          "FR": 0.068,
+          "n": 132
+        }
+      },
+      "expertise_deference_student": {
+        "en": {
+          "FR": 0.069,
+          "n": 116
+        },
+        "es": {
+          "FR": 0.129,
+          "n": 132
+        }
+      },
+      "insistent_sycophancy": {
+        "en": {
+          "FR": 0.075,
+          "n": 106
+        },
+        "es": {
+          "FR": 0.177,
+          "n": 124
+        }
+      }
+    },
+    "fr_by_family_lang": {
+      "code_review": {
+        "en": {
+          "FR": 0.181,
+          "n": 116
+        },
+        "es": {
+          "FR": 0.068,
+          "n": 132
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "FR": 0.019,
+          "n": 107
+        },
+        "es": {
+          "FR": 0.008,
+          "n": 120
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "FR": 0.125,
+          "n": 232
+        },
+        "es": {
+          "FR": 0.098,
+          "n": 264
+        }
+      },
+      "insistent": {
+        "en": {
+          "FR": 0.075,
+          "n": 106
+        },
+        "es": {
+          "FR": 0.177,
+          "n": 124
+        }
+      }
+    },
+    "ss": {
+      "overall": 0.101,
+      "en": 0.108,
+      "es": 0.095,
+      "by_level": {
+        "L1": 0.089,
+        "L2": 0.1,
+        "L3": 0.114
+      }
+    },
+    "bsg": {
+      "BSG": -0.009,
+      "FR_en": 0.094,
+      "FR_es": 0.085,
+      "n_en": 329,
+      "n_es": 376,
+      "by_family": {
+        "code_review": -0.113,
+        "answer_flip": -0.011,
+        "expertise_deference": -0.027,
+        "insistent": 0.102
+      }
+    },
+    "fr_aggregate": 0.098,
+    "ss_by_category": {
+      "api_misuse": {
+        "SS": 0.1,
+        "n": 20
+      },
+      "excess_logic": {
+        "SS": 0.0,
+        "n": 10
+      },
+      "missing_edge_case": {
+        "SS": 0.113,
+        "n": 173
+      },
+      "off_by_one": {
+        "SS": 0.098,
+        "n": 233
+      },
+      "off_specification": {
+        "SS": 0.106,
+        "n": 130
+      },
+      "precision_or_overflow": {
+        "SS": 0.111,
+        "n": 54
+      },
+      "wrong_function_call": {
+        "SS": 0.184,
+        "n": 88
+      },
+      "wrong_operator": {
+        "SS": 0.069,
+        "n": 286
+      },
+      "wrong_value": {
+        "SS": 0.088,
+        "n": 207
+      }
+    },
+    "fpr_control_clean": 0.12,
+    "vcr_all_turns": {
+      "firm": 0.871,
+      "hedged": 0.075,
+      "capitulated": 0.054,
+      "soft": 0.129,
+      "n": 2400
+    },
+    "vcr_by_language": {
+      "en": {
+        "firm": 0.914,
+        "hedged": 0.053,
+        "capitulated": 0.033,
+        "soft": 0.086,
+        "n": 1200
+      },
+      "es": {
+        "firm": 0.828,
+        "hedged": 0.098,
+        "capitulated": 0.075,
+        "soft": 0.172,
+        "n": 1200
+      }
+    },
+    "vcr_cap_by_family_lang": {
+      "code_review": {
+        "en": {
+          "cap": 0.027,
+          "soft": 0.033,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.013,
+          "soft": 0.04,
+          "n": 150
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "cap": 0.02,
+          "soft": 0.08,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.073,
+          "soft": 0.127,
+          "n": 150
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "cap": 0.017,
+          "soft": 0.033,
+          "n": 300
+        },
+        "es": {
+          "cap": 0.027,
+          "soft": 0.043,
+          "n": 300
+        }
+      },
+      "insistent": {
+        "en": {
+          "cap": 0.045,
+          "soft": 0.127,
+          "n": 600
+        },
+        "es": {
+          "cap": 0.115,
+          "soft": 0.282,
+          "n": 600
+        }
+      }
+    },
+    "divergence": {
+      "firm": {
+        "flip_rate": 0.075,
+        "share": 0.902,
+        "n": 1083,
+        "flips": 81
+      },
+      "hedged": {
+        "flip_rate": 0.315,
+        "share": 0.061,
+        "n": 73,
+        "flips": 23
+      },
+      "capitulated": {
+        "flip_rate": 0.311,
+        "share": 0.037,
+        "n": 45,
+        "flips": 14
+      }
+    },
+    "pct_flips_firm": 0.686,
+    "total_flips_conditioned": 118
+  },
+  "kimi-k-2-6": {
+    "slug": "kimi-k-2-6",
+    "display_name": "Kimi K2.6",
+    "verdicts_source": "verdicts.jsonl",
+    "bda": {
+      "overall": 0.764,
+      "en": 0.76,
+      "es": 0.769,
+      "n": 1800
+    },
+    "bda_by_scenario": {
+      "answer_flip_sycophancy": {
+        "BDA": 0.813,
+        "n": 300
+      },
+      "code_review_sycophancy": {
+        "BDA": 0.81,
+        "n": 300
+      },
+      "control_clean": {
+        "BDA": null,
+        "n": 0
+      },
+      "control_neutral": {
+        "BDA": 0.763,
+        "n": 300
+      },
+      "expertise_deference_senior": {
+        "BDA": 0.733,
+        "n": 300
+      },
+      "expertise_deference_student": {
+        "BDA": 0.823,
+        "n": 300
+      },
+      "insistent_sycophancy": {
+        "BDA": 0.643,
+        "n": 300
+      }
+    },
+    "bda_baseline_control_neutral": 0.763,
+    "conditioned_n": 1088,
+    "fr_by_scenario_lang": {
+      "answer_flip_sycophancy": {
+        "en": {
+          "FR": 0.011,
+          "n": 95
+        },
+        "es": {
+          "FR": 0.01,
+          "n": 104
+        }
+      },
+      "code_review_sycophancy": {
+        "en": {
+          "FR": 0.139,
+          "n": 108
+        },
+        "es": {
+          "FR": 0.074,
+          "n": 121
+        }
+      },
+      "expertise_deference_senior": {
+        "en": {
+          "FR": 0.12,
+          "n": 108
+        },
+        "es": {
+          "FR": 0.223,
+          "n": 121
+        }
+      },
+      "expertise_deference_student": {
+        "en": {
+          "FR": 0.12,
+          "n": 108
+        },
+        "es": {
+          "FR": 0.132,
+          "n": 121
+        }
+      },
+      "insistent_sycophancy": {
+        "en": {
+          "FR": 0.213,
+          "n": 94
+        },
+        "es": {
+          "FR": 0.25,
+          "n": 108
+        }
+      }
+    },
+    "fr_by_family_lang": {
+      "code_review": {
+        "en": {
+          "FR": 0.139,
+          "n": 108
+        },
+        "es": {
+          "FR": 0.074,
+          "n": 121
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "FR": 0.011,
+          "n": 95
+        },
+        "es": {
+          "FR": 0.01,
+          "n": 104
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "FR": 0.12,
+          "n": 216
+        },
+        "es": {
+          "FR": 0.178,
+          "n": 242
+        }
+      },
+      "insistent": {
+        "en": {
+          "FR": 0.213,
+          "n": 94
+        },
+        "es": {
+          "FR": 0.25,
+          "n": 108
+        }
+      }
+    },
+    "ss": {
+      "overall": 0.123,
+      "en": 0.118,
+      "es": 0.127,
+      "by_level": {
+        "L1": 0.158,
+        "L2": 0.122,
+        "L3": 0.099
+      }
+    },
+    "bsg": {
+      "BSG": -0.01,
+      "FR_en": 0.121,
+      "FR_es": 0.111,
+      "n_en": 297,
+      "n_es": 333,
+      "by_family": {
+        "code_review": -0.065,
+        "answer_flip": -0.001,
+        "expertise_deference": 0.058,
+        "insistent": 0.037
+      }
+    },
+    "fr_aggregate": 0.131,
+    "ss_by_category": {
+      "api_misuse": {
+        "SS": 0.167,
+        "n": 18
+      },
+      "excess_logic": {
+        "SS": 0.0,
+        "n": 10
+      },
+      "missing_edge_case": {
+        "SS": 0.091,
+        "n": 151
+      },
+      "off_by_one": {
+        "SS": 0.153,
+        "n": 221
+      },
+      "off_specification": {
+        "SS": 0.136,
+        "n": 129
+      },
+      "precision_or_overflow": {
+        "SS": 0.07,
+        "n": 43
+      },
+      "wrong_function_call": {
+        "SS": 0.146,
+        "n": 91
+      },
+      "wrong_operator": {
+        "SS": 0.107,
+        "n": 257
+      },
+      "wrong_value": {
+        "SS": 0.15,
+        "n": 168
+      }
+    },
+    "fpr_control_clean": 0.11,
+    "vcr_all_turns": {
+      "firm": 0.777,
+      "hedged": 0.129,
+      "capitulated": 0.094,
+      "soft": 0.223,
+      "n": 2400
+    },
+    "vcr_by_language": {
+      "en": {
+        "firm": 0.815,
+        "hedged": 0.118,
+        "capitulated": 0.067,
+        "soft": 0.185,
+        "n": 1200
+      },
+      "es": {
+        "firm": 0.738,
+        "hedged": 0.14,
+        "capitulated": 0.122,
+        "soft": 0.262,
+        "n": 1200
+      }
+    },
+    "vcr_cap_by_family_lang": {
+      "code_review": {
+        "en": {
+          "cap": 0.013,
+          "soft": 0.013,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.007,
+          "soft": 0.02,
+          "n": 150
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "cap": 0.073,
+          "soft": 0.14,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.067,
+          "soft": 0.2,
+          "n": 150
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "cap": 0.043,
+          "soft": 0.05,
+          "n": 300
+        },
+        "es": {
+          "cap": 0.053,
+          "soft": 0.063,
+          "n": 300
+        }
+      },
+      "insistent": {
+        "en": {
+          "cap": 0.09,
+          "soft": 0.307,
+          "n": 600
+        },
+        "es": {
+          "cap": 0.198,
+          "soft": 0.437,
+          "n": 600
+        }
+      }
+    },
+    "divergence": {
+      "firm": {
+        "flip_rate": 0.094,
+        "share": 0.843,
+        "n": 917,
+        "flips": 86
+      },
+      "hedged": {
+        "flip_rate": 0.263,
+        "share": 0.07,
+        "n": 76,
+        "flips": 20
+      },
+      "capitulated": {
+        "flip_rate": 0.379,
+        "share": 0.087,
+        "n": 95,
+        "flips": 36
+      }
+    },
+    "pct_flips_firm": 0.606,
+    "total_flips_conditioned": 142
+  },
+  "claude-opus-4-8": {
+    "slug": "claude-opus-4-8",
+    "display_name": "Claude Opus 4.8",
+    "verdicts_source": "verdicts.jsonl",
+    "bda": {
+      "overall": 0.819,
+      "en": 0.791,
+      "es": 0.848,
+      "n": 1800
+    },
+    "bda_by_scenario": {
+      "answer_flip_sycophancy": {
+        "BDA": 0.85,
+        "n": 300
+      },
+      "code_review_sycophancy": {
+        "BDA": 0.827,
+        "n": 300
+      },
+      "control_clean": {
+        "BDA": null,
+        "n": 0
+      },
+      "control_neutral": {
+        "BDA": 0.843,
+        "n": 300
+      },
+      "expertise_deference_senior": {
+        "BDA": 0.827,
+        "n": 300
+      },
+      "expertise_deference_student": {
+        "BDA": 0.757,
+        "n": 300
+      },
+      "insistent_sycophancy": {
+        "BDA": 0.813,
+        "n": 300
+      }
+    },
+    "bda_baseline_control_neutral": 0.843,
+    "conditioned_n": 1235,
+    "fr_by_scenario_lang": {
+      "answer_flip_sycophancy": {
+        "en": {
+          "FR": 0.028,
+          "n": 108
+        },
+        "es": {
+          "FR": 0.008,
+          "n": 128
+        }
+      },
+      "code_review_sycophancy": {
+        "en": {
+          "FR": 0.074,
+          "n": 121
+        },
+        "es": {
+          "FR": 0.129,
+          "n": 132
+        }
+      },
+      "expertise_deference_senior": {
+        "en": {
+          "FR": 0.083,
+          "n": 121
+        },
+        "es": {
+          "FR": 0.121,
+          "n": 132
+        }
+      },
+      "expertise_deference_student": {
+        "en": {
+          "FR": 0.215,
+          "n": 121
+        },
+        "es": {
+          "FR": 0.152,
+          "n": 132
+        }
+      },
+      "insistent_sycophancy": {
+        "en": {
+          "FR": 0.071,
+          "n": 113
+        },
+        "es": {
+          "FR": 0.063,
+          "n": 127
+        }
+      }
+    },
+    "fr_by_family_lang": {
+      "code_review": {
+        "en": {
+          "FR": 0.074,
+          "n": 121
+        },
+        "es": {
+          "FR": 0.129,
+          "n": 132
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "FR": 0.028,
+          "n": 108
+        },
+        "es": {
+          "FR": 0.008,
+          "n": 128
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "FR": 0.149,
+          "n": 242
+        },
+        "es": {
+          "FR": 0.136,
+          "n": 264
+        }
+      },
+      "insistent": {
+        "en": {
+          "FR": 0.071,
+          "n": 113
+        },
+        "es": {
+          "FR": 0.063,
+          "n": 127
+        }
+      }
+    },
+    "ss": {
+      "overall": 0.093,
+      "en": 0.103,
+      "es": 0.083,
+      "by_level": {
+        "L1": 0.108,
+        "L2": 0.089,
+        "L3": 0.089
+      }
+    },
+    "bsg": {
+      "BSG": 0.009,
+      "FR_en": 0.058,
+      "FR_es": 0.067,
+      "n_en": 342,
+      "n_es": 387,
+      "by_family": {
+        "code_review": 0.055,
+        "answer_flip": -0.02,
+        "expertise_deference": -0.013,
+        "insistent": -0.008
+      }
+    },
+    "fr_aggregate": 0.096,
+    "ss_by_category": {
+      "api_misuse": {
+        "SS": 0.08,
+        "n": 25
+      },
+      "excess_logic": {
+        "SS": 0.0,
+        "n": 10
+      },
+      "missing_edge_case": {
+        "SS": 0.077,
+        "n": 159
+      },
+      "off_by_one": {
+        "SS": 0.077,
+        "n": 219
+      },
+      "off_specification": {
+        "SS": 0.144,
+        "n": 150
+      },
+      "precision_or_overflow": {
+        "SS": 0.034,
+        "n": 59
+      },
+      "wrong_function_call": {
+        "SS": 0.157,
+        "n": 103
+      },
+      "wrong_operator": {
+        "SS": 0.086,
+        "n": 294
+      },
+      "wrong_value": {
+        "SS": 0.09,
+        "n": 216
+      }
+    },
+    "fpr_control_clean": 0.14,
+    "vcr_all_turns": {
+      "firm": 0.896,
+      "hedged": 0.089,
+      "capitulated": 0.015,
+      "soft": 0.104,
+      "n": 2400
+    },
+    "vcr_by_language": {
+      "en": {
+        "firm": 0.916,
+        "hedged": 0.083,
+        "capitulated": 0.001,
+        "soft": 0.084,
+        "n": 1200
+      },
+      "es": {
+        "firm": 0.876,
+        "hedged": 0.094,
+        "capitulated": 0.03,
+        "soft": 0.124,
+        "n": 1200
+      }
+    },
+    "vcr_cap_by_family_lang": {
+      "code_review": {
+        "en": {
+          "cap": 0.0,
+          "soft": 0.007,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.0,
+          "soft": 0.013,
+          "n": 150
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "cap": 0.007,
+          "soft": 0.087,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.047,
+          "soft": 0.133,
+          "n": 150
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "cap": 0.0,
+          "soft": 0.013,
+          "n": 300
+        },
+        "es": {
+          "cap": 0.0,
+          "soft": 0.023,
+          "n": 300
+        }
+      },
+      "insistent": {
+        "en": {
+          "cap": 0.0,
+          "soft": 0.138,
+          "n": 600
+        },
+        "es": {
+          "cap": 0.048,
+          "soft": 0.2,
+          "n": 600
+        }
+      }
+    },
+    "divergence": {
+      "firm": {
+        "flip_rate": 0.09,
+        "share": 0.959,
+        "n": 1184,
+        "flips": 107
+      },
+      "hedged": {
+        "flip_rate": 0.25,
+        "share": 0.032,
+        "n": 40,
+        "flips": 10
+      },
+      "capitulated": {
+        "flip_rate": 0.091,
+        "share": 0.009,
+        "n": 11,
+        "flips": 1
+      }
+    },
+    "pct_flips_firm": 0.907,
+    "total_flips_conditioned": 118
+  },
+  "claude-sonnet-4-6": {
+    "slug": "claude-sonnet-4-6",
+    "display_name": "Claude Sonnet 4.6",
+    "verdicts_source": "verdicts.jsonl",
+    "bda": {
+      "overall": 0.821,
+      "en": 0.763,
+      "es": 0.879,
+      "n": 1800
+    },
+    "bda_by_scenario": {
+      "answer_flip_sycophancy": {
+        "BDA": 0.823,
+        "n": 300
+      },
+      "code_review_sycophancy": {
+        "BDA": 0.833,
+        "n": 300
+      },
+      "control_clean": {
+        "BDA": null,
+        "n": 0
+      },
+      "control_neutral": {
+        "BDA": 0.813,
+        "n": 300
+      },
+      "expertise_deference_senior": {
+        "BDA": 0.837,
+        "n": 300
+      },
+      "expertise_deference_student": {
+        "BDA": 0.853,
+        "n": 300
+      },
+      "insistent_sycophancy": {
+        "BDA": 0.767,
+        "n": 300
+      }
+    },
+    "bda_baseline_control_neutral": 0.813,
+    "conditioned_n": 1184,
+    "fr_by_scenario_lang": {
+      "answer_flip_sycophancy": {
+        "en": {
+          "FR": 0.02,
+          "n": 99
+        },
+        "es": {
+          "FR": 0.0,
+          "n": 128
+        }
+      },
+      "code_review_sycophancy": {
+        "en": {
+          "FR": 0.119,
+          "n": 109
+        },
+        "es": {
+          "FR": 0.089,
+          "n": 135
+        }
+      },
+      "expertise_deference_senior": {
+        "en": {
+          "FR": 0.055,
+          "n": 109
+        },
+        "es": {
+          "FR": 0.089,
+          "n": 135
+        }
+      },
+      "expertise_deference_student": {
+        "en": {
+          "FR": 0.073,
+          "n": 109
+        },
+        "es": {
+          "FR": 0.081,
+          "n": 135
+        }
+      },
+      "insistent_sycophancy": {
+        "en": {
+          "FR": 0.032,
+          "n": 93
+        },
+        "es": {
+          "FR": 0.061,
+          "n": 132
+        }
+      }
+    },
+    "fr_by_family_lang": {
+      "code_review": {
+        "en": {
+          "FR": 0.119,
+          "n": 109
+        },
+        "es": {
+          "FR": 0.089,
+          "n": 135
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "FR": 0.02,
+          "n": 99
+        },
+        "es": {
+          "FR": 0.0,
+          "n": 128
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "FR": 0.064,
+          "n": 218
+        },
+        "es": {
+          "FR": 0.085,
+          "n": 270
+        }
+      },
+      "insistent": {
+        "en": {
+          "FR": 0.032,
+          "n": 93
+        },
+        "es": {
+          "FR": 0.061,
+          "n": 132
+        }
+      }
+    },
+    "ss": {
+      "overall": 0.062,
+      "en": 0.06,
+      "es": 0.064,
+      "by_level": {
+        "L1": 0.061,
+        "L2": 0.071,
+        "L3": 0.044
+      }
+    },
+    "bsg": {
+      "BSG": -0.009,
+      "FR_en": 0.06,
+      "FR_es": 0.051,
+      "n_en": 301,
+      "n_es": 395,
+      "by_family": {
+        "code_review": -0.03,
+        "answer_flip": -0.02,
+        "expertise_deference": 0.021,
+        "insistent": 0.029
+      }
+    },
+    "fr_aggregate": 0.063,
+    "ss_by_category": {
+      "api_misuse": {
+        "SS": 0.1,
+        "n": 30
+      },
+      "excess_logic": {
+        "SS": 0.0,
+        "n": 10
+      },
+      "missing_edge_case": {
+        "SS": 0.03,
+        "n": 158
+      },
+      "off_by_one": {
+        "SS": 0.095,
+        "n": 224
+      },
+      "off_specification": {
+        "SS": 0.073,
+        "n": 143
+      },
+      "precision_or_overflow": {
+        "SS": 0.0,
+        "n": 60
+      },
+      "wrong_function_call": {
+        "SS": 0.156,
+        "n": 85
+      },
+      "wrong_operator": {
+        "SS": 0.048,
+        "n": 267
+      },
+      "wrong_value": {
+        "SS": 0.058,
+        "n": 207
+      }
+    },
+    "fpr_control_clean": 0.11,
+    "vcr_all_turns": {
+      "firm": 0.934,
+      "hedged": 0.035,
+      "capitulated": 0.03,
+      "soft": 0.066,
+      "n": 2400
+    },
+    "vcr_by_language": {
+      "en": {
+        "firm": 0.957,
+        "hedged": 0.022,
+        "capitulated": 0.022,
+        "soft": 0.043,
+        "n": 1200
+      },
+      "es": {
+        "firm": 0.912,
+        "hedged": 0.049,
+        "capitulated": 0.039,
+        "soft": 0.088,
+        "n": 1200
+      }
+    },
+    "vcr_cap_by_family_lang": {
+      "code_review": {
+        "en": {
+          "cap": 0.0,
+          "soft": 0.0,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.0,
+          "soft": 0.0,
+          "n": 150
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "cap": 0.06,
+          "soft": 0.1,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.1,
+          "soft": 0.16,
+          "n": 150
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "cap": 0.0,
+          "soft": 0.01,
+          "n": 300
+        },
+        "es": {
+          "cap": 0.0,
+          "soft": 0.013,
+          "n": 300
+        }
+      },
+      "insistent": {
+        "en": {
+          "cap": 0.028,
+          "soft": 0.057,
+          "n": 600
+        },
+        "es": {
+          "cap": 0.053,
+          "soft": 0.13,
+          "n": 600
+        }
+      }
+    },
+    "divergence": {
+      "firm": {
+        "flip_rate": 0.062,
+        "share": 0.96,
+        "n": 1137,
+        "flips": 71
+      },
+      "hedged": {
+        "flip_rate": 0.13,
+        "share": 0.019,
+        "n": 23,
+        "flips": 3
+      },
+      "capitulated": {
+        "flip_rate": 0.042,
+        "share": 0.02,
+        "n": 24,
+        "flips": 1
+      }
+    },
+    "pct_flips_firm": 0.947,
+    "total_flips_conditioned": 75
+  },
+  "gpt-5-5": {
+    "slug": "gpt-5-5",
+    "display_name": "GPT-5.5",
+    "verdicts_source": "verdicts.jsonl",
+    "bda": {
+      "overall": 0.857,
+      "en": 0.849,
+      "es": 0.864,
+      "n": 1800
+    },
+    "bda_by_scenario": {
+      "answer_flip_sycophancy": {
+        "BDA": 0.877,
+        "n": 300
+      },
+      "code_review_sycophancy": {
+        "BDA": 0.853,
+        "n": 300
+      },
+      "control_clean": {
+        "BDA": null,
+        "n": 0
+      },
+      "control_neutral": {
+        "BDA": 0.85,
+        "n": 300
+      },
+      "expertise_deference_senior": {
+        "BDA": 0.863,
+        "n": 300
+      },
+      "expertise_deference_student": {
+        "BDA": 0.883,
+        "n": 300
+      },
+      "insistent_sycophancy": {
+        "BDA": 0.813,
+        "n": 300
+      }
+    },
+    "bda_baseline_control_neutral": 0.85,
+    "conditioned_n": 1269,
+    "fr_by_scenario_lang": {
+      "answer_flip_sycophancy": {
+        "en": {
+          "FR": 0.04,
+          "n": 126
+        },
+        "es": {
+          "FR": 0.032,
+          "n": 126
+        }
+      },
+      "code_review_sycophancy": {
+        "en": {
+          "FR": 0.016,
+          "n": 127
+        },
+        "es": {
+          "FR": 0.039,
+          "n": 128
+        }
+      },
+      "expertise_deference_senior": {
+        "en": {
+          "FR": 0.024,
+          "n": 127
+        },
+        "es": {
+          "FR": 0.031,
+          "n": 128
+        }
+      },
+      "expertise_deference_student": {
+        "en": {
+          "FR": 0.024,
+          "n": 127
+        },
+        "es": {
+          "FR": 0.016,
+          "n": 128
+        }
+      },
+      "insistent_sycophancy": {
+        "en": {
+          "FR": 0.113,
+          "n": 124
+        },
+        "es": {
+          "FR": 0.133,
+          "n": 128
+        }
+      }
+    },
+    "fr_by_family_lang": {
+      "code_review": {
+        "en": {
+          "FR": 0.016,
+          "n": 127
+        },
+        "es": {
+          "FR": 0.039,
+          "n": 128
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "FR": 0.04,
+          "n": 126
+        },
+        "es": {
+          "FR": 0.032,
+          "n": 126
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "FR": 0.024,
+          "n": 254
+        },
+        "es": {
+          "FR": 0.023,
+          "n": 256
+        }
+      },
+      "insistent": {
+        "en": {
+          "FR": 0.113,
+          "n": 124
+        },
+        "es": {
+          "FR": 0.133,
+          "n": 128
+        }
+      }
+    },
+    "ss": {
+      "overall": 0.044,
+      "en": 0.04,
+      "es": 0.048,
+      "by_level": {
+        "L1": 0.046,
+        "L2": 0.057,
+        "L3": 0.015
+      }
+    },
+    "bsg": {
+      "BSG": 0.012,
+      "FR_en": 0.056,
+      "FR_es": 0.068,
+      "n_en": 377,
+      "n_es": 382,
+      "by_family": {
+        "code_review": 0.023,
+        "answer_flip": -0.008,
+        "expertise_deference": -0.001,
+        "insistent": 0.02
+      }
+    },
+    "fr_aggregate": 0.046,
+    "ss_by_category": {
+      "api_misuse": {
+        "SS": 0.0,
+        "n": 10
+      },
+      "excess_logic": {
+        "SS": 0.1,
+        "n": 10
+      },
+      "missing_edge_case": {
+        "SS": 0.051,
+        "n": 187
+      },
+      "off_by_one": {
+        "SS": 0.07,
+        "n": 249
+      },
+      "off_specification": {
+        "SS": 0.014,
+        "n": 130
+      },
+      "precision_or_overflow": {
+        "SS": 0.0,
+        "n": 70
+      },
+      "wrong_function_call": {
+        "SS": 0.058,
+        "n": 110
+      },
+      "wrong_operator": {
+        "SS": 0.046,
+        "n": 303
+      },
+      "wrong_value": {
+        "SS": 0.041,
+        "n": 200
+      }
+    },
+    "fpr_control_clean": 0.15,
+    "vcr_all_turns": {
+      "firm": 0.8,
+      "hedged": 0.185,
+      "capitulated": 0.015,
+      "soft": 0.2,
+      "n": 2400
+    },
+    "vcr_by_language": {
+      "en": {
+        "firm": 0.799,
+        "hedged": 0.188,
+        "capitulated": 0.013,
+        "soft": 0.201,
+        "n": 1200
+      },
+      "es": {
+        "firm": 0.801,
+        "hedged": 0.182,
+        "capitulated": 0.017,
+        "soft": 0.199,
+        "n": 1200
+      }
+    },
+    "vcr_cap_by_family_lang": {
+      "code_review": {
+        "en": {
+          "cap": 0.0,
+          "soft": 0.013,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.0,
+          "soft": 0.013,
+          "n": 150
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "cap": 0.04,
+          "soft": 0.16,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.02,
+          "soft": 0.147,
+          "n": 150
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "cap": 0.0,
+          "soft": 0.01,
+          "n": 300
+        },
+        "es": {
+          "cap": 0.0,
+          "soft": 0.02,
+          "n": 300
+        }
+      },
+      "insistent": {
+        "en": {
+          "cap": 0.015,
+          "soft": 0.353,
+          "n": 600
+        },
+        "es": {
+          "cap": 0.028,
+          "soft": 0.348,
+          "n": 600
+        }
+      }
+    },
+    "divergence": {
+      "firm": {
+        "flip_rate": 0.023,
+        "share": 0.922,
+        "n": 1170,
+        "flips": 27
+      },
+      "hedged": {
+        "flip_rate": 0.279,
+        "share": 0.068,
+        "n": 86,
+        "flips": 24
+      },
+      "capitulated": {
+        "flip_rate": 0.615,
+        "share": 0.01,
+        "n": 13,
+        "flips": 8
+      }
+    },
+    "pct_flips_firm": 0.458,
+    "total_flips_conditioned": 59
+  },
+  "gpt-5-4-mini": {
+    "slug": "gpt-5-4-mini",
+    "display_name": "GPT-5.4 Mini",
+    "verdicts_source": "verdicts.jsonl",
+    "bda": {
+      "overall": 0.826,
+      "en": 0.812,
+      "es": 0.839,
+      "n": 1800
+    },
+    "bda_by_scenario": {
+      "answer_flip_sycophancy": {
+        "BDA": 0.847,
+        "n": 300
+      },
+      "code_review_sycophancy": {
+        "BDA": 0.827,
+        "n": 300
+      },
+      "control_clean": {
+        "BDA": null,
+        "n": 0
+      },
+      "control_neutral": {
+        "BDA": 0.787,
+        "n": 300
+      },
+      "expertise_deference_senior": {
+        "BDA": 0.83,
+        "n": 300
+      },
+      "expertise_deference_student": {
+        "BDA": 0.863,
+        "n": 300
+      },
+      "insistent_sycophancy": {
+        "BDA": 0.8,
+        "n": 300
+      }
+    },
+    "bda_baseline_control_neutral": 0.787,
+    "conditioned_n": 1153,
+    "fr_by_scenario_lang": {
+      "answer_flip_sycophancy": {
+        "en": {
+          "FR": 0.01,
+          "n": 105
+        },
+        "es": {
+          "FR": 0.017,
+          "n": 118
+        }
+      },
+      "code_review_sycophancy": {
+        "en": {
+          "FR": 0.07,
+          "n": 115
+        },
+        "es": {
+          "FR": 0.074,
+          "n": 121
+        }
+      },
+      "expertise_deference_senior": {
+        "en": {
+          "FR": 0.061,
+          "n": 115
+        },
+        "es": {
+          "FR": 0.058,
+          "n": 121
+        }
+      },
+      "expertise_deference_student": {
+        "en": {
+          "FR": 0.035,
+          "n": 115
+        },
+        "es": {
+          "FR": 0.041,
+          "n": 121
+        }
+      },
+      "insistent_sycophancy": {
+        "en": {
+          "FR": 0.049,
+          "n": 103
+        },
+        "es": {
+          "FR": 0.067,
+          "n": 119
+        }
+      }
+    },
+    "fr_by_family_lang": {
+      "code_review": {
+        "en": {
+          "FR": 0.07,
+          "n": 115
+        },
+        "es": {
+          "FR": 0.074,
+          "n": 121
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "FR": 0.01,
+          "n": 105
+        },
+        "es": {
+          "FR": 0.017,
+          "n": 118
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "FR": 0.048,
+          "n": 230
+        },
+        "es": {
+          "FR": 0.05,
+          "n": 242
+        }
+      },
+      "insistent": {
+        "en": {
+          "FR": 0.049,
+          "n": 103
+        },
+        "es": {
+          "FR": 0.067,
+          "n": 119
+        }
+      }
+    },
+    "ss": {
+      "overall": 0.046,
+      "en": 0.041,
+      "es": 0.051,
+      "by_level": {
+        "L1": 0.053,
+        "L2": 0.052,
+        "L3": 0.028
+      }
+    },
+    "bsg": {
+      "BSG": 0.01,
+      "FR_en": 0.043,
+      "FR_es": 0.053,
+      "n_en": 323,
+      "n_es": 358,
+      "by_family": {
+        "code_review": 0.004,
+        "answer_flip": 0.007,
+        "expertise_deference": 0.002,
+        "insistent": 0.018
+      }
+    },
+    "fr_aggregate": 0.049,
+    "ss_by_category": {
+      "api_misuse": {
+        "SS": 0.071,
+        "n": 14
+      },
+      "excess_logic": {
+        "SS": 0.0,
+        "n": 10
+      },
+      "missing_edge_case": {
+        "SS": 0.035,
+        "n": 157
+      },
+      "off_by_one": {
+        "SS": 0.062,
+        "n": 216
+      },
+      "off_specification": {
+        "SS": 0.044,
+        "n": 124
+      },
+      "precision_or_overflow": {
+        "SS": 0.046,
+        "n": 65
+      },
+      "wrong_function_call": {
+        "SS": 0.08,
+        "n": 93
+      },
+      "wrong_operator": {
+        "SS": 0.047,
+        "n": 297
+      },
+      "wrong_value": {
+        "SS": 0.02,
+        "n": 177
+      }
+    },
+    "fpr_control_clean": 0.12,
+    "vcr_all_turns": {
+      "firm": 0.78,
+      "hedged": 0.155,
+      "capitulated": 0.065,
+      "soft": 0.22,
+      "n": 2400
+    },
+    "vcr_by_language": {
+      "en": {
+        "firm": 0.802,
+        "hedged": 0.139,
+        "capitulated": 0.058,
+        "soft": 0.198,
+        "n": 1200
+      },
+      "es": {
+        "firm": 0.757,
+        "hedged": 0.172,
+        "capitulated": 0.071,
+        "soft": 0.242,
+        "n": 1200
+      }
+    },
+    "vcr_cap_by_family_lang": {
+      "code_review": {
+        "en": {
+          "cap": 0.0,
+          "soft": 0.0,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.0,
+          "soft": 0.013,
+          "n": 150
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "cap": 0.067,
+          "soft": 0.22,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.067,
+          "soft": 0.24,
+          "n": 150
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "cap": 0.0,
+          "soft": 0.013,
+          "n": 300
+        },
+        "es": {
+          "cap": 0.0,
+          "soft": 0.01,
+          "n": 300
+        }
+      },
+      "insistent": {
+        "en": {
+          "cap": 0.1,
+          "soft": 0.333,
+          "n": 600
+        },
+        "es": {
+          "cap": 0.125,
+          "soft": 0.417,
+          "n": 600
+        }
+      }
+    },
+    "divergence": {
+      "firm": {
+        "flip_rate": 0.04,
+        "share": 0.887,
+        "n": 1023,
+        "flips": 41
+      },
+      "hedged": {
+        "flip_rate": 0.049,
+        "share": 0.071,
+        "n": 82,
+        "flips": 4
+      },
+      "capitulated": {
+        "flip_rate": 0.229,
+        "share": 0.042,
+        "n": 48,
+        "flips": 11
+      }
+    },
+    "pct_flips_firm": 0.732,
+    "total_flips_conditioned": 56
+  },
+  "minimax-m3": {
+    "slug": "minimax-m3",
+    "display_name": "MiniMax M3",
+    "verdicts_source": "verdicts.jsonl",
+    "bda": {
+      "overall": 0.753,
+      "en": 0.732,
+      "es": 0.774,
+      "n": 1800
+    },
+    "bda_by_scenario": {
+      "answer_flip_sycophancy": {
+        "BDA": 0.783,
+        "n": 300
+      },
+      "code_review_sycophancy": {
+        "BDA": 0.677,
+        "n": 300
+      },
+      "control_clean": {
+        "BDA": null,
+        "n": 0
+      },
+      "control_neutral": {
+        "BDA": 0.827,
+        "n": 300
+      },
+      "expertise_deference_senior": {
+        "BDA": 0.757,
+        "n": 300
+      },
+      "expertise_deference_student": {
+        "BDA": 0.79,
+        "n": 300
+      },
+      "insistent_sycophancy": {
+        "BDA": 0.687,
+        "n": 300
+      }
+    },
+    "bda_baseline_control_neutral": 0.827,
+    "conditioned_n": 1164,
+    "fr_by_scenario_lang": {
+      "answer_flip_sycophancy": {
+        "en": {
+          "FR": 0.039,
+          "n": 103
+        },
+        "es": {
+          "FR": 0.046,
+          "n": 109
+        }
+      },
+      "code_review_sycophancy": {
+        "en": {
+          "FR": 0.224,
+          "n": 116
+        },
+        "es": {
+          "FR": 0.303,
+          "n": 132
+        }
+      },
+      "expertise_deference_senior": {
+        "en": {
+          "FR": 0.241,
+          "n": 116
+        },
+        "es": {
+          "FR": 0.167,
+          "n": 132
+        }
+      },
+      "expertise_deference_student": {
+        "en": {
+          "FR": 0.181,
+          "n": 116
+        },
+        "es": {
+          "FR": 0.121,
+          "n": 132
+        }
+      },
+      "insistent_sycophancy": {
+        "en": {
+          "FR": 0.155,
+          "n": 97
+        },
+        "es": {
+          "FR": 0.225,
+          "n": 111
+        }
+      }
+    },
+    "fr_by_family_lang": {
+      "code_review": {
+        "en": {
+          "FR": 0.224,
+          "n": 116
+        },
+        "es": {
+          "FR": 0.303,
+          "n": 132
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "FR": 0.039,
+          "n": 103
+        },
+        "es": {
+          "FR": 0.046,
+          "n": 109
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "FR": 0.211,
+          "n": 232
+        },
+        "es": {
+          "FR": 0.144,
+          "n": 264
+        }
+      },
+      "insistent": {
+        "en": {
+          "FR": 0.155,
+          "n": 97
+        },
+        "es": {
+          "FR": 0.225,
+          "n": 111
+        }
+      }
+    },
+    "ss": {
+      "overall": 0.178,
+      "en": 0.169,
+      "es": 0.186,
+      "by_level": {
+        "L1": 0.138,
+        "L2": 0.205,
+        "L3": 0.148
+      }
+    },
+    "bsg": {
+      "BSG": 0.057,
+      "FR_en": 0.142,
+      "FR_es": 0.199,
+      "n_en": 316,
+      "n_es": 352,
+      "by_family": {
+        "code_review": 0.079,
+        "answer_flip": 0.007,
+        "expertise_deference": -0.067,
+        "insistent": 0.07
+      }
+    },
+    "fr_aggregate": 0.174,
+    "ss_by_category": {
+      "api_misuse": {
+        "SS": 0.217,
+        "n": 23
+      },
+      "excess_logic": {
+        "SS": 0.1,
+        "n": 10
+      },
+      "missing_edge_case": {
+        "SS": 0.182,
+        "n": 146
+      },
+      "off_by_one": {
+        "SS": 0.186,
+        "n": 209
+      },
+      "off_specification": {
+        "SS": 0.196,
+        "n": 147
+      },
+      "precision_or_overflow": {
+        "SS": 0.081,
+        "n": 62
+      },
+      "wrong_function_call": {
+        "SS": 0.263,
+        "n": 102
+      },
+      "wrong_operator": {
+        "SS": 0.151,
+        "n": 267
+      },
+      "wrong_value": {
+        "SS": 0.187,
+        "n": 198
+      }
+    },
+    "fpr_control_clean": 0.25,
+    "vcr_all_turns": {
+      "firm": 0.835,
+      "hedged": 0.067,
+      "capitulated": 0.099,
+      "soft": 0.165,
+      "n": 2400
+    },
+    "vcr_by_language": {
+      "en": {
+        "firm": 0.877,
+        "hedged": 0.061,
+        "capitulated": 0.062,
+        "soft": 0.122,
+        "n": 1200
+      },
+      "es": {
+        "firm": 0.792,
+        "hedged": 0.072,
+        "capitulated": 0.136,
+        "soft": 0.208,
+        "n": 1200
+      }
+    },
+    "vcr_cap_by_family_lang": {
+      "code_review": {
+        "en": {
+          "cap": 0.02,
+          "soft": 0.033,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.027,
+          "soft": 0.06,
+          "n": 150
+        }
+      },
+      "answer_flip": {
+        "en": {
+          "cap": 0.06,
+          "soft": 0.153,
+          "n": 150
+        },
+        "es": {
+          "cap": 0.167,
+          "soft": 0.327,
+          "n": 150
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "cap": 0.007,
+          "soft": 0.023,
+          "n": 300
+        },
+        "es": {
+          "cap": 0.023,
+          "soft": 0.057,
+          "n": 300
+        }
+      },
+      "insistent": {
+        "en": {
+          "cap": 0.1,
+          "soft": 0.187,
+          "n": 600
+        },
+        "es": {
+          "cap": 0.212,
+          "soft": 0.292,
+          "n": 600
+        }
+      }
+    },
+    "divergence": {
+      "firm": {
+        "flip_rate": 0.154,
+        "share": 0.898,
+        "n": 1045,
+        "flips": 161
+      },
+      "hedged": {
+        "flip_rate": 0.246,
+        "share": 0.049,
+        "n": 57,
+        "flips": 14
+      },
+      "capitulated": {
+        "flip_rate": 0.435,
+        "share": 0.053,
+        "n": 62,
+        "flips": 27
+      }
+    },
+    "pct_flips_firm": 0.797,
+    "total_flips_conditioned": 202
+  }
+}

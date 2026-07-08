@@ -1,0 +1,632 @@
+{
+ "gate": 0.6,
+ "n_gold_turns": 320,
+ "n_voters": 10,
+ "n_panels": 360,
+ "recommended_cheapest_passing": {
+  "fixed": [
+   "deepseek/deepseek-v4-flash-20260423::binary",
+   "deepseek/deepseek-v4-flash-20260423::direct"
+  ],
+  "tiebreak": "google/gemini-3.1-flash-lite-20260507::binary",
+  "kappa": 0.755,
+  "disagree_rate": 0.128,
+  "expected_cost_usd": 0.1573,
+  "kappa_per_eur": 4.8,
+  "passes_gate": true
+ },
+ "best_kappa_panel": {
+  "fixed": [
+   "deepseek/deepseek-v4-flash-20260423::binary",
+   "google/gemini-3.1-flash-lite-20260507::binary"
+  ],
+  "tiebreak": "z-ai/glm-5.1-20260406::direct",
+  "kappa": 0.817,
+  "disagree_rate": 0.15,
+  "expected_cost_usd": 0.3995,
+  "kappa_per_eur": 2.05,
+  "passes_gate": true
+ },
+ "all_panels_ranked": [
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-flash-20260423::binary",
+    "google/gemini-3.1-flash-lite-20260507::binary"
+   ],
+   "tiebreak": "z-ai/glm-5.1-20260406::direct",
+   "kappa": 0.817,
+   "disagree_rate": 0.15,
+   "expected_cost_usd": 0.3995,
+   "kappa_per_eur": 2.05,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-flash-20260423::binary",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "google/gemini-3.1-flash-lite-20260507::binary",
+   "kappa": 0.817,
+   "disagree_rate": 0.113,
+   "expected_cost_usd": 0.8634,
+   "kappa_per_eur": 0.95,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "google/gemini-3.1-flash-lite-20260507::binary",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-flash-20260423::binary",
+   "kappa": 0.817,
+   "disagree_rate": 0.069,
+   "expected_cost_usd": 0.9853,
+   "kappa_per_eur": 0.83,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::direct",
+    "google/gemini-3.1-flash-lite-20260507::binary"
+   ],
+   "tiebreak": "qwen/qwen3.6-35b-a3b-20260415::direct",
+   "kappa": 0.808,
+   "disagree_rate": 0.103,
+   "expected_cost_usd": 0.5627,
+   "kappa_per_eur": 1.44,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "google/gemini-3.1-flash-lite-20260507::binary",
+    "qwen/qwen3.6-35b-a3b-20260415::direct"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::direct",
+   "kappa": 0.808,
+   "disagree_rate": 0.084,
+   "expected_cost_usd": 0.6852,
+   "kappa_per_eur": 1.18,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::direct",
+    "qwen/qwen3.6-35b-a3b-20260415::direct"
+   ],
+   "tiebreak": "google/gemini-3.1-flash-lite-20260507::binary",
+   "kappa": 0.808,
+   "disagree_rate": 0.069,
+   "expected_cost_usd": 0.7656,
+   "kappa_per_eur": 1.06,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-flash-20260423::direct",
+    "deepseek/deepseek-v4-pro-20260423::binary"
+   ],
+   "tiebreak": "z-ai/glm-5.1-20260406::direct",
+   "kappa": 0.793,
+   "disagree_rate": 0.097,
+   "expected_cost_usd": 0.4715,
+   "kappa_per_eur": 1.68,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::binary",
+    "deepseek/deepseek-v4-pro-20260423::direct"
+   ],
+   "tiebreak": "z-ai/glm-5.1-20260406::direct",
+   "kappa": 0.793,
+   "disagree_rate": 0.078,
+   "expected_cost_usd": 0.7029,
+   "kappa_per_eur": 1.13,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::direct",
+    "qwen/qwen3.6-35b-a3b-20260415::direct"
+   ],
+   "tiebreak": "z-ai/glm-5.1-20260406::binary",
+   "kappa": 0.793,
+   "disagree_rate": 0.069,
+   "expected_cost_usd": 0.8136,
+   "kappa_per_eur": 0.97,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-flash-20260423::direct",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::binary",
+   "kappa": 0.793,
+   "disagree_rate": 0.056,
+   "expected_cost_usd": 0.8451,
+   "kappa_per_eur": 0.94,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::direct",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::binary",
+   "kappa": 0.793,
+   "disagree_rate": 0.066,
+   "expected_cost_usd": 1.0941,
+   "kappa_per_eur": 0.72,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::binary",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-flash-20260423::direct",
+   "kappa": 0.793,
+   "disagree_rate": 0.066,
+   "expected_cost_usd": 1.1104,
+   "kappa_per_eur": 0.71,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::binary",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::direct",
+   "kappa": 0.793,
+   "disagree_rate": 0.066,
+   "expected_cost_usd": 1.1266,
+   "kappa_per_eur": 0.7,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::direct",
+    "z-ai/glm-5.1-20260406::binary"
+   ],
+   "tiebreak": "qwen/qwen3.6-35b-a3b-20260415::direct",
+   "kappa": 0.793,
+   "disagree_rate": 0.134,
+   "expected_cost_usd": 1.2754,
+   "kappa_per_eur": 0.62,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "qwen/qwen3.6-35b-a3b-20260415::direct",
+    "z-ai/glm-5.1-20260406::binary"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::direct",
+   "kappa": 0.793,
+   "disagree_rate": 0.138,
+   "expected_cost_usd": 1.4,
+   "kappa_per_eur": 0.57,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-flash-20260423::binary",
+    "google/gemini-3.1-flash-lite-20260507::binary"
+   ],
+   "tiebreak": "qwen/qwen3.6-35b-a3b-20260415::direct",
+   "kappa": 0.787,
+   "disagree_rate": 0.15,
+   "expected_cost_usd": 0.3514,
+   "kappa_per_eur": 2.24,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-flash-20260423::binary",
+    "qwen/qwen3.6-35b-a3b-20260415::direct"
+   ],
+   "tiebreak": "google/gemini-3.1-flash-lite-20260507::binary",
+   "kappa": 0.787,
+   "disagree_rate": 0.119,
+   "expected_cost_usd": 0.5439,
+   "kappa_per_eur": 1.45,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "google/gemini-3.1-flash-lite-20260507::binary",
+    "qwen/qwen3.6-35b-a3b-20260415::direct"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-flash-20260423::binary",
+   "kappa": 0.787,
+   "disagree_rate": 0.084,
+   "expected_cost_usd": 0.6656,
+   "kappa_per_eur": 1.18,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-flash-20260423::binary",
+    "google/gemini-3.1-flash-lite-20260507::binary"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::direct",
+   "kappa": 0.781,
+   "disagree_rate": 0.15,
+   "expected_cost_usd": 0.33,
+   "kappa_per_eur": 2.37,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-flash-20260423::binary",
+    "deepseek/deepseek-v4-pro-20260423::direct"
+   ],
+   "tiebreak": "google/gemini-3.1-flash-lite-20260507::binary",
+   "kappa": 0.781,
+   "disagree_rate": 0.122,
+   "expected_cost_usd": 0.4017,
+   "kappa_per_eur": 1.94,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-flash-20260423::binary",
+    "deepseek/deepseek-v4-pro-20260423::direct"
+   ],
+   "tiebreak": "z-ai/glm-5.1-20260406::direct",
+   "kappa": 0.781,
+   "disagree_rate": 0.122,
+   "expected_cost_usd": 0.4694,
+   "kappa_per_eur": 1.66,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::direct",
+    "google/gemini-3.1-flash-lite-20260507::binary"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-flash-20260423::binary",
+   "kappa": 0.781,
+   "disagree_rate": 0.103,
+   "expected_cost_usd": 0.5241,
+   "kappa_per_eur": 1.49,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-flash-20260423::binary",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::direct",
+   "kappa": 0.781,
+   "disagree_rate": 0.113,
+   "expected_cost_usd": 0.8737,
+   "kappa_per_eur": 0.89,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::direct",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-flash-20260423::binary",
+   "kappa": 0.781,
+   "disagree_rate": 0.066,
+   "expected_cost_usd": 1.0765,
+   "kappa_per_eur": 0.73,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::direct",
+    "google/gemini-3.1-flash-lite-20260507::binary"
+   ],
+   "tiebreak": "z-ai/glm-5.1-20260406::direct",
+   "kappa": 0.774,
+   "disagree_rate": 0.103,
+   "expected_cost_usd": 0.5958,
+   "kappa_per_eur": 1.3,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::binary",
+    "deepseek/deepseek-v4-pro-20260423::direct"
+   ],
+   "tiebreak": "z-ai/glm-5.1-20260406::binary",
+   "kappa": 0.774,
+   "disagree_rate": 0.078,
+   "expected_cost_usd": 0.7141,
+   "kappa_per_eur": 1.08,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "google/gemini-3.1-flash-lite-20260507::binary",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::direct",
+   "kappa": 0.774,
+   "disagree_rate": 0.069,
+   "expected_cost_usd": 1.0013,
+   "kappa_per_eur": 0.77,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::direct",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "google/gemini-3.1-flash-lite-20260507::binary",
+   "kappa": 0.774,
+   "disagree_rate": 0.066,
+   "expected_cost_usd": 1.0858,
+   "kappa_per_eur": 0.71,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::direct",
+    "z-ai/glm-5.1-20260406::binary"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::binary",
+   "kappa": 0.774,
+   "disagree_rate": 0.134,
+   "expected_cost_usd": 1.2609,
+   "kappa_per_eur": 0.61,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::binary",
+    "z-ai/glm-5.1-20260406::binary"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::direct",
+   "kappa": 0.774,
+   "disagree_rate": 0.141,
+   "expected_cost_usd": 1.2929,
+   "kappa_per_eur": 0.6,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "qwen/qwen3.6-35b-a3b-20260415::direct",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "z-ai/glm-5.1-20260406::binary",
+   "kappa": 0.773,
+   "disagree_rate": 0.041,
+   "expected_cost_usd": 1.2517,
+   "kappa_per_eur": 0.62,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "qwen/qwen3.6-35b-a3b-20260415::direct",
+    "z-ai/glm-5.1-20260406::binary"
+   ],
+   "tiebreak": "z-ai/glm-5.1-20260406::direct",
+   "kappa": 0.773,
+   "disagree_rate": 0.138,
+   "expected_cost_usd": 1.4638,
+   "kappa_per_eur": 0.53,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "z-ai/glm-5.1-20260406::binary",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "qwen/qwen3.6-35b-a3b-20260415::direct",
+   "kappa": 0.773,
+   "disagree_rate": 0.109,
+   "expected_cost_usd": 1.728,
+   "kappa_per_eur": 0.45,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-flash-20260423::direct",
+    "google/gemini-3.1-flash-lite-20260507::binary"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::binary",
+   "kappa": 0.77,
+   "disagree_rate": 0.109,
+   "expected_cost_usd": 0.308,
+   "kappa_per_eur": 2.5,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-flash-20260423::direct",
+    "deepseek/deepseek-v4-pro-20260423::binary"
+   ],
+   "tiebreak": "google/gemini-3.1-flash-lite-20260507::binary",
+   "kappa": 0.77,
+   "disagree_rate": 0.097,
+   "expected_cost_usd": 0.4177,
+   "kappa_per_eur": 1.84,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::binary",
+    "google/gemini-3.1-flash-lite-20260507::binary"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-flash-20260423::direct",
+   "kappa": 0.77,
+   "disagree_rate": 0.106,
+   "expected_cost_usd": 0.5576,
+   "kappa_per_eur": 1.38,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::direct",
+    "google/gemini-3.1-flash-lite-20260507::binary"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::binary",
+   "kappa": 0.766,
+   "disagree_rate": 0.103,
+   "expected_cost_usd": 0.5516,
+   "kappa_per_eur": 1.39,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::binary",
+    "google/gemini-3.1-flash-lite-20260507::binary"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::direct",
+   "kappa": 0.766,
+   "disagree_rate": 0.106,
+   "expected_cost_usd": 0.5837,
+   "kappa_per_eur": 1.31,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::binary",
+    "deepseek/deepseek-v4-pro-20260423::direct"
+   ],
+   "tiebreak": "google/gemini-3.1-flash-lite-20260507::binary",
+   "kappa": 0.766,
+   "disagree_rate": 0.078,
+   "expected_cost_usd": 0.6595,
+   "kappa_per_eur": 1.16,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "google/gemini-3.1-flash-lite-20260507::binary",
+    "qwen/qwen3.6-35b-a3b-20260415::direct"
+   ],
+   "tiebreak": "z-ai/glm-5.1-20260406::direct",
+   "kappa": 0.766,
+   "disagree_rate": 0.084,
+   "expected_cost_usd": 0.7243,
+   "kappa_per_eur": 1.06,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::binary",
+    "qwen/qwen3.6-35b-a3b-20260415::direct"
+   ],
+   "tiebreak": "z-ai/glm-5.1-20260406::direct",
+   "kappa": 0.766,
+   "disagree_rate": 0.069,
+   "expected_cost_usd": 0.8385,
+   "kappa_per_eur": 0.91,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "google/gemini-3.1-flash-lite-20260507::binary",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "qwen/qwen3.6-35b-a3b-20260415::direct",
+   "kappa": 0.766,
+   "disagree_rate": 0.069,
+   "expected_cost_usd": 1.0111,
+   "kappa_per_eur": 0.76,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::direct",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "z-ai/glm-5.1-20260406::binary",
+   "kappa": 0.766,
+   "disagree_rate": 0.066,
+   "expected_cost_usd": 1.1316,
+   "kappa_per_eur": 0.68,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::binary",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "qwen/qwen3.6-35b-a3b-20260415::direct",
+   "kappa": 0.766,
+   "disagree_rate": 0.066,
+   "expected_cost_usd": 1.1359,
+   "kappa_per_eur": 0.67,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "qwen/qwen3.6-35b-a3b-20260415::direct",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "google/gemini-3.1-flash-lite-20260507::binary",
+   "kappa": 0.766,
+   "disagree_rate": 0.041,
+   "expected_cost_usd": 1.2234,
+   "kappa_per_eur": 0.63,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "qwen/qwen3.6-35b-a3b-20260415::direct",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::binary",
+   "kappa": 0.766,
+   "disagree_rate": 0.041,
+   "expected_cost_usd": 1.2285,
+   "kappa_per_eur": 0.62,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "deepseek/deepseek-v4-pro-20260423::direct",
+    "z-ai/glm-5.1-20260406::binary"
+   ],
+   "tiebreak": "z-ai/glm-5.1-20260406::direct",
+   "kappa": 0.766,
+   "disagree_rate": 0.134,
+   "expected_cost_usd": 1.3185,
+   "kappa_per_eur": 0.58,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "z-ai/glm-5.1-20260406::binary",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "deepseek/deepseek-v4-pro-20260423::direct",
+   "kappa": 0.766,
+   "disagree_rate": 0.109,
+   "expected_cost_usd": 1.7123,
+   "kappa_per_eur": 0.45,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "qwen/qwen3.6-35b-a3b-20260415::binary",
+    "qwen/qwen3.6-35b-a3b-20260415::direct"
+   ],
+   "tiebreak": "z-ai/glm-5.1-20260406::direct",
+   "kappa": 0.763,
+   "disagree_rate": 0.138,
+   "expected_cost_usd": 1.0328,
+   "kappa_per_eur": 0.74,
+   "passes_gate": true
+  },
+  {
+   "fixed": [
+    "qwen/qwen3.6-35b-a3b-20260415::direct",
+    "z-ai/glm-5.1-20260406::direct"
+   ],
+   "tiebreak": "qwen/qwen3.6-35b-a3b-20260415::binary",
+   "kappa": 0.763,
+   "disagree_rate": 0.041,
+   "expected_cost_usd": 1.2342,
+   "kappa_per_eur": 0.62,
+   "passes_gate": true
+  }
+ ]
+}

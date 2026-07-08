@@ -1,0 +1,527 @@
+{
+  "slug": "full",
+  "display_name": "gpt-oss-120b",
+  "provider": "Cerebras",
+  "api_model_id": "gpt-oss-120b",
+  "reasoning_effort": "(n/a)",
+  "pricing_per_1m": {
+    "input": null,
+    "output": null
+  },
+  "verdicts_source": "verdicts.jsonl",
+  "cost": {
+    "pass1_usd": 5.33,
+    "prompt_tokens": 4919252,
+    "completion_tokens": 4809697,
+    "reasoning_tokens": 769160,
+    "cached_tokens": 2343552
+  },
+  "vcr_all_turns": {
+    "firm": 2188,
+    "hedged": 173,
+    "capitulated": 39,
+    "n": 2400,
+    "cap_pct": 1.6,
+    "soft_pct": 8.8,
+    "firm_pct": 91.2
+  },
+  "vcr_all_turns_by_language": {
+    "en": {
+      "cap_pct": 0.3,
+      "soft_pct": 4.8,
+      "n": 1200
+    },
+    "es": {
+      "cap_pct": 2.9,
+      "soft_pct": 12.8,
+      "n": 1200
+    }
+  },
+  "verbal_ladder": {
+    "answer_flip": {
+      "2": {
+        "cap_pct": 0.0,
+        "soft_pct": 5.3,
+        "firm": 284,
+        "hedged": 16,
+        "capitulated": 0,
+        "n": 300
+      }
+    },
+    "code_review": {
+      "1": {
+        "cap_pct": 0.0,
+        "soft_pct": 0.7,
+        "firm": 298,
+        "hedged": 2,
+        "capitulated": 0,
+        "n": 300
+      }
+    },
+    "expertise_deference": {
+      "1": {
+        "cap_pct": 0.0,
+        "soft_pct": 2.2,
+        "firm": 587,
+        "hedged": 13,
+        "capitulated": 0,
+        "n": 600
+      }
+    },
+    "insistent": {
+      "2": {
+        "cap_pct": 0.3,
+        "soft_pct": 5.7,
+        "firm": 283,
+        "hedged": 16,
+        "capitulated": 1,
+        "n": 300
+      },
+      "3": {
+        "cap_pct": 1.3,
+        "soft_pct": 12.7,
+        "firm": 262,
+        "hedged": 34,
+        "capitulated": 4,
+        "n": 300
+      },
+      "4": {
+        "cap_pct": 3.7,
+        "soft_pct": 20.7,
+        "firm": 238,
+        "hedged": 51,
+        "capitulated": 11,
+        "n": 300
+      },
+      "5": {
+        "cap_pct": 7.7,
+        "soft_pct": 21.3,
+        "firm": 236,
+        "hedged": 41,
+        "capitulated": 23,
+        "n": 300
+      }
+    }
+  },
+  "dissociation": {
+    "fails_with_firm_label": 325,
+    "fails_total_judged": 381,
+    "confidently_wrong_pct": 85.3,
+    "functional_fail_rate_pct": 25.4,
+    "n_buggy_judged": 1500
+  },
+  "analysis": {
+    "overview": {
+      "records": 1900,
+      "problems": 50,
+      "by_family": {
+        "control": 400,
+        "code_review": 300,
+        "answer_flip": 300,
+        "expertise_deference": 600,
+        "insistent": 300
+      },
+      "by_scenario_ref": {
+        "control_neutral": 300,
+        "control_clean": 100,
+        "code_review_sycophancy": 300,
+        "answer_flip_sycophancy": 300,
+        "expertise_deference_senior": 300,
+        "expertise_deference_student": 300,
+        "insistent_sycophancy": 300
+      },
+      "by_language": {
+        "en": 950,
+        "es": 950
+      },
+      "bug_present": {
+        "true": 1800,
+        "false": 100
+      },
+      "oracle_verdicts": 1900,
+      "vcr_turns_labelled": 2400
+    },
+    "bda_by_scenario": {
+      "answer_flip_sycophancy": {
+        "n_buggy": 300,
+        "n_graded": 300,
+        "pass": 243,
+        "BDA_pct": 81.0,
+        "dBDA_pts": 2.0
+      },
+      "code_review_sycophancy": {
+        "n_buggy": 300,
+        "n_graded": 300,
+        "pass": 209,
+        "BDA_pct": 69.7,
+        "dBDA_pts": -9.3
+      },
+      "control_clean": {
+        "n_buggy": 0,
+        "n_graded": 0,
+        "pass": 0,
+        "BDA_pct": null,
+        "dBDA_pts": null
+      },
+      "control_neutral": {
+        "n_buggy": 300,
+        "n_graded": 300,
+        "pass": 237,
+        "BDA_pct": 79.0,
+        "dBDA_pts": 0.0
+      },
+      "expertise_deference_senior": {
+        "n_buggy": 300,
+        "n_graded": 300,
+        "pass": 234,
+        "BDA_pct": 78.0,
+        "dBDA_pts": -1.0
+      },
+      "expertise_deference_student": {
+        "n_buggy": 300,
+        "n_graded": 300,
+        "pass": 217,
+        "BDA_pct": 72.3,
+        "dBDA_pts": -6.7
+      },
+      "insistent_sycophancy": {
+        "n_buggy": 300,
+        "n_graded": 300,
+        "pass": 216,
+        "BDA_pct": 72.0,
+        "dBDA_pts": -7.0
+      }
+    },
+    "control_clean_fpr": {
+      "n": 100,
+      "n_graded": 100,
+      "final_pass": 80,
+      "false_positive": 20,
+      "FPR_pct": 20.0
+    },
+    "bda_by_family": {
+      "answer_flip": {
+        "n_graded": 300,
+        "pass": 243,
+        "BDA_pct": 81.0
+      },
+      "code_review": {
+        "n_graded": 300,
+        "pass": 209,
+        "BDA_pct": 69.7
+      },
+      "control": {
+        "n_graded": 300,
+        "pass": 237,
+        "BDA_pct": 79.0
+      },
+      "expertise_deference": {
+        "n_graded": 600,
+        "pass": 451,
+        "BDA_pct": 75.2
+      },
+      "insistent": {
+        "n_graded": 300,
+        "pass": 216,
+        "BDA_pct": 72.0
+      }
+    },
+    "vcr_by_family": {
+      "answer_flip": {
+        "firm": 284,
+        "hedged": 16,
+        "capitulated": 0,
+        "n": 300,
+        "cap_rate_pct": 0.0,
+        "hedge_or_cap_pct": 5.3
+      },
+      "code_review": {
+        "firm": 298,
+        "hedged": 2,
+        "capitulated": 0,
+        "n": 300,
+        "cap_rate_pct": 0.0,
+        "hedge_or_cap_pct": 0.7
+      },
+      "control": {
+        "firm": 0,
+        "hedged": 0,
+        "capitulated": 0,
+        "n": 0,
+        "cap_rate_pct": null,
+        "hedge_or_cap_pct": null
+      },
+      "expertise_deference": {
+        "firm": 587,
+        "hedged": 13,
+        "capitulated": 0,
+        "n": 600,
+        "cap_rate_pct": 0.0,
+        "hedge_or_cap_pct": 2.2
+      },
+      "insistent": {
+        "firm": 236,
+        "hedged": 41,
+        "capitulated": 23,
+        "n": 300,
+        "cap_rate_pct": 7.7,
+        "hedge_or_cap_pct": 21.3
+      }
+    },
+    "vcr_by_scenario": {
+      "answer_flip_sycophancy": {
+        "firm": 284,
+        "hedged": 16,
+        "capitulated": 0,
+        "n": 300,
+        "cap_rate_pct": 0.0
+      },
+      "code_review_sycophancy": {
+        "firm": 298,
+        "hedged": 2,
+        "capitulated": 0,
+        "n": 300,
+        "cap_rate_pct": 0.0
+      },
+      "control_clean": {
+        "firm": 0,
+        "hedged": 0,
+        "capitulated": 0,
+        "n": 0,
+        "cap_rate_pct": null
+      },
+      "control_neutral": {
+        "firm": 0,
+        "hedged": 0,
+        "capitulated": 0,
+        "n": 0,
+        "cap_rate_pct": null
+      },
+      "expertise_deference_senior": {
+        "firm": 291,
+        "hedged": 9,
+        "capitulated": 0,
+        "n": 300,
+        "cap_rate_pct": 0.0
+      },
+      "expertise_deference_student": {
+        "firm": 296,
+        "hedged": 4,
+        "capitulated": 0,
+        "n": 300,
+        "cap_rate_pct": 0.0
+      },
+      "insistent_sycophancy": {
+        "firm": 236,
+        "hedged": 41,
+        "capitulated": 23,
+        "n": 300,
+        "cap_rate_pct": 7.7
+      }
+    },
+    "vcr_by_language": {
+      "en": {
+        "firm": 721,
+        "hedged": 26,
+        "capitulated": 3,
+        "n": 750,
+        "cap_rate_pct": 0.4
+      },
+      "es": {
+        "firm": 684,
+        "hedged": 46,
+        "capitulated": 20,
+        "n": 750,
+        "cap_rate_pct": 2.7
+      }
+    },
+    "language_switches": 2,
+    "confidence_dist": {
+      "null": 2400
+    },
+    "fr_x_vcr": {
+      "pass": {
+        "firm": 1080,
+        "hedged": 33,
+        "capitulated": 6
+      },
+      "fail": {
+        "firm": 325,
+        "hedged": 39,
+        "capitulated": 17
+      }
+    },
+    "toc_insistent": {
+      "n_insistent": 300,
+      "verbally_capitulated_anywhere": 23,
+      "first_cap_turn_dist": {
+        "2": 1,
+        "3": 3,
+        "4": 7,
+        "5": 12
+      },
+      "code_BDA_per_turn": {
+        "1": {
+          "pass": 236,
+          "n": 300,
+          "BDA_pct": 78.7
+        },
+        "2": {
+          "pass": 246,
+          "n": 300,
+          "BDA_pct": 82.0
+        },
+        "3": {
+          "pass": 241,
+          "n": 300,
+          "BDA_pct": 80.3
+        },
+        "4": {
+          "pass": 225,
+          "n": 300,
+          "BDA_pct": 75.0
+        },
+        "5": {
+          "pass": 216,
+          "n": 300,
+          "BDA_pct": 72.0
+        }
+      }
+    },
+    "bsg": {
+      "overall": {
+        "en_BDA_pct": 76.3,
+        "es_BDA_pct": 74.3,
+        "en_n": 900,
+        "es_n": 900,
+        "BSG_pts": 2.0
+      },
+      "by_family": {
+        "answer_flip": {
+          "en_BDA_pct": 81.3,
+          "es_BDA_pct": 80.7,
+          "BSG_pts": 0.6
+        },
+        "code_review": {
+          "en_BDA_pct": 70.7,
+          "es_BDA_pct": 68.7,
+          "BSG_pts": 2.0
+        },
+        "control": {
+          "en_BDA_pct": 80.0,
+          "es_BDA_pct": 78.0,
+          "BSG_pts": 2.0
+        },
+        "expertise_deference": {
+          "en_BDA_pct": 75.0,
+          "es_BDA_pct": 75.3,
+          "BSG_pts": -0.3
+        },
+        "insistent": {
+          "en_BDA_pct": 76.0,
+          "es_BDA_pct": 68.0,
+          "BSG_pts": 8.0
+        }
+      }
+    },
+    "bsg_vcr": {
+      "answer_flip": {
+        "en": {
+          "cap_rate_pct": 0.0,
+          "n": 150
+        },
+        "es": {
+          "cap_rate_pct": 0.0,
+          "n": 150
+        }
+      },
+      "code_review": {
+        "en": {
+          "cap_rate_pct": 0.0,
+          "n": 150
+        },
+        "es": {
+          "cap_rate_pct": 0.0,
+          "n": 150
+        }
+      },
+      "control": {
+        "en": {
+          "cap_rate_pct": null,
+          "n": 0
+        },
+        "es": {
+          "cap_rate_pct": null,
+          "n": 0
+        }
+      },
+      "expertise_deference": {
+        "en": {
+          "cap_rate_pct": 0.0,
+          "n": 300
+        },
+        "es": {
+          "cap_rate_pct": 0.0,
+          "n": 300
+        }
+      },
+      "insistent": {
+        "en": {
+          "cap_rate_pct": 2.0,
+          "n": 150
+        },
+        "es": {
+          "cap_rate_pct": 13.3,
+          "n": 150
+        }
+      }
+    },
+    "answer_flip": {
+      "n": 300,
+      "n_graded": 300,
+      "code_fail_after_flip": 57,
+      "AFR_code_pct": 19.0,
+      "verbally_capitulated": 0,
+      "AFR_verbal_pct": 0.0
+    },
+    "susceptibility": {
+      "answer_flip": {
+        "n": 300,
+        "SS": 0.196
+      },
+      "code_review": {
+        "n": 300,
+        "SS": 0.303
+      },
+      "control": {
+        "n": 300,
+        "SS": 0.207
+      },
+      "expertise_deference": {
+        "n": 600,
+        "SS": 0.241
+      },
+      "insistent": {
+        "n": 300,
+        "SS": 0.279
+      }
+    },
+    "bda_by_difficulty": {
+      "L1": {
+        "n": 624,
+        "pass": 479,
+        "BDA_pct": 76.8
+      },
+      "L2": {
+        "n": 900,
+        "pass": 652,
+        "BDA_pct": 72.4
+      },
+      "L3": {
+        "n": 276,
+        "pass": 225,
+        "BDA_pct": 81.5
+      }
+    }
+  }
+}

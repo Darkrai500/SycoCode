@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SycoCode — Mission Control</title>
+<style>
+  /* ── Phosphor-amber mission control. One accent, near-black field, every
+     numeral tabular so columns never jitter between polls. ─────────────── */
+  :root {
+    --bg:        #0b0e14;
+    --bg-raise:  #10141d;
+    --bg-card:   #0e1219;
+    --line:      #1c2230;
+    --line-soft: #161b26;
+    --ink:       #c9d1dc;
+    --ink-dim:   #6b7585;
+    --ink-faint: #444d5c;
+    --accent:    #ffb454;          /* phosphor amber */
+    --accent-dim:#8a6630;
+    --good:      #4cc38a;
+    --bad:       #f06464;
+    --warn:      #e5c07b;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font: 14px/1.45 var(--sans);
+    font-variant-numeric: tabular-nums;
+    /* faint scanline texture: structure without kitsch */
+    background-image: repeating-linear-gradient(
+      0deg, transparent 0 2px, rgba(255,255,255,0.012) 2px 4px);
+  }
+  a { color: var(--accent); }
+
+  .app { display: grid; grid-template-rows: auto 1fr; height: 100vh; }
+
+  /* ── header ─────────────────────────────────────────────────────────── */
+  header {
+    display: flex; align-items: baseline; gap: 16px;
+    padding: 14px 22px; border-bottom: 1px solid var(--line);
+    background: var(--bg-raise);
+  }
+  .brand { font-family: var(--mono); font-size: 13px; letter-spacing: .22em;
+           color: var(--accent); white-space: nowrap; }
+  .brand::before { content: "▮ "; animation: blink 1.6s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: .25; } }
+  .runsdir { font-family: var(--mono); font-size: 11px; color: var(--ink-dim);
+             overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+  .tick { font-family: var(--mono); font-size: 11px; color: var(--ink-dim); white-space: nowrap; }
+  .tick b { color: var(--ink); font-weight: 600; }
+
+  /* ── layout ─────────────────────────────────────────────────────────── */
+  .cols { display: grid; grid-template-columns: 300px 1fr; min-height: 0; }
+
+  /* ── sidebar: run list ──────────────────────────────────────────────── */
+  nav { border-right: 1px solid var(--line); overflow-y: auto; padding: 14px 0; }
+  .nav-label { font-family: var(--mono); font-size: 10px; letter-spacing: .18em;
+               color: var(--ink-faint); padding: 0 18px 8px; }
+  .run-row {
+    display: grid; grid-template-columns: 10px 1fr auto; gap: 10px; align-items: center;
+    padding: 9px 18px; cursor: pointer; border-left: 2px solid transparent;
+  }
+  .run-row:hover { background: var(--bg-raise); }
+  .run-row.sel { background: var(--bg-raise); border-left-color: var(--accent); }
+  .run-id { font-family: var(--mono); font-size: 11px; color: var(--ink);
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .run-sub { font-family: var(--mono); font-size: 10px; color: var(--ink-dim); }
+  .run-count { font-family: var(--mono); font-size: 10px; color: var(--ink-dim); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot.running  { background: var(--accent); animation: pulse 1.4s ease-in-out infinite; }
+  .dot.finished { background: var(--good); }
+  .dot.aborted  { background: var(--bad); }
+  .dot.stale    { background: var(--ink-faint); }
+  @keyframes pulse { 50% { opacity: .3; box-shadow: 0 0 8px var(--accent); } }
+
+  /* ── main column ────────────────────────────────────────────────────── */
+  main { overflow-y: auto; padding: 22px 26px 60px; }
+  .empty { color: var(--ink-dim); font-family: var(--mono); padding: 60px 0; text-align: center; }
+
+  .title-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
+  h1 { font-family: var(--mono); font-size: 16px; font-weight: 600; letter-spacing: .02em; }
+  .model-tag { font-family: var(--mono); font-size: 11px; color: var(--ink-dim);
+               border: 1px solid var(--line); border-radius: 3px; padding: 2px 8px; }
+  .pill { font-family: var(--mono); font-size: 10px; letter-spacing: .14em;
+          padding: 3px 10px; border-radius: 3px; border: 1px solid; }
+  .pill.live     { color: var(--accent); border-color: var(--accent-dim);
+                   animation: blink 2s steps(1) infinite; }
+  .pill.lagging  { color: var(--warn); border-color: var(--warn); }
+  .pill.stalled  { color: var(--bad); border-color: var(--bad); }
+  .pill.finished { color: var(--good); border-color: var(--good); }
+  .pill.aborted  { color: var(--bad); border-color: var(--bad); }
+  .pill.stale    { color: var(--ink-faint); border-color: var(--ink-faint); }
+  .abort-reason { font-family: var(--mono); font-size: 11px; color: var(--bad); margin: 2px 0 8px; }
+  .synth-note { font-family: var(--mono); font-size: 11px; color: var(--ink-dim); margin: 2px 0 8px; }
+
+  /* hero counter */
+  .hero { display: flex; align-items: baseline; gap: 18px; margin: 18px 0 10px; }
+  .big { font-family: var(--mono); font-size: 52px; font-weight: 300; line-height: 1; color: #fff; }
+  .big .of { color: var(--ink-faint); font-size: 30px; }
+  .pct { font-family: var(--mono); font-size: 24px; color: var(--accent); }
+  .hero-sub { font-family: var(--mono); font-size: 11px; color: var(--ink-dim); }
+
+  .bar { height: 14px; border: 1px solid var(--line); border-radius: 3px;
+         background: var(--bg-card); overflow: hidden; display: flex; margin-bottom: 22px; }
+  .bar .seg-ok   { background: var(--good);  transition: width .6s ease; }
+  .bar .seg-fail { background: var(--bad);   transition: width .6s ease; }
+  .bar .seg-skip { background: var(--ink-faint); transition: width .6s ease; }
+
+  /* stat cards */
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+           gap: 10px; margin-bottom: 22px; }
+  .card { background: var(--bg-card); border: 1px solid var(--line-soft);
+          border-radius: 4px; padding: 10px 12px; }
+  .card .k { font-family: var(--mono); font-size: 9px; letter-spacing: .16em;
+             color: var(--ink-faint); margin-bottom: 5px; text-transform: uppercase; }
+  .card .v { font-family: var(--mono); font-size: 17px; color: var(--ink); }
+  .card .v small { font-size: 11px; color: var(--ink-dim); }
+  .card.accent .v { color: var(--accent); }
+  .card.bad .v { color: var(--bad); }
+
+  /* sections */
+  section { margin-bottom: 26px; }
+  h2 { font-family: var(--mono); font-size: 10px; letter-spacing: .2em; font-weight: 600;
+       color: var(--ink-faint); text-transform: uppercase; margin-bottom: 10px; }
+  h2::before { content: "── "; color: var(--line); }
+
+  /* sparkline */
+  .spark-wrap { background: var(--bg-card); border: 1px solid var(--line-soft);
+                border-radius: 4px; padding: 10px 12px; }
+  .spark-meta { font-family: var(--mono); font-size: 10px; color: var(--ink-dim); margin-top: 4px; }
+  svg.spark { display: block; width: 100%; height: 56px; }
+
+  /* matrix */
+  .matrix { border-collapse: collapse; font-family: var(--mono); font-size: 11px; }
+  .matrix th, .matrix td { border: 1px solid var(--line-soft); padding: 5px 12px; text-align: right; }
+  .matrix th { color: var(--ink-dim); font-weight: 400; background: var(--bg-card); }
+  .matrix td.rowhead { text-align: left; color: var(--ink-dim); background: var(--bg-card); }
+  .matrix td { position: relative; color: var(--ink); }
+  .matrix td.zero { color: var(--ink-faint); }
+  .matrix td .fbadge { position: absolute; top: 0; right: 0; width: 0; height: 0;
+                       border-top: 9px solid var(--bad); border-left: 9px solid transparent; }
+
+  /* failures feed */
+  .feed { font-family: var(--mono); font-size: 11px; }
+  .feed-row { display: grid; grid-template-columns: 270px 110px 1fr; gap: 12px;
+              padding: 6px 2px; border-bottom: 1px solid var(--line-soft); }
+  .feed-row .fitem { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .feed-row .ftype { color: var(--bad); }
+  .feed-row .fmsg  { color: var(--ink-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .feed-empty { color: var(--ink-faint); font-family: var(--mono); font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">SYCOCODE&nbsp;MISSION&nbsp;CONTROL</div>
+    <div class="runsdir" id="runsdir">—</div>
+    <div class="tick" id="tick">updated —</div>
+  </header>
+  <div class="cols">
+    <nav>
+      <div class="nav-label">RUNS · NEWEST FIRST</div>
+      <div id="runlist"></div>
+    </nav>
+    <main id="main"><div class="empty">no run selected</div></main>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* All state lives here; rendering is a pure function of it. Polling cadence:
+   status 2s while running / 10s otherwise, breakdown 6s / 30s, run list 10s.
+   Everything pauses while document.hidden and resumes on visibilitychange. */
+const S = {
+  runs: [], selected: null, status: null, breakdown: null,
+  statusFetchedAt: null,                 // Date.now() of last status poll
+  samples: [],                           // throughput history, max 120
+  autoSelected: false,
+  timers: { status: null, breakdown: null, runs: null },
+};
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g,
+  (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const fmtInt = (n) => (n == null ? "—" : Number(n).toLocaleString("en-US"));
+const fmtUsd = (n) => (n == null ? "—" : "$" + Number(n).toFixed(4));
+function fmtDur(sec) {
+  if (sec == null || !isFinite(sec)) return "—";
+  sec = Math.max(0, Math.round(sec));
+  const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
+  if (h) return `${h}h ${m}m`;
+  if (m) return `${m}m ${s}s`;
+  return `${s}s`;
+}
+const parseIso = (t) => (t ? new Date(t.replace(" ", "T")) : null);
+
+async function getJson(url) {
+  const r = await fetch(url, { cache: "no-store" });
+  if (!r.ok) throw new Error(`${url} -> ${r.status}`);
+  return r.json();
+}
+
+/* ── polling ──────────────────────────────────────────────────────────── */
+function isRunning() { return S.status && S.status.run_status === "running"; }
+
+function schedule(kind, fn, ms) {
+  clearTimeout(S.timers[kind]);
+  S.timers[kind] = setTimeout(fn, ms);
+}
+
+async function pollRuns() {
+  if (!document.hidden) {
+    try {
+      S.runs = await getJson("/api/runs");
+      if (!S.autoSelected && S.runs.length) {
+        const live = S.runs.find((r) => r.run_status === "running");
+        selectRun((live || S.runs[0]).run_id, false);
+        S.autoSelected = true;
+      }
+      renderSidebar();
+    } catch (e) { /* server briefly away: keep last view */ }
+  }
+  schedule("runs", pollRuns, 10000);
+}
+
+async function pollStatus() {
+  if (!document.hidden && S.selected) {
+    const rid = S.selected;                // discard late responses for old runs
+    try {
+      const st = await getJson(`/api/status?run_id=${encodeURIComponent(rid)}`);
+      if (rid === S.selected) {
+        S.status = st;
+        S.statusFetchedAt = Date.now();
+        S.samples.push({ t: Date.now(), v: st.throughput_per_min ?? 0 });
+        if (S.samples.length > 120) S.samples.shift();
+        renderMain();
+      }
+    } catch (e) { /* transient */ }
+  }
+  schedule("status", pollStatus, isRunning() ? 2000 : 10000);
+}
+
+async function pollBreakdown() {
+  if (!document.hidden && S.selected) {
+    const rid = S.selected;                // discard late responses for old runs
+    try {
+      const bd = await getJson(`/api/breakdown?run_id=${encodeURIComponent(rid)}`);
+      if (rid === S.selected) {
+        S.breakdown = bd;
+        renderMain();
+      }
+    } catch (e) { /* transient */ }
+  }
+  schedule("breakdown", pollBreakdown, isRunning() ? 6000 : 30000);
+}
+
+function selectRun(runId, user = true) {
+  if (S.selected === runId) return;
+  S.selected = runId;
+  S.status = null; S.breakdown = null; S.samples = []; S.statusFetchedAt = null;
+  if (user) S.autoSelected = true;
+  renderSidebar(); renderMain();
+  schedule("status", pollStatus, 0);
+  schedule("breakdown", pollBreakdown, 0);
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) {            // resume immediately rather than waiting a cycle
+    schedule("runs", pollRuns, 0);
+    schedule("status", pollStatus, 0);
+    schedule("breakdown", pollBreakdown, 0);
+  }
+});
+
+/* ── rendering ────────────────────────────────────────────────────────── */
+function renderSidebar() {
+  $("runlist").innerHTML = S.runs.map((r) => {
+    const model = r.model ? esc(r.model.logical_name || r.model.api_model_id || "") : "";
+    return `<div class="run-row ${r.run_id === S.selected ? "sel" : ""}"
+                 data-run-id="${esc(r.run_id)}">
+      <span class="dot ${esc(r.run_status)}"></span>
+      <span><span class="run-id" title="${esc(r.run_id)}">${esc(r.run_id)}</span><br>
+            <span class="run-sub">${model || esc(r.run_status)}</span></span>
+      <span class="run-count">${fmtInt(r.completed)}/${fmtInt(r.total)}</span>
+    </div>`;
+  }).join("") || `<div class="feed-empty" style="padding:0 18px">no runs found</div>`;
+}
+
+/* one delegated listener: run ids with quotes/backslashes never reach JS source */
+$("runlist").addEventListener("click", (e) => {
+  const row = e.target.closest(".run-row");
+  if (row && row.dataset.runId != null) selectRun(row.dataset.runId);
+});
+
+function liveness(st) {
+  if (!st) return null;
+  if (st.run_status === "finished") return { cls: "finished", label: "FINISHED" };
+  if (st.run_status === "aborted")  return { cls: "aborted",  label: "ABORTED" };
+  if (st.run_status === "stale")    return { cls: "stale",    label: "STALE" };
+  const age = ageNow(st);
+  if (age == null) return { cls: "stalled", label: "UNKNOWN" };
+  if (age < 15) return { cls: "live",    label: "LIVE" };
+  if (age < 60) return { cls: "lagging", label: "LAGGING" };
+  return { cls: "stalled", label: st.run_status === "running" ? "STALLED" : "STALE" };
+}
+
+/* age of the status file right now = server-computed age + time since we fetched */
+function ageNow(st) {
+  if (!st || st.age_seconds == null) return null;
+  return st.age_seconds + (S.statusFetchedAt ? (Date.now() - S.statusFetchedAt) / 1000 : 0);
+}
+
+function elapsedSeconds(st) {
+  const start = parseIso(st.started_at);
+  if (!start) return null;
+  const end = st.run_status === "running"
+    ? new Date()
+    : (parseIso(st.finished_at) || parseIso(st.updated_at) || new Date());
+  return (end - start) / 1000;
+}
+
+function card(k, v, cls = "") {
+  return `<div class="card ${cls}"><div class="k">${k}</div><div class="v">${v}</div></div>`;
+}
+
+function statCards(st) {
+  const t = st.tokens || null;                       // v2 only
+  const defs = [
+    ["throughput", st.throughput_per_min != null
+      ? `${st.throughput_per_min.toFixed(1)} <small>/min</small>` : null, "accent"],
+    ["eta", st.eta_seconds != null ? fmtDur(st.eta_seconds) : null],
+    ["elapsed", fmtDur(elapsedSeconds(st))],
+    ["in flight", st.in_flight != null ? fmtInt(st.in_flight) : null],
+    ["failed", st.failed ? fmtInt(st.failed) : null, "bad"],
+    ["retries", st.retries_total != null ? fmtInt(st.retries_total) : null],
+    ["requests", st.requests_done != null ? fmtInt(st.requests_done) : null],
+    ["governor delay", st.governor_delay_s != null ? `${st.governor_delay_s.toFixed(2)}s` : null],
+    ["concurrency", st.concurrency != null ? fmtInt(st.concurrency) : null],
+    ["tokens in", t ? fmtInt(t.prompt) : null],
+    ["tokens out", t ? (fmtInt(t.completion)
+        + (t.reasoning ? ` <small>+${fmtInt(t.reasoning)} rsn</small>` : "")) : null],
+    ["cost", st.cost_usd != null ? fmtUsd(st.cost_usd) : null, "accent"],
+  ];
+  return defs.filter(([, v]) => v != null && v !== "—")
+             .map(([k, v, cls]) => card(k, v, cls)).join("");
+}
+
+function sparkline() {
+  const pts = S.samples;
+  if (pts.length < 2) return `<div class="feed-empty">collecting samples…</div>`;
+  const W = 600, H = 56, vmax = Math.max(...pts.map((p) => p.v), 1e-9);
+  const xy = pts.map((p, i) =>
+    `${(i / (pts.length - 1) * W).toFixed(1)},${(H - 4 - (p.v / vmax) * (H - 10)).toFixed(1)}`);
+  const last = pts[pts.length - 1].v;
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+      <polyline points="${xy.join(" ")}" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+      <circle cx="${xy[xy.length - 1].split(",")[0]}" cy="${xy[xy.length - 1].split(",")[1]}"
+              r="2.5" fill="var(--accent)"/>
+    </svg>
+    <div class="spark-meta">now ${last.toFixed(1)}/min · peak ${vmax.toFixed(1)}/min
+      · ${pts.length} samples</div>`;
+}
+
+function matrix(bd) {
+  const cells = bd && bd.by_scenario_language ? bd.by_scenario_language : {};
+  const keys = Object.keys(cells);
+  if (!keys.length) return `<div class="feed-empty">no responses yet</div>`;
+  const rows = [...new Set(keys.map((k) => k.split("|")[0]))].sort();
+  const cols = [...new Set(keys.map((k) => k.split("|")[1]))].sort();
+  let h = `<table class="matrix"><tr><th></th>${cols.map((c) => `<th>${esc(c)}</th>`).join("")}</tr>`;
+  for (const r of rows) {
+    h += `<tr><td class="rowhead">${esc(r)}</td>`;
+    for (const c of cols) {
+      const cell = cells[`${r}|${c}`] || { completed: 0, partial: 0, failed: 0 };
+      const fails = (cell.partial || 0) + (cell.failed || 0);
+      h += `<td class="${cell.completed ? "" : "zero"}"
+                title="${cell.completed} completed, ${cell.partial} partial, ${cell.failed} failed">
+              ${cell.completed}${fails ? `<span class="fbadge"></span>` : ""}</td>`;
+    }
+    h += `</tr>`;
+  }
+  return h + `</table>`;
+}
+
+function failuresFeed(st, bd) {
+  /* Merge persisted failures (responses.jsonl) with live retry noise from the
+     status file; newest first, dedup on item+message, cap 12. */
+  const rows = [];
+  for (const e of [...(st.recent_errors || [])].reverse()) {
+    rows.push({ item: e.item_id, type: e.kind, msg: e.message });
+  }
+  for (const f of (bd && bd.failures) || []) {
+    rows.push({ item: f.item_id, type: f.error_type,
+                msg: f.error_message + (f.retries ? ` (retries: ${f.retries})` : "") });
+  }
+  const seen = new Set(); const out = [];
+  for (const r of rows) {
+    const k = `${r.item}|${r.msg}`;
+    if (!seen.has(k)) { seen.add(k); out.push(r); }
+    if (out.length >= 12) break;
+  }
+  if (!out.length) return `<div class="feed-empty">no failures — clean run</div>`;
+  return out.map((r) => `<div class="feed-row">
+      <span class="fitem" title="${esc(r.item)}">${esc(r.item)}</span>
+      <span class="ftype">${esc(r.type)}</span>
+      <span class="fmsg" title="${esc(r.msg)}">${esc(r.msg)}</span></div>`).join("");
+}
+
+function renderMain() {
+  const st = S.status;
+  if (!st) { $("main").innerHTML = `<div class="empty">loading ${esc(S.selected || "")}…</div>`; return; }
+  const lv = liveness(st);
+  const total = st.total || 0;
+  const done = (st.completed || 0) + (st.failed || 0) + (st.skipped_existing || 0);
+  const pc = (x) => (total ? (100 * (x || 0) / total) : 0);
+  const model = st.model
+    ? `${st.model.logical_name} · ${st.model.provider} · ${st.model.api_model_id}` : null;
+  const bd = S.breakdown;
+  const tt = bd && bd.totals;
+
+  $("main").innerHTML = `
+    <div class="title-row">
+      <h1>${esc(st.run_id)}</h1>
+      <span class="pill ${lv.cls}" id="lv-pill">${lv.label}</span>
+      ${model ? `<span class="model-tag">${esc(model)}</span>` : ""}
+    </div>
+    ${st.run_status === "aborted" && st.abort_reason
+      ? `<div class="abort-reason">✕ ${esc(st.abort_reason)}</div>` : ""}
+    ${st.synthesized
+      ? `<div class="synth-note">no status file — showing runs.jsonl data</div>` : ""}
+
+    <div class="hero">
+      <div class="big">${fmtInt(st.completed)}<span class="of"> / ${fmtInt(st.total)}</span></div>
+      <div class="pct">${st.percent != null ? st.percent.toFixed(1) + "%" : ""}</div>
+      <div class="hero-sub">${fmtInt(st.remaining)} remaining
+        ${st.skipped_existing ? `· ${fmtInt(st.skipped_existing)} resumed` : ""}</div>
+    </div>
+    <div class="bar">
+      <div class="seg-skip" style="width:${pc(st.skipped_existing)}%"></div>
+      <div class="seg-ok"   style="width:${pc(st.completed)}%"></div>
+      <div class="seg-fail" style="width:${pc(st.failed)}%"></div>
+    </div>
+
+    <div class="cards">${statCards(st)}</div>
+
+    <section><h2>throughput / min</h2>
+      <div class="spark-wrap">${sparkline()}</div></section>
+
+    <section><h2>scenario × language</h2>${matrix(bd)}</section>
+
+    ${tt ? `<section><h2>corpus totals (responses.jsonl)</h2><div class="cards">
+        ${card("items", fmtInt(tt.items))}
+        ${card("records (all attempts)", fmtInt(tt.records))}
+        ${card("prompt tokens", fmtInt(tt.prompt_tokens))}
+        ${card("completion tokens", fmtInt(tt.completion_tokens))}
+        ${card("cost", fmtUsd(tt.cost_usd), "accent")}
+        ${card("retries", fmtInt(tt.retries))}
+      </div></section>` : ""}
+
+    <section><h2>failures</h2><div class="feed">${failuresFeed(st, bd)}</div></section>`;
+}
+
+/* header ticker: re-renders the "updated Xs ago" line every second */
+setInterval(() => {
+  const age = ageNow(S.status);
+  $("tick").innerHTML = age == null ? "updated —" : `updated <b>${fmtDur(age)}</b> ago`;
+  const pill = $("lv-pill");
+  if (pill && S.status) {
+    const lv = liveness(S.status);
+    pill.className = `pill ${lv.cls}`; pill.textContent = lv.label;
+  }
+}, 1000);
+
+/* boot */
+getJson("/api/meta").then((m) => { $("runsdir").textContent = m.runs_dir; }).catch(() => {});
+pollRuns();
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# SycoCode Phase C — Pass 1 generation runner (eval/). Python 3.9+.
+# Install into the project venv:  .venv/bin/pip install -r requirements-eval.txt
+#
+# httpx is already vendored by requirements-data.txt; pinned here so the runner
+# is installable standalone on a fresh clone.
+httpx==0.28.1
+
+# Live terminal progress (eval/progress.py): rich Live dashboard on a TTY.
+# Optional at runtime — the runner degrades to plain mode without it.
+rich==15.0.0
+
+# Optional: schema validation of items.jsonl against schema/items.schema.json.
+# The runner works without it; uncomment to enable a future --validate flag.
+# jsonschema>=4.0
+
+# For scripts/build_cost_model.py (the cost workbook generator).
+openpyxl==3.1.5

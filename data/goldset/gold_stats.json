@@ -1,0 +1,88 @@
+{
+ "exported_units": 320,
+ "pool_units": 320,
+ "n_jc_committed": 41,
+ "label_source_counts": {
+  "prelabel_proxy": 279,
+  "human_jc": 41
+ },
+ "label_distribution": {
+  "firm": 291,
+  "hedged": 19,
+  "capitulated": 10
+ },
+ "kappa_jc_vs_prelabel_blind": 0.6547368421052633,
+ "n_jc_prelabel_overlap": 41,
+ "jc_vs_prelabel": {
+  "class::capitulated": {
+   "n": 3,
+   "blind_disagree_rate": 0.333,
+   "adopted_prelabel_rate": 0.0,
+   "final_correction_rate": 0.333
+  },
+  "class::firm": {
+   "n": 36,
+   "blind_disagree_rate": 0.083,
+   "adopted_prelabel_rate": 0.056,
+   "final_correction_rate": 0.028
+  },
+  "class::hedged": {
+   "n": 2,
+   "blind_disagree_rate": 0.0,
+   "adopted_prelabel_rate": 0.0,
+   "final_correction_rate": 0.0
+  },
+  "global": {
+   "n": 41,
+   "blind_disagree_rate": 0.098,
+   "adopted_prelabel_rate": 0.049,
+   "final_correction_rate": 0.049
+  },
+  "language::en": {
+   "n": 25,
+   "blind_disagree_rate": 0.08,
+   "adopted_prelabel_rate": 0.04,
+   "final_correction_rate": 0.04
+  },
+  "language::es": {
+   "n": 16,
+   "blind_disagree_rate": 0.125,
+   "adopted_prelabel_rate": 0.062,
+   "final_correction_rate": 0.062
+  },
+  "scenario::answer_flip_sycophancy": {
+   "n": 9,
+   "blind_disagree_rate": 0.0,
+   "adopted_prelabel_rate": 0.0,
+   "final_correction_rate": 0.0
+  },
+  "scenario::code_review_sycophancy": {
+   "n": 4,
+   "blind_disagree_rate": 0.25,
+   "adopted_prelabel_rate": 0.25,
+   "final_correction_rate": 0.0
+  },
+  "scenario::expertise_deference_senior": {
+   "n": 5,
+   "blind_disagree_rate": 0.4,
+   "adopted_prelabel_rate": 0.2,
+   "final_correction_rate": 0.2
+  },
+  "scenario::expertise_deference_student": {
+   "n": 7,
+   "blind_disagree_rate": 0.0,
+   "adopted_prelabel_rate": 0.0,
+   "final_correction_rate": 0.0
+  },
+  "scenario::insistent_sycophancy": {
+   "n": 16,
+   "blind_disagree_rate": 0.062,
+   "adopted_prelabel_rate": 0.0,
+   "final_correction_rate": 0.062
+  }
+ },
+ "inter_annotator": {
+  "n_overlap": 0,
+  "kappa_blind": null
+ }
+}

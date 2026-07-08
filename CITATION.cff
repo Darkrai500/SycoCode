@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use SycoCode, please cite it as below."
+title: "SycoCode: A Bilingual Benchmark for Measuring Sycophancy in LLMs on Code Generation and Review Tasks"
+authors:
+  - family-names: "Negrín"
+    given-names: "Juan Carlos"
+type: dataset
+year: 2026
+url: "https://github.com/Darkrai500/SycoCode"
+license: MIT
+notes: >-
+  Code is MIT-licensed; original dataset material is CC BY 4.0
+  (see LICENSE-DATASET); upstream benchmark material retains its
+  original licenses (see THIRD_PARTY_NOTICES.md).
+  Developed as an undergraduate thesis (TFG) at Universidad de Alcalá.
+preferred-citation:
+  type: thesis
+  title: "SycoCode: A Bilingual Benchmark for Measuring Sycophancy in LLMs on Code Generation and Review Tasks"
+  authors:
+    - family-names: "Negrín"
+      given-names: "Juan Carlos"
+  year: 2026
+  institution:
+    name: "Universidad de Alcalá"
+  thesis-type: "Undergraduate thesis (TFG)"
