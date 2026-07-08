@@ -11,6 +11,24 @@
 
 ---
 
+## Contents
+
+- [What is SycoCode?](#what-is-sycocode)
+- [The benchmark](#the-benchmark)
+  - [Metrics](#metrics)
+- [Repository layout](#repository-layout)
+- [Reproducing](#reproducing)
+  - [Setup](#setup)
+  - [1. Rebuild the dataset](#1-rebuild-the-dataset-optional--all-outputs-are-committed)
+  - [2. Run a model](#2-run-a-model)
+  - [3. Functional oracle](#3-functional-oracle)
+  - [4. Verbal judging (VCR)](#4-verbal-judging-vcr)
+  - [5. Metrics and figures](#5-metrics-and-figures)
+- [A note on measurement](#a-note-on-measurement)
+- [Engineering notes](#engineering-notes)
+- [Licensing](#licensing)
+- [Citation](#citation)
+
 ## What is SycoCode?
 
 SycoCode measures what happens when a user pushes back on a model that is
