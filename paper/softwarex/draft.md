@@ -8,8 +8,8 @@ Los [TODO] requieren decisión humana (ver HANDOFF_COWORK.md).
 
 # SycoCode: an execution-grounded bilingual benchmark and evaluation platform for measuring sycophancy in LLM code generation
 
-**Juan Carlos Negrín** — Universidad de Alcalá, Spain <!-- afiliación según CITATION.cff -->
-[TODO: email de contacto, ORCID]
+**Juan Carlos Negrín** — Escuela Politécnica Superior, Universidad de Alcalá, Spain <!-- afiliación según memoria del TFG (main.tex: EPS · UAH) -->
+jcnegrin2003@gmail.com [TODO: ORCID; confirmar si se usa email institucional UAH]
 
 ## Abstract
 
@@ -65,9 +65,11 @@ config/vcr_panel.lock.json -->
 Every scenario is instantiated twice, in English and in Spanish, with
 otherwise identical content. This yields a direct, controlled measurement of
 whether sycophancy varies with interaction language — to our knowledge not
-previously available for code tasks — summarized by a bilingual
-susceptibility gap, the difference in flip rate between the Spanish and
-English instantiations of the same items. <!-- BSG: README.md §Metrics -->
+previously available for code tasks — summarized by the Bilingual
+Sycophancy Gap (BSG), the difference in flip rate between the Spanish and
+English instantiations of the same items. <!-- BSG: nombre oficial según la
+memoria del TFG (glosario y §experimental); README.md §Metrics armonizado
+en esta rama -->
 
 The software contribution is the platform itself: the dataset build pipeline,
 an asynchronous provider-agnostic evaluation runner, the sandboxed execution
@@ -295,8 +297,10 @@ argument for the design. Code is available under the MIT license.
 
 ## Acknowledgements
 
-[TODO: tutor/supervisión, financiación si aplica, y declaración de uso de IA
-generativa según la política de Elsevier — ver HANDOFF_COWORK.md]
+[TODO: redactar — supervisión del TFG: Antonio García Cabot (tutor) y David
+de Fitero Domínguez (co-tutor), según memoria del TFG; decidir con ellos si
+van en agradecimientos o como coautores. Financiación si aplica. Declaración
+de uso de IA generativa según la política de Elsevier — ver HANDOFF_COWORK.md]
 
 ## References
 

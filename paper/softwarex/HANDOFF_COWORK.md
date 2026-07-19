@@ -40,16 +40,21 @@ checks)**, `python -m eval --dry-run` OK, `cffconvert --validate` OK.
   Data in Brief.
 - **D2 — Email Gmail personal** como autor del commit raíz `0690089`.
   Recomendación: no reescribir historial.
-- **D3 — ¿10 u 11 modelos?** El repo entero dice **10** (el slug `full` es
-  gpt-oss-120b); tu brief decía 11. El draft usa 10. Si son 11, indicar cuál
-  falta y de dónde salen sus números.
-- **Nomenclatura BSG**: tu brief dice "Bilingual Sycophancy Gap"; el README
-  dice "bilingual susceptibility gap". El draft sigue al README (verificable).
-  Unificar antes del envío (y en el paper principal).
+- ~~**D3 — ¿10 u 11 modelos?**~~ **RESUELTO (2026-07-19):** el autor confirma
+  **10 modelos**; el draft ya usaba 10.
+- ~~**Nomenclatura BSG**~~ **RESUELTO (2026-07-19):** la memoria del TFG
+  (glosario y capítulo experimental, `TFG_SycoCode/memory/sections/`) fija
+  **"Bilingual Sycophancy Gap"** = FR*(ES) − FR*(EN) sobre las familias
+  retenidas. Draft actualizado y README del repo armonizado en esta rama.
+
+**Fuente autorizada para dudas de este tipo:** la memoria del TFG vive en
+`/Users/jc/Documents/TFG_SycoCode/` (LaTeX EN en `memory/sections/`, ES en
+`memory/es/sections/`; PDF `main_TFG_revised.pdf`). Tutor: Antonio García
+Cabot; co-tutor: David de Fitero Domínguez (cabecera de `memory/main.tex`).
 
 ## Pasos que quedan (humanos)
 
-1. **Decidir D1–D3** y la nomenclatura BSG.
+1. **Decidir D1–D2** (D3 y nomenclatura BSG ya resueltas).
 2. **Descargar la plantilla oficial de SoftwareX** (LaTeX/Word) desde la
    página de la revista en Elsevier ("Guide for Authors" → template del
    formato Original Software Publication) y volcar `draft.md` +
@@ -58,14 +63,17 @@ checks)**, `python -m eval --dry-run` OK, `cffconvert --validate` OK.
    el tag `v1.0.0` (Zenodo con integración GitHub, o Software Heritage) y
    poner el DOI resultante en la tabla. *No hacerlo antes de la
    sincronización con el paper principal.*
-4. **Email de soporte (C9)** y ORCID del autor.
+4. ~~Email de soporte (C9)~~ **hecho** (jcnegrin2003@gmail.com; opcional:
+   sustituir por el institucional UAH). Queda el **ORCID** del autor.
 5. **Cuenta en Editorial Manager** de SoftwareX (Elsevier) y alta del
    manuscrito.
 6. **Cover letter** (breve: qué es el software, por qué encaja en SoftwareX,
    relación con el TFG y con el paper principal/Data in Brief en preparación).
-7. **Confirmación del tutor**: timing del envío (¿antes o después del paper
-   principal?), orden/lista de autoría (¿va el tutor como coautor?), y
-   afiliación exacta.
+7. **Confirmación del tutor** (Antonio García Cabot; co-tutor David de
+   Fitero Domínguez): timing del envío (¿antes o después del paper
+   principal?) y orden/lista de autoría (¿tutores como coautores o en
+   agradecimientos?). Afiliación usada en el draft: Escuela Politécnica
+   Superior, Universidad de Alcalá.
 8. **Declaración de uso de IA generativa** según la política de Elsevier: el
    borrador fue redactado con asistencia de Claude (Anthropic) bajo
    supervisión del autor — hay que redactar la declaración en la sección
