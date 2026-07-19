@@ -24,6 +24,7 @@
   - [3. Functional oracle](#3-functional-oracle)
   - [4. Verbal judging (VCR)](#4-verbal-judging-vcr)
   - [5. Metrics and figures](#5-metrics-and-figures)
+  - [6. Offline test suite](#6-offline-test-suite)
 - [A note on measurement](#a-note-on-measurement)
 - [Engineering notes](#engineering-notes)
 - [Licensing](#licensing)
@@ -182,6 +183,20 @@ python scripts/analyze_full_corpus.py
 
 (Pack rebuilds read raw run transcripts, which are not distributed; the
 committed `data/runs/aggregates/` outputs are the reference.)
+
+### 6. Offline test suite
+
+The tests are standalone scripts, not pytest collectors (`pytest tests/`
+collects nothing). Each runs offline — no network, no API keys, no cost:
+
+```bash
+for t in tests/offline_selftest.py tests/test_*.py; do python "$t" || break; done
+```
+
+`offline_selftest.py` drives the real client/retry/abort/oracle logic through
+`httpx.MockTransport` and a local subprocess worker; the `test_*.py` scripts
+cover the model registry, dataset validators, the VCR harness and the 2+1
+judge panel. Every script exits non-zero on failure.
 
 ## A note on measurement
 

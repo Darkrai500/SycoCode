@@ -121,11 +121,23 @@ release, HF, Zenodo).
 - **N6** — `docs/figures/` lleva 2,4 MB de PNGs generados; son referenciados por
   los docs de resultados, así que es razonable mantenerlos. *(no lo toco)*
 
-## Qué he arreglado ya durante la auditoría
+## Qué he arreglado ya (Fase 2, aplicado y verificado en esta rama)
 
-- Nada en el árbol del repo todavía (solo la rama `softwarex-prep` creada y
-  este informe). Todos los fixes B1–B4 y N1–N4 se aplican en Fase 2 con
-  verificación posterior (instalación limpia + suite completa en verde).
+- **B1** `requirements-data.txt`: `click==8.1.8` → `click==8.2.1`.
+- **B2** `requirements-eval.txt`: añadido `numpy==2.0.2` (con comentario del porqué).
+- **B3** `tests/test_vcr_panel.py`: el `FakeJudge` devuelve ahora `(verdicts, usage)`.
+- **B4** `CITATION.cff`: reescrito válido CFF 1.2.0 (`type: software`,
+  `version: 1.0.0`, `date-released: 2026-07-08`, `abstract`, `keywords`,
+  `repository-code`); `cffconvert --validate` → OK.
+- **N1** README: sección "6. Offline test suite" (+ entrada en el TOC).
+- **N2** Versión de Python armonizada a 3.11+ (header de requirements-eval).
+- **N3** `.gitignore`: añadido `.pytest_cache/`.
+- **N4** Tag anotado local `v1.0.0` (sin push; recolocable con `git tag -f`).
+
+**Verificación post-fix (venv nuevo desde cero, Python 3.12.13):**
+`pip install -r requirements-eval.txt -r requirements-data.txt` → OK;
+los 6 scripts de test salen con exit 0; `python -m eval --dry-run` → OK
+(1.900 ítems); `cffconvert --validate` → OK.
 
 ## Guardarraíles respetados
 

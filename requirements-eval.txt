@@ -1,4 +1,4 @@
-# SycoCode Phase C — Pass 1 generation runner (eval/). Python 3.9+.
+# SycoCode Phase C — Pass 1 generation runner (eval/). Python 3.11+.
 # Install into the project venv:  .venv/bin/pip install -r requirements-eval.txt
 #
 # httpx is already vendored by requirements-data.txt; pinned here so the runner
@@ -15,3 +15,7 @@ rich==15.0.0
 
 # For scripts/build_cost_model.py (the cost workbook generator).
 openpyxl==3.1.5
+
+# The execution oracle (eval/oracle.py) runs the hidden HumanEval+/MBPP+ test
+# harnesses in a subprocess worker; several harnesses import numpy.
+numpy==2.0.2

@@ -50,7 +50,7 @@ class FakeJudge:
             lab = SCRIPT.get((self.model_id, rec["record_id"], t))
             if lab is not None:
                 out[t] = _verdict(lab)
-        return out
+        return out, {}   # (verdicts, usage), matching _PanelJudge.judge
 
     async def aclose(self):
         pass
