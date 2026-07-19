@@ -22,6 +22,13 @@ sepas que el código y el dataset completo ya están expuestos; la
 "sincronización de la liberación con el paper" aplica solo a lo nuevo (tag,
 release, HF, Zenodo).
 
+> **Actualización 2026-07-19 (posterior a la auditoría):** con autorización
+> explícita del autor, `Darkrai500/SycoCode` se puso **PRIVADO** (0 forks /
+> 0 stars comprobados antes de tocarlo) y el GitHub Pages de
+> `Darkrai500/TFG_SycoCode` se **despublicó** (la rama `WebPage` y `/docs`
+> quedan intactas; la URL pública devuelve 404). La liberación queda ahora
+> genuinamente sincronizable con el envío del paper.
+
 ---
 
 ## Resumen por área
@@ -102,8 +109,8 @@ release, HF, Zenodo).
 
 | ID | Qué | Contexto | Opciones |
 |----|-----|----------|----------|
-| D1 | **Separación del dataset** | `data/` = 26 MB (raw 13 MB, problems 6,2 MB, goldset 5,5 MB) vive en el repo y **ya está en el historial público**. Para SoftwareX no estorba (el paper es del software); para Data in Brief + HF puede interesar que el dataset viva fuera. | (a) Dejarlo como está y que HF/Data in Brief referencien este repo; (b) mover el dataset a un repo/HF dataset propio y dejar aquí solo un sample para tests (`cand_001` + gold de ejemplo) — **implica reescritura de historial** si además quieres sacarlo del historial, con cambio de todos los SHAs de un repo ya público; (c) sacarlo solo del tip (borrar + .gitignore) sin reescribir historial. Mi recomendación: **(a)** para el envío a SoftwareX; revisar en el flujo de Data in Brief. |
-| D2 | **Email personal en el historial** | El commit raíz `0690089` tiene autor `JC <jcnegrin2003@gmail.com>` (los otros 3 usan el noreply de GitHub). Ya es público. | (a) No hacer nada (es tu propio email y publicas con tu nombre; en papers suele ir un email de contacto de todas formas); (b) reescribir historial con el noreply — cambia todos los SHAs de un repo público. Mi recomendación: **(a)**. |
+| D1 | **Separación del dataset** | `data/` = 26 MB (raw 13 MB, problems 6,2 MB, goldset 5,5 MB) vive en el repo y ya estuvo en el historial público. | **RESUELTO (2026-07-19): opción (a)** — el dataset se queda en el repo tal cual. Ninguna reescritura de historial, ahora ni después (decisión del autor). |
+| D2 | **Email personal en el historial** | El commit raíz `0690089` tiene autor `JC <jcnegrin2003@gmail.com>` (los otros 3 usan el noreply de GitHub). | **RESUELTO (2026-07-19): opción (a)** — no se toca (decisión del autor). |
 | D3 | **10 vs 11 modelos** | Tu brief dice "11 modelos frontera"; el repo entero (README, comparativa v3, master.json, 10 packs — el slug `full` es gpt-oss-120b) dice **10**. | **RESUELTO (2026-07-19): son 10**, confirmado por el autor y coherente con la memoria del TFG ("nine of the ten models"). El draft usa 10. |
 
 ## NICE-TO-HAVE (los mecánicos también van en Fase 2)

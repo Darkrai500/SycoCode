@@ -35,11 +35,11 @@ checks)**, `python -m eval --dry-run` OK, `cffconvert --validate` OK.
 
 ## Blockers / decisiones pendientes (de PUBLICATION_READINESS.md; ninguna ejecutada)
 
-- **D1 — Separación del dataset** (26 MB en repo e historial ya público).
-  Recomendación: dejarlo tal cual para SoftwareX; decidir en el flujo de
-  Data in Brief.
-- **D2 — Email Gmail personal** como autor del commit raíz `0690089`.
-  Recomendación: no reescribir historial.
+- ~~**D1 — Separación del dataset**~~ **RESUELTO (2026-07-19):** opción (a),
+  el dataset se queda en el repo tal cual; ninguna reescritura de historial,
+  ahora ni después (decisión del autor).
+- ~~**D2 — Email Gmail personal**~~ **RESUELTO (2026-07-19):** opción (a),
+  el email del commit raíz no se toca (decisión del autor).
 - ~~**D3 — ¿10 u 11 modelos?**~~ **RESUELTO (2026-07-19):** el autor confirma
   **10 modelos**; el draft ya usaba 10.
 - ~~**Nomenclatura BSG**~~ **RESUELTO (2026-07-19):** la memoria del TFG
@@ -54,7 +54,8 @@ Cabot; co-tutor: David de Fitero Domínguez (cabecera de `memory/main.tex`).
 
 ## Pasos que quedan (humanos)
 
-1. **Decidir D1–D2** (D3 y nomenclatura BSG ya resueltas).
+1. ~~Decidir D1–D2~~ **hecho** — todas las decisiones (D1, D2, D3, BSG)
+   están resueltas; ver arriba.
 2. **Descargar la plantilla oficial de SoftwareX** (LaTeX/Word) desde la
    página de la revista en Elsevier ("Guide for Authors" → template del
    formato Original Software Publication) y volcar `draft.md` +
@@ -81,8 +82,22 @@ Cabot; co-tutor: David de Fitero Domínguez (cabecera de `memory/main.tex`).
 9. Repaso final de los `[TODO]` restantes en `draft.md` (email/ORCID en la
    cabecera, agradecimientos).
 
+## Estado de visibilidad (operaciones autorizadas el 2026-07-19)
+
+| Repo | Visibilidad | GitHub Pages |
+|---|---|---|
+| `Darkrai500/SycoCode` | **PRIVATE** (antes público; 0 forks / 0 stars comprobados antes de privatizar) | No tiene (API 404) |
+| `Darkrai500/TFG_SycoCode` | PRIVATE (ya lo era) | **Despublicado** (API 404; URL pública → HTTP 404). Rama `WebPage` y `/docs` intactas para republicar al liberar. |
+
+⚠️ Consecuencia a revisar antes del envío: la landing
+`https://darkrai500.github.io/TFG_SycoCode/` ahora devuelve 404, y la
+referencian el badge/enlace "Project page" del `README.md` y el campo `url:`
+de `CITATION.cff`. Si Pages se republica al liberar, no hay que tocar nada;
+si no, cambiar ambos al enlace del repo.
+
 ## Qué NO se ha hecho (a propósito)
 
-- Ningún push, ningún repo nuevo, nada a HF/Zenodo/PyPI, sin tocar visibilidad.
-- Las decisiones D1–D3 no se han ejecutado.
+- Ningún push, ningún repo nuevo, nada a HF/Zenodo/PyPI.
+- Ningún cambio de visibilidad fuera de los dos autorizados de la tabla.
+- Ninguna reescritura de historial (D1/D2 cerradas como "no tocar").
 - No se ha tocado el paper principal ni nada de Data in Brief.
