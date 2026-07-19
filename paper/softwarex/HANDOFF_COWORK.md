@@ -20,8 +20,19 @@ checks)**, `python -m eval --dry-run` OK, `cffconvert --validate` OK.
 
 - `PUBLICATION_READINESS.md` — auditoría completa, blockers y decisiones.
 - `paper/softwarex/metadata_table.md` — Code Metadata Table con datos reales
-  del repo; TODOs marcados: C2 (enlace permanente archivado), C3 (cápsula
-  reproducible, opcional), C9 (email de soporte).
+  del repo (nota: usa el layout C1–C9 antiguo; la plantilla oficial 2026
+  tiene C1–C8 — solo pide el enlace de GitHub, sin cápsula reproducible — y
+  el manuscrito LaTeX sigue a la plantilla).
+- `paper/softwarex/latex/` — **manuscrito LaTeX sobre la plantilla oficial**:
+  `sycocode-softwarex.tex` (manuscrito), `sycocode-softwarex.pdf` (compilado,
+  9 págs), `refs.bib` (generado desde las respuestas crudas de las APIs),
+  `softwarex-osp-template.tex` (plantilla oficial intacta, referencia),
+  `elsarticle.cls` + `elsarticle-num.bst` (Elsarticle Bundle oficial, CTAN).
+  Compila con `latexmk -pdf sycocode-softwarex.tex`: 0 errores, 0 citas sin
+  resolver, 0 "??"; warnings restantes justificados (4× hyperref por
+  `\corref` dentro de `\author` — mecanismo de la propia plantilla, solo
+  afecta al string de metadatos del PDF; 1× float `!h`→`!ht` del `[!h]` de
+  la tabla del template, mantenido verbatim).
 - `paper/softwarex/draft.md` — borrador OSP completo, **2.051 palabras** de
   cuerpo (límite orientativo 3.000; está deliberadamente sobrio, hay margen
   si el tutor quiere ampliar). Cada cifra lleva comentario HTML con su fuente
@@ -56,10 +67,18 @@ Cabot; co-tutor: David de Fitero Domínguez (cabecera de `memory/main.tex`).
 
 1. ~~Decidir D1–D2~~ **hecho** — todas las decisiones (D1, D2, D3, BSG)
    están resueltas; ver arriba.
-2. **Descargar la plantilla oficial de SoftwareX** (LaTeX/Word) desde la
-   página de la revista en Elsevier ("Guide for Authors" → template del
-   formato Original Software Publication) y volcar `draft.md` +
-   `metadata_table.md` a ella.
+2. ~~Descargar la plantilla oficial y volcar el contenido~~ **hecho**
+   (2026-07-19): `softwarex-osp-template.tex` descargada del fileshare de
+   Elsevier, manuscrito completo en `paper/softwarex/latex/`, compilado y
+   verificado. Quedan dentro del .tex los `\todo{}` de autoría/CRediT/
+   agradecimientos y el ORCID.
+   Requisitos de la plantilla a vigilar al enviar: el repo de GitHub debe
+   ser **público** con README.md y **fichero de licencia** (la guía dice
+   "Licence.txt"; el repo tiene `LICENSE` — probablemente valga, pero si el
+   editorial se queja, añadir una copia como `License.txt`). Límite 4.000
+   palabras (estamos en ~2.100) y máx. 6 figuras (llevamos 0 — valorar si
+   añadir el diagrama TikZ del pipeline de la memoria del TFG como figura
+   de arquitectura, que la plantilla sugiere "where possible").
 3. **Enlace permanente (C2)**: cuando la liberación esté autorizada, archivar
    el tag `v1.0.0` (Zenodo con integración GitHub, o Software Heritage) y
    poner el DOI resultante en la tabla. *No hacerlo antes de la

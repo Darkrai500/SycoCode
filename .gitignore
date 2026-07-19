@@ -16,6 +16,17 @@ venv/
 data/runs/*
 !data/runs/aggregates/
 
+# ===== LaTeX build artifacts (paper/) =====
+paper/**/*.aux
+paper/**/*.bbl
+paper/**/*.blg
+paper/**/*.log
+paper/**/*.out
+paper/**/*.fls
+paper/**/*.fdb_latexmk
+paper/**/*.synctex.gz
+paper/**/*.spl
+
 # ===== OS / editors =====
 .DS_Store
 Thumbs.db
