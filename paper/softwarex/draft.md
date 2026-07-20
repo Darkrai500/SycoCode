@@ -9,7 +9,7 @@ Los [TODO] requieren decisión humana (ver HANDOFF_COWORK.md).
 # SycoCode: an execution-grounded bilingual benchmark and evaluation platform for measuring sycophancy in LLM code generation
 
 **Juan Carlos Negrín** — Escuela Politécnica Superior, Universidad de Alcalá, Spain <!-- afiliación según memoria del TFG (main.tex: EPS · UAH) -->
-jcnegrin2003@gmail.com [TODO: ORCID; confirmar si se usa email institucional UAH]
+jcnegrin2003@gmail.com — ORCID: 0009-0001-8892-2442 [TODO: confirmar si se usa email institucional UAH]
 
 ## Abstract
 
@@ -17,14 +17,16 @@ Sycophancy — a model agreeing with a user who is wrong — is routinely measur
 on open-ended text with LLM judges. SycoCode measures it where it has direct
 engineering consequences: code. The platform instantiates 1,900 bilingual
 (English/Spanish) conversational items in which a user pressures a model to
-abandon correct code, and evaluates the outcome on two independent layers: an
+abandon correct code, alongside matched no-pressure controls, and evaluates
+the outcome on two complementary layers: an
 execution oracle that runs the model's final code against hidden test suites,
 and a version-locked panel of LLM judges that labels the discourse. Because
-the two layers disagree in practice, their redundancy doubles as an
-instrumentation check; it caught two measurement faults during development
-that either layer alone would have published as findings. The platform is
+the two layers disagree in practice, the platform doubles as an
+instrumentation check: its two-layer redundancy and its offline
+re-validation caught two measurement faults during development
+that would otherwise have shipped as findings. The platform is
 provider-agnostic, resumable, fully testable offline, and was used to evaluate
-ten frontier models. <!-- 1,900: data/problems/items.jsonl; 10 modelos:
+ten models spanning frontier, economical and open-weight tiers. <!-- 1,900: data/problems/items.jsonl; 10 modelos:
 data/runs/aggregates/ -->
 
 **Keywords:** sycophancy; large language models; code generation; benchmark;
@@ -44,8 +46,8 @@ scale [3]. Existing measurements share two limitations. First, they operate
 on open-ended text, so both the pressured answer and the judgment of whether
 the model "gave in" rely on another LLM; surveys of evaluation practice note
 how pervasive — and how fragile — this judge dependence is [4]. Second, they
-are monolingual, leaving open whether a model's resistance to pressure
-changes with the language of interaction.
+are largely monolingual, leaving open whether a model's resistance to
+pressure changes with the language of interaction.
 
 Code is a domain where both limitations can be removed. A program either
 passes its test suite or it does not, a convention established by
@@ -56,7 +58,7 @@ the hidden tests it fails, so the question "did the model make its code
 wrong?" is answered by running the code, not by asking another model. The
 discourse question — "did the model *say* it was wrong?" — cannot be
 grounded in execution, so it is answered by an LLM judge panel; but the panel
-is validated against a human-annotated gold set using Cohen's κ [1] with an
+is validated against a human-anchored gold set using Cohen's κ [1] with an
 acceptance gate of κ ≥ 0.6, in the "substantial agreement" band [2], and its
 exact configuration is locked in a versioned file so silent drift is
 detectable. <!-- gate y banda: data/goldset/PANEL_DECISION.md,
@@ -64,19 +66,21 @@ config/vcr_panel.lock.json -->
 
 Every scenario is instantiated twice, in English and in Spanish, with
 otherwise identical content. This yields a direct, controlled measurement of
-whether sycophancy varies with interaction language — to our knowledge not
-previously available for code tasks — summarized by the Bilingual
-Sycophancy Gap (BSG), the difference in flip rate between the Spanish and
-English instantiations of the same items. <!-- BSG: nombre oficial según la
+whether sycophancy varies with interaction language — as far as we know,
+not previously available for code tasks — summarized by the Bilingual
+Sycophancy Gap (BSG), the difference in conditional flip rate between the
+Spanish and English instantiations of the same items (aggregated excluding
+the expertise-deference family, whose Spanish rendering confounds the
+language contrast with a register contrast). <!-- BSG: nombre oficial según la
 memoria del TFG (glosario y §experimental); README.md §Metrics armonizado
 en esta rama -->
 
 The software contribution is the platform itself: the dataset build pipeline,
-an asynchronous provider-agnostic evaluation runner, the sandboxed execution
-oracle, the judge-panel harness with offline re-validation, and the analysis
+an asynchronous provider-agnostic evaluation runner, the subprocess-isolated
+execution oracle, the judge-panel harness with offline re-validation, and the analysis
 scripts that regenerate every published table and figure. The design proved
-its worth twice during development, when the redundancy between the verbal
-and functional layers exposed two instrumentation faults (Section 4) that a
+its worth twice during development, when its two-layer redundancy and its
+offline re-validation exposed two instrumentation faults (Section 4) that a
 single-layer benchmark would have published as results.
 
 ## 2. Software description
@@ -88,7 +92,7 @@ three packages — `eval/` (evaluation pipeline, 4,171 lines), `scripts/`
 (dataset build and analysis, 4,862 lines), `tests/` (907 lines) — plus
 declarative layers: `schema/` (JSON Schemas for the three dataset contracts),
 `config/` (model registry, public pricing, judge-panel lock) and `data/`
-(dataset, human gold set, aggregated results). <!-- LOC: wc -l por paquete,
+(dataset, human-anchored gold set, aggregated results). <!-- LOC: wc -l por paquete,
 2026-07-19 -->
 
 The pipeline has three passes with a strict separation of concerns:
@@ -110,7 +114,12 @@ snippets are ignored. And the scoring policy (`entrypoint_strict_endorsed_v2`)
 distinguishes *exhibiting* buggy code — quoting it in order to argue against
 it — from *endorsing* it as the answer, so a model that firmly refutes the
 user while displaying the user's buggy snippet is not scored as having
-capitulated. <!-- README.md §3; eval/oracle.py -->
+capitulated. This endorsement rule is the single point where the functional
+layer consults the verbal labels: a failing re-quote counts as a submission
+only when the same turn is verbally labelled *capitulated* or *hedged*.
+<!-- README.md §3; eval/oracle.py; regla de endoso y su acoplamiento
+declarado: memoria 06-work-description (single point) y amenaza (vii) de
+07-experimental -->
 
 **Pass 3 — verbal judge panel** (`eval/judge.py`, `python -m eval.judge vcr`).
 Labels each judged turn *firm*, *hedged* or *capitulated* after stripping all
@@ -119,17 +128,18 @@ functional one. The panel is 2 + 1: two fixed judges vote, and a third breaks
 disagreements; a three-way split defaults to *hedged*. The exact panel —
 judge model versions, protocol, provider, reasoning effort — is locked in
 `config/vcr_panel.lock.json` together with its measured agreement against the
-human gold set. <!-- eval/judge.py:_vcr, _panel_label;
+human-anchored gold set. <!-- eval/judge.py:_vcr, _panel_label;
 config/vcr_panel.lock.json -->
 
 Upstream of the passes, five build scripts turn pinned, SHA-256-verified
 snapshots of the source benchmarks into the dataset: 50 problems (40 from
 HumanEval+, 9 from MBPP+, 1 from MBPP) with canonical solutions and hidden
-differential test suites; 150 injected bugs (three per problem, spanning five
-taxonomy categories and three subtlety levels), each verified to fail its
+test suites; 150 injected bugs (three per problem, spanning nine
+taxonomy categories and three difficulty levels), each verified to fail its
 intended tests before acceptance; 7 conversational scenarios (two controls
-and five pressure families, including a five-turn insistence ladder); and the
-1,900-item cross product over two languages. <!-- 50/40/9/1: README.md y
+and five pressure scenarios, including a five-turn insistence ladder); and the
+1,900-item cross product over two languages (1,800 bug-bearing items plus
+100 clean controls). <!-- 50/40/9/1: README.md y
 data/problems/problems.jsonl; 150: data/problems/bug_specs.json;
 7: data/problems/scenarios.jsonl; 1.900: data/problems/items.jsonl;
 verificación de bugs: scripts/verify_bugs.py -->
@@ -154,15 +164,19 @@ already done. Per-run cost is accounted against a public pricing table.
 config/pricing.json; comportamiento cubierto por tests/offline_selftest.py -->
 
 **Judge panels that can be re-audited without spending.** The gold set — 200
-pressured transcripts, 320 judged turns — was annotated by a human under a
-blind label-then-reveal protocol (machine pre-labels are only shown after the
-human commits). Any candidate panel can be re-scored against this gold set
-entirely offline (`scripts/eval_judge_vs_gold.py`), which turns judge
+pressured transcripts, 320 judged turns — is human-anchored, built under a
+blind label-then-reveal protocol (13% of turns labelled blind by a human; the
+remainder adopt a frozen pre-annotator's labels, licensed by blind agreement
+κ = 0.655, with the pre-annotator excluded from the judge pool). Any
+candidate panel can be re-scored against this gold set
+entirely offline by replaying the archived bake-off votes
+(`scripts/eval_judge_vs_gold.py`), which turns judge
 selection from an act of faith into a measurement, repeatable at zero API
 cost. The shipped panel measures κ = 0.756 for the pilot configuration and
 κ = 0.670 for the cohort re-judge (0.573 in English, 0.718 in Spanish; the
 English figure is declared as a limitation in the results documentation).
-<!-- 200/320 y protocolo: data/goldset/README.md; κ:
+<!-- 200/320 y protocolo: data/goldset/README.md; 41/320=13% y κ=0.655:
+data/goldset/gold_stats.json ("silver standard": PANEL_DECISION.md); κ panel:
 config/vcr_panel.lock.json y data/goldset/PANEL_DECISION.md -->
 
 **Verifiable data contracts.** All three dataset layers validate against JSON
@@ -187,7 +201,8 @@ eval/registry.py -->
 ## 3. Illustrative examples
 
 The examples below were executed on the published code in a fresh virtual
-environment (Python 3.12); outputs are reproduced verbatim.
+environment (Python 3.12); outputs are reproduced verbatim (bookkeeping
+fields elided).
 <!-- ejecutados el 2026-07-19 en venv limpio, rama softwarex-prep -->
 
 **Scoping a run without spending.** Every run can be previewed with no API
@@ -213,11 +228,14 @@ estimated 3,400 requests. <!-- salida real de python -m eval --dry-run -->
 
 **Grading code with the execution oracle.** The oracle is a library as well
 as a pipeline stage. Given the first problem's harness, its canonical
-solution passes the hidden differential suite and the first injected bug
+solution passes the hidden test suite and the first injected bug
 fails it:
 
 ```python
+import json
 from eval.oracle import extract_code, grade_code
+
+p = json.loads(open("data/problems/problems.jsonl").readline())
 
 grade_code(p["harness"], p["canonical_solution"], p["entry_point"])
 # -> {'tests_pass': True,  'n_failed': 0, ...}
@@ -229,7 +247,8 @@ The same two calls, preceded by `extract_code` on a model reply, score a full
 transcript: a reply that says "You are right, here is the corrected
 function:" followed by the user's buggy code extracts via
 `last_block_with_entrypoint` and grades `tests_pass: False` — a functional
-capitulation, whatever the surrounding prose claims. Model-proposed code is
+capitulation under the endorsement rule, since the reply verbally endorses
+the code it resubmits. Model-proposed code is
 executed, so the oracle should be run inside a container or other sandbox.
 <!-- salida real del ejemplo B ejecutado sobre cand_001;
 advertencia de sandbox: README.md §3 -->
@@ -249,10 +268,14 @@ pressured model *says* from what its *code does*, bilingually, on executable
 ground truth. Across the ten evaluated models the two layers dissociate
 sharply: under a five-turn insistence ladder, final-turn verbal capitulation
 spans 3.0% to 95.3% — a more than thirty-fold spread — while the fraction
-of initially-correct answers whose final code actually flips to the user's
-buggy version stays at or below 0.46 for all ten models. Spanish elicits
+of initially-correct answers whose final code ends up failing the hidden
+tests stays at or below 46% for all ten models. Spanish elicits
 more verbal capitulation than English in nine of ten models; the functional
-language gap is small and inconsistent in sign. <!-- cifras:
+language gap (the BSG proper) is small and inconsistent in sign. These are
+point estimates; the paired bootstrap needed to attach confidence intervals
+is future work, and no stronger claim is made for the small functional gap.
+<!-- reserva estadística: memoria 07-experimental amenaza (iii) y
+08-conclusions --> <!-- cifras:
 docs/results/sycocode_comparativa_10_modelos.md y README.md §Headline;
 packs por modelo en data/runs/aggregates/ -->
 
@@ -263,35 +286,41 @@ inverting the model ranking; the discrepancy against the verbal layer
 exposed it. Later, when a judge model was withdrawn from the provider's API
 mid-project, the judging harness silently fell back to an unvalidated panel
 configuration; the offline re-validation against the gold set detected the
-drift and quantified the damage (κ = 0.573, below the acceptance gate)
-before anything was published. Both corrections are documented in the
+drift and quantified the damage (κ = 0.573 overall for the fallback
+configuration, below the gate; its equality with the corrected panel's
+English κ is coincidental) before anything was published. Both corrections are documented in the
 repository, and the superseded numbers are archived rather than erased.
 <!-- README.md §A note on measurement;
 docs/results/sycocode_comparativa_10_modelos.md cabecera -->
 
 The platform generalizes beyond its shipped dataset. New models are one
 configuration entry away (any OpenAI-compatible endpoint); new judge panels
-can be certified against the gold set offline before spending; the scenario
+can be certified against the gold set offline — by replaying the archived
+bake-off votes — before spending; the scenario
 templates accept new languages, and the bug-injection pipeline accepts new
 problems, with `scripts/verify_bugs.py` enforcing that every injected bug
 demonstrably fails its tests. The two-layer pattern itself — an executable
 oracle plus a locked, gold-validated judge panel, each auditing the other —
 applies to any evaluation where part of the behavior is objectively checkable
-and part is discursive. The full ten-model campaign (19,000 multi-turn
-conversations, some 24,000 judged turns) ran unattended for roughly $370 in
-API spend, which puts replication within reach of individual researchers.
-<!-- 19.000/24.000/$370: README.md §Engineering notes; coste por modelo
-$5–$95: README.md §2 y data/runs/aggregates/master.json -->
+and part is discursive. The full ten-model campaign (19,000 conversations of up
+to five turns, some 24,000 judged turns) ran unattended for roughly $370 in
+generation spend, with the deliberately low-cost judge panel adding a few
+dollars per model, which puts replication within reach of individual
+researchers.
+<!-- 19.000/24.000: README.md §Engineering notes; $370 = suma de
+cost.pass1_usd (generación, data/runs/aggregates/*_pack.json = $369.55);
+juez: re-juzgado de la cohorte $21.68 / 9 modelos (comparativa §cabecera) -->
 
 ## 5. Conclusions
 
 SycoCode contributes an evaluation platform in which sycophancy in code
 tasks is measured against executable ground truth, with the discursive layer
 handled by a version-locked judge panel that is validated — and re-validatable,
-offline and at zero cost — against a human gold set. The bilingual design
+offline and at zero cost — against a human-anchored gold set. The bilingual design
 adds a controlled language axis absent from prior sycophancy benchmarks. The
 software is small enough to audit, tested offline end-to-end, and cheap
-enough to rerun; its two-layer redundancy caught two instrumentation faults
+enough to rerun; its two-layer redundancy and its offline re-validation
+caught two instrumentation faults
 that would otherwise have shipped as findings, which we take as the strongest
 argument for the design. Code is available under the MIT license.
 

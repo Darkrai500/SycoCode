@@ -1,4 +1,17 @@
-# HANDOFF — Preparación SoftwareX (estado a 2026-07-19)
+# HANDOFF — Preparación SoftwareX (estado a 2026-07-20)
+
+> **Actualización 2026-07-20 — corrección + revisión adversarial.** Sobre el
+> manuscrito se aplicaron los 14 fixes de la revisión externa (F1–F14) y,
+> tras un checkpoint aprobado por el autor, los hallazgos de una revisión
+> adversarial con tres subagentes de contexto fresco (auditor de cifras,
+> auditor de consistencia con la memoria, revisor hostil SoftwareX). Todo
+> documentado en `paper/softwarex/review/`: `FIXLOG.md` (fix → fuente →
+> cambio, dos rondas) + `informe_A_cifras.md` (56 verificados / 1 no
+> trazable / 0 contradichos) + `informe_B_memoria.md` (14 discrepancias,
+> aplicadas o justificadas) + `informe_C_revisor.md` (simulacro de rechazo;
+> objeciones triadas). Estado actual del PDF: 10 páginas, 0 errores,
+> cuerpo ~2.079 palabras. ORCID del autor (0009-0001-8892-2442) en la
+> cabecera del .tex (\fnref/\fntext) y en `CITATION.cff`.
 
 ## Estado final
 
@@ -76,15 +89,20 @@ Cabot; co-tutor: David de Fitero Domínguez (cabecera de `memory/main.tex`).
    ser **público** con README.md y **fichero de licencia** (la guía dice
    "Licence.txt"; el repo tiene `LICENSE` — probablemente valga, pero si el
    editorial se queja, añadir una copia como `License.txt`). Límite 4.000
-   palabras (estamos en ~2.100) y máx. 6 figuras (llevamos 0 — valorar si
-   añadir el diagrama TikZ del pipeline de la memoria del TFG como figura
-   de arquitectura, que la plantilla sugiere "where possible").
+   palabras (estamos en ~2.079) y máx. 6 figuras (llevamos 0 — el revisor
+   hostil (informe C, O9) y la plantilla ("where possible") recomiendan
+   añadir el diagrama TikZ del pipeline de la memoria como figura de
+   arquitectura; decisión estética pendiente del autor. Opcional adicional
+   del informe B: citar los precedentes cross-lingües Sattigeri/CLINIC en
+   §1 exigiría verificar 2 DOIs nuevos — hoy se optó por "largely
+   monolingual" sin refs nuevas).
 3. **Enlace permanente (C2)**: cuando la liberación esté autorizada, archivar
    el tag `v1.0.0` (Zenodo con integración GitHub, o Software Heritage) y
    poner el DOI resultante en la tabla. *No hacerlo antes de la
    sincronización con el paper principal.*
 4. ~~Email de soporte (C9)~~ **hecho** (jcnegrin2003@gmail.com; opcional:
-   sustituir por el institucional UAH). Queda el **ORCID** del autor.
+   sustituir por el institucional UAH). ~~ORCID~~ **hecho** (2026-07-20):
+   0009-0001-8892-2442 en la cabecera del .tex y en `CITATION.cff`.
 5. **Cuenta en Editorial Manager** de SoftwareX (Elsevier) y alta del
    manuscrito.
 6. **Cover letter** (breve: qué es el software, por qué encaja en SoftwareX,
@@ -98,8 +116,10 @@ Cabot; co-tutor: David de Fitero Domínguez (cabecera de `memory/main.tex`).
    borrador fue redactado con asistencia de Claude (Anthropic) bajo
    supervisión del autor — hay que redactar la declaración en la sección
    correspondiente del manuscrito y repasarlo todo a mano antes de enviar.
-9. Repaso final de los `[TODO]` restantes en `draft.md` (email/ORCID en la
-   cabecera, agradecimientos).
+9. Repaso final de los `[TODO]` restantes (email institucional sí/no,
+   autoría/CRediT/agradecimientos) y pase de estilo manual del autor sobre
+   el .tex — la corrección del 2026-07-20 fue quirúrgica, sin retoques de
+   redacción.
 
 ## Estado de visibilidad (operaciones autorizadas el 2026-07-19)
 

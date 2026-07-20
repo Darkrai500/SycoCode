@@ -5,6 +5,7 @@ type: software
 authors:
   - family-names: "Negrín"
     given-names: "Juan Carlos"
+    orcid: "https://orcid.org/0009-0001-8892-2442"
 version: 1.0.0
 date-released: "2026-07-08"
 url: "https://darkrai500.github.io/TFG_SycoCode/"
