@@ -15,6 +15,9 @@
 \usepackage{amssymb}
 \usepackage{hyperref}
 \setlength{\parindent}{0pt}
+% Tercera pasada de corte de líneas: evita los overfull de los tokens
+% \texttt largos (rutas de fichero) sin alterar el contenido.
+\emergencystretch=2em
 
 %% ---- Inherited from the TFG preamble (elsarticle-compatible subset) -----
 \usepackage[T1]{fontenc}
@@ -49,9 +52,6 @@
 }
 \lstset{style=academic,language=Python}
 
-%% ---- Visible TODO marker (no extra package dependencies) ----------------
-\newcommand{\todo}[1]{\textbf{[TODO: #1]}}
-
 \journal{SoftwareX}
 
 \begin{document}
@@ -59,23 +59,34 @@
 
 \begin{frontmatter}
 
-\title{SycoCode: an execution-grounded bilingual benchmark and evaluation
-platform for measuring sycophancy in LLM code generation}
+%% Título orientado al software (no al hallazgo), deliberadamente disjunto del
+%% del paper largo del TFG ("Dissociating verbal and functional sycophancy in
+%% LLM code assistants: a bilingual benchmark with executable oracles").
+\title{SycoCode: a Python platform for execution-grounded evaluation of
+sycophancy in code-generating LLMs}
 
-%% Author names EXACTLY as in the TFG memoir header
-%% (TFG_SycoCode/memory/main.tex: author + tutor + co-tutor).
-%% AUTHORSHIP ORDER PENDING CONFIRMATION with the supervisors — until then
-%% only the student is listed; uncomment and order once decided:
-%% \author[uah]{Antonio García Cabot}
-%% \author[uah]{David de Fitero Domínguez}
-\author[uah]{Juan Carlos Negrín de la Fe\corref{cor1}\fnref{orcid1}}
-\ead{jcnegrin2003@gmail.com}
+%% Nombres en la convención del grupo (sin acentos, guiones entre componentes
+%% compuestos), verificada contra la lista de autores publicada en
+%% arXiv:2401.03741 / EAAI 2024: "David de-Fitero-Dominguez, Eva Garcia-Lopez,
+%% Antonio Garcia-Cabot, Jose-Javier Martinez-Herraiz".
+%% Autor de correspondencia: PENDIENTE DE DECISIÓN (se mantiene el estudiante).
+\author[uah]{Juan-Carlos Negrin-de-la-Fe\corref{cor1}\fnref{orcid1}}
+\ead{juan.negrin@edu.uah.es}
+\author[uah]{David de-Fitero-Dominguez}
+\author[uah]{Antonio Garcia-Cabot}
+\ead{a.garciac@uah.es}
 \cortext[cor1]{Corresponding author.}
 % ORCID: elsarticle no tiene campo nativo; se usa su mecanismo estándar de
-% nota de autor (\fnref/\fntext). C8 mantiene el Gmail (decisión del autor).
+% nota de autor (\fnref/\fntext). Email del corresponding: institucional UAH;
+% C8 (support email) mantiene el Gmail (decisión F11, durabilidad
+% post-graduación).
 \fntext[orcid1]{ORCID: \href{https://orcid.org/0009-0001-8892-2442}{0009-0001-8892-2442}.}
 
-\address[uah]{Escuela Politécnica Superior, Universidad de Alcalá, Spain}
+%% Afiliación institucional en español y en este orden: normativa interna UAH
+%% (indicación de A. García-Cabot, previa al envío). Misma dirección para los
+%% tres autores.
+\address[uah]{Departamento de Ciencias de la Computación, Universidad de
+Alcalá, 28801 Madrid, Spain}
 
 \begin{abstract}
 %% Transcribed verbatim from draft.md §Abstract
@@ -104,6 +115,12 @@ sycophancy \sep large language models \sep code generation \sep benchmark
 \end{frontmatter}
 
 %\linenumbers
+
+%% La tabla flotaba al inicio de la página, POR ENCIMA de sus dos encabezados
+%% ("Required Metadata" / "Current code version"). El \clearpage abre la
+%% página antes de los encabezados, de modo que la tabla cabe donde se declara
+%% y queda debajo de ellos. No altera la tabla ni ningún ajuste de formato.
+\clearpage
 
 \section*{Required Metadata}
 \label{sec:metadata}
@@ -148,53 +165,53 @@ C8 & Support email for questions & \href{mailto:jcnegrin2003@gmail.com}{jcnegrin
 When a user pushes back on a correct answer, language models often defer.
 This behavior, called sycophancy, has been documented across model families
 and traced in part to human-feedback training, where assenting responses are
-preferred over corrective ones \cite{sharmaUnderstandingSycophancyLanguage2023},
-and it can be elicited systematically at scale
+preferred over corrective ones \cite{sharmaUnderstandingSycophancyLanguage2023}.
+It can be elicited systematically at scale
 \cite{perezDiscoveringLanguageModel2023}. Existing measurements share two
 limitations. First, they operate on open-ended text, so both the pressured
-answer and the judgment of whether the model ``gave in'' rely on another LLM;
-surveys of evaluation practice note how pervasive --- and how fragile ---
-this judge dependence is \cite{changSurveyEvaluationLarge2024}. Second, they
+answer and the judgment of whether the model ``gave in'' rely on another LLM.
+Surveys of evaluation practice note how pervasive and how fragile this judge
+dependence is \cite{changSurveyEvaluationLarge2024}. Second, they
 are largely monolingual, leaving open whether a model's resistance to
 pressure changes with the language of interaction.
 
 Code is a domain where both limitations can be removed. A program either
-passes its test suite or it does not, a convention established by
+passes its test suite or it does not. This convention was established by
 execution-based benchmarks such as HumanEval
 \cite{chenEvaluatingLargeLanguage2021} and MBPP
 \cite{austinProgramSynthesisLarge2021} and hardened by the extended,
 rigorized test suites of EvalPlus \cite{liuYourCodeGenerated2023}. SycoCode
 builds on this: every pressure scenario is anchored to an injected bug that
-is \emph{defined} by the hidden tests it fails, so the question ``did the
-model make its code wrong?'' is answered by running the code, not by asking
-another model. The discourse question --- ``did the model \emph{say} it was
-wrong?'' --- cannot be grounded in execution, so it is answered by an LLM
-judge panel; but the panel is validated against a human-anchored gold set
-using Cohen's $\kappa$ \cite{cohenCoefficientAgreementNominal1960} with an
-acceptance gate of $\kappa \geq 0.6$, in the ``substantial agreement'' band
-\cite{landisMeasurementObserverAgreement1977}, and its exact configuration
-is locked in a versioned file so silent drift is detectable.
+is \emph{defined} by the hidden tests it fails. The question ``did the
+model make its code wrong?'' is therefore answered by running the code, not
+by asking another model. The discourse question --- ``did the model
+\emph{say} it was wrong?'' --- cannot be grounded in execution, so it is
+answered by an LLM judge panel. The panel is validated against a
+human-anchored gold set using Cohen's $\kappa$
+\cite{cohenCoefficientAgreementNominal1960} with an acceptance gate of
+$\kappa \geq 0.6$, in the ``substantial agreement'' band
+\cite{landisMeasurementObserverAgreement1977}. Its exact configuration is
+locked in a versioned file, so silent drift is detectable.
 % gate y banda: data/goldset/PANEL_DECISION.md, config/vcr_panel.lock.json
 
 Every scenario is instantiated twice, in English and in Spanish, with
 otherwise identical content. This yields a direct, controlled measurement of
-whether sycophancy varies with interaction language --- as far as we know,
-not previously available for code tasks --- summarized by the Bilingual
-Sycophancy Gap (BSG), the difference in conditional flip rate between the
-Spanish and English instantiations of the same items (aggregated excluding
-the expertise-deference family, whose Spanish rendering confounds the
-language contrast with a register contrast).
+whether sycophancy varies with interaction language; as far as we know, no
+such measurement was previously available for code tasks. It is summarized
+by the Bilingual Sycophancy Gap (BSG), the difference in conditional flip
+rate between the Spanish and English instantiations of the same items
+(aggregated excluding the expertise-deference family, whose Spanish
+rendering confounds the language contrast with a register contrast).
 % BSG: nombre oficial según la memoria del TFG (glosario y §experimental);
 % README.md §Metrics armonizado en la rama softwarex-prep
 
 The software contribution is the platform itself: the dataset build pipeline,
 an asynchronous provider-agnostic evaluation runner, the subprocess-isolated
-execution oracle, the judge-panel harness with offline re-validation, and the analysis
-scripts that regenerate every published table and figure. The design proved
-its worth twice during development, when its two-layer redundancy and its
-offline re-validation exposed two instrumentation faults
-(Section~\ref{sec:impact}) that a single-layer benchmark would have
-published as results.
+execution oracle, the judge-panel harness with offline re-validation, and the
+analysis scripts that regenerate every published table and figure. During
+development, the two-layer redundancy and the offline re-validation exposed
+two instrumentation faults (Section~\ref{sec:impact}) that a single-layer
+benchmark would have published as results.
 
 \section{Software description}
 \label{sec:description}
@@ -202,13 +219,13 @@ published as results.
 \subsection{Software architecture}
 \label{sec:architecture}
 
-SycoCode is a Python ($\geq$ 3.11) codebase of roughly 9,900 lines organized
-as three packages --- \texttt{eval/} (evaluation pipeline, 4,171 lines),
-\texttt{scripts/} (dataset build and analysis, 4,862 lines), \texttt{tests/}
-(907 lines) --- plus declarative layers: \texttt{schema/} (JSON Schemas for
-the three dataset contracts), \texttt{config/} (model registry, public
-pricing, judge-panel lock) and \texttt{data/} (dataset, human-anchored gold
-set,
+SycoCode is a Python ($\geq$ 3.11) codebase of roughly 9,900 lines,
+organized as three packages plus declarative layers. The packages are
+\texttt{eval/} (evaluation pipeline, 4,171 lines), \texttt{scripts/}
+(dataset build and analysis, 4,862 lines) and \texttt{tests/} (907 lines).
+The declarative layers are \texttt{schema/} (JSON Schemas for the three
+dataset contracts), \texttt{config/} (model registry, public pricing,
+judge-panel lock) and \texttt{data/} (dataset, human-anchored gold set,
 aggregated results).
 % LOC: wc -l por paquete, 2026-07-19
 
@@ -231,13 +248,12 @@ problem's hidden test suite in an isolated subprocess worker
 AST-aware and considers only code blocks that define the problem's entry
 point, so prose and unrelated snippets are ignored. And the scoring policy
 (\texttt{entrypoint\_strict\_endorsed\_v2}) distinguishes \emph{exhibiting}
-buggy code --- quoting it in order to argue against it --- from
-\emph{endorsing} it as the answer, so a model that firmly refutes the user
-while displaying the user's buggy snippet is not scored as having
-capitulated. This endorsement rule is the single point where the functional
-layer consults the verbal labels: a failing re-quote counts as a submission
-only when the same turn is verbally labelled \emph{capitulated} or
-\emph{hedged}.
+buggy code (quoting it in order to argue against it) from \emph{endorsing}
+it as the answer. A model that firmly refutes the user while displaying the
+user's buggy snippet is therefore not scored as having capitulated. The
+endorsement rule is the one place where the two layers are coupled: a
+re-quote that fails the tests is scored as the model's own answer only if the
+verbal verdict for that turn reads \emph{capitulated} or \emph{hedged}.
 % README.md §3; eval/oracle.py; regla de endoso y su acoplamiento declarado:
 % memoria 06-work-description (single point) y amenaza (vii) de 07-experimental
 
@@ -246,10 +262,10 @@ only when the same turn is verbally labelled \emph{capitulated} or
 \emph{hedged} or \emph{capitulated} after stripping all code from the
 transcript, so the verbal verdict cannot leak from the functional one. The
 panel is 2\,+\,1: two fixed judges vote, and a third breaks disagreements; a
-three-way split defaults to \emph{hedged}. The exact panel --- judge model
-versions, protocol, provider, reasoning effort --- is locked in
-\texttt{config/vcr\_panel.lock.json} together with its measured agreement
-against the human-anchored gold set.
+three-way split defaults to \emph{hedged}. The exact panel (judge model
+versions, protocol, provider, reasoning effort), together with its measured
+agreement against the human-anchored gold set, is locked in
+\texttt{config/vcr\_panel.lock.json}.
 % eval/judge.py:_vcr, _panel_label; config/vcr_panel.lock.json
 
 Upstream of the passes, five build scripts turn pinned, SHA-256-verified
@@ -273,7 +289,7 @@ results, all deterministically rebuildable from committed inputs.
 \subsection{Software functionalities}
 \label{sec:functionalities}
 
-\textbf{Robust unattended evaluation.} The runner is asynchronous with
+\textbf{Unattended evaluation.} The runner is asynchronous with
 configurable concurrency, request-per-minute and token-per-minute buckets,
 and a global additive-increase/multiplicative-decrease governor that widens
 spacing across all workers when a provider signals saturation. Transient
@@ -287,15 +303,15 @@ table.
 % config/pricing.json; cubierto por tests/offline_selftest.py
 
 \textbf{Judge panels that can be re-audited without spending.} The gold set
---- 200 pressured transcripts, 320 judged turns --- is human-anchored, built
-under a blind label-then-reveal protocol (13\% of turns labelled blind by a
-human; the remainder adopt a frozen pre-annotator's labels, licensed by blind
-agreement $\kappa = 0.655$, with the pre-annotator excluded from the judge
-pool). Any candidate panel can be re-scored against this
-gold set entirely offline by replaying the archived bake-off votes
-(\texttt{scripts/eval\_judge\_vs\_gold.py}), which
-turns judge selection from an act of faith into a measurement, repeatable at
-zero API cost. The shipped panel measures $\kappa = 0.756$ for the pilot
+(200 pressured transcripts, 320 judged turns) is human-anchored. It was
+built under a blind label-then-reveal protocol: 13\% of turns were labelled
+blind by a human, and the remainder adopt a frozen pre-annotator's labels,
+licensed by blind agreement $\kappa = 0.655$, with the pre-annotator
+excluded from the judge pool. Any candidate panel can be re-scored against
+this gold set entirely offline: \texttt{scripts/eval\_judge\_vs\_gold.py}
+replays the archived bake-off votes. This makes judge selection a
+measurement, repeatable at zero API cost. The shipped panel measures
+$\kappa = 0.756$ for the pilot
 configuration and $\kappa = 0.670$ for the cohort re-judge (0.573 in
 English, 0.718 in Spanish; the English figure is declared as a limitation in
 the results documentation).
@@ -304,14 +320,14 @@ the results documentation).
 % kappa panel: config/vcr_panel.lock.json y data/goldset/PANEL_DECISION.md
 
 \textbf{Verifiable data contracts.} All three dataset layers validate
-against JSON Schemas; dataset rebuilds start from immutable upstream
+against JSON Schemas. Dataset rebuilds start from immutable upstream
 snapshots whose SHA-256 and source revisions are recorded, so the provenance
 chain from the original benchmarks to every published number is checkable.
 % schema/*.json; data/raw/README.md; scripts/download_sources.py
 
 \textbf{Offline test suite.} Six standalone test scripts (127 checks in
 total) exercise the real client, retry, abort, registry, validation, oracle
-and panel logic with no network and no keys --- the HTTP layer is driven
+and panel logic with no network and no keys: the HTTP layer is driven
 through \texttt{httpx.MockTransport} and the oracle through its actual
 subprocess worker.
 % 127 = 41+21+19+18+14+14, recuento del run en verde del 2026-07-19
@@ -331,9 +347,12 @@ fields elided).
 % ejecutados el 2026-07-19 en venv limpio, rama softwarex-prep
 
 \textbf{Scoping a run without spending.} Every run can be previewed with no
-API calls. For a single problem:
+API calls. For a single problem (Listing~\ref{lst:dryrun}):
 
-\begin{lstlisting}[language={},caption={Scoped dry run: exact item scope and estimated request count, with no API calls.},label={lst:dryrun}]
+% float=!htb: los listings no se parten en el salto de página; si no caben,
+% flotan enteros y el texto rellena el hueco (fix del corte huérfano de la
+% p. 5). Referencias \ref en el texto anclan cada listing a su párrafo.
+\begin{lstlisting}[language={},float=!htb,caption={Scoped dry run: exact item scope and estimated request count, with no API calls.},label={lst:dryrun}]
 $ python -m eval --scope-problem cand_001 --dry-run
 {
   "dry_run": true,
@@ -355,9 +374,9 @@ estimated 3,400 requests.
 \textbf{Grading code with the execution oracle.} The oracle is a library as
 well as a pipeline stage. Given the first problem's harness, its canonical
 solution passes the hidden test suite and the first injected bug
-fails it:
+fails it (Listing~\ref{lst:oracle}):
 
-\begin{lstlisting}[language=Python,caption={Grading a canonical solution and an injected bug against the hidden test suite.},label={lst:oracle}]
+\begin{lstlisting}[language=Python,float=!htb,caption={Grading a canonical solution and an injected bug against the hidden test suite.},label={lst:oracle}]
 import json
 from eval.oracle import extract_code, grade_code
 
@@ -370,11 +389,11 @@ grade_code(p["harness"], p["bugs"][0]["buggy_solution"], p["entry_point"])
 \end{lstlisting}
 
 The same two calls, preceded by \texttt{extract\_code} on a model reply,
-score a full transcript: a reply that says ``You are right, here is the
+score a full transcript. A reply that says ``You are right, here is the
 corrected function:'' followed by the user's buggy code extracts via
 \texttt{last\_block\_with\_entrypoint} and grades \texttt{tests\_pass:
-False} --- a functional capitulation under the endorsement rule, since the
-reply verbally endorses the code it resubmits.
+False}. Under the endorsement rule this is a functional capitulation, since
+the reply verbally endorses the code it resubmits.
 Model-proposed code is executed, so the oracle should be run inside a
 container or other sandbox.
 % salida real del ejemplo ejecutado sobre cand_001;
@@ -382,8 +401,8 @@ container or other sandbox.
 
 \textbf{Validating the platform offline.}
 \texttt{tests/offline\_selftest.py} replays the whole error-handling surface
---- governor engagement on timeouts, abort without a record,
-\texttt{Retry-After} in date form, the fail-fast breaker, resumability ---
+(governor engagement on timeouts, abort without a record,
+\texttt{Retry-After} in date form, the fail-fast breaker, resumability)
 against a mock transport, and finishes by driving the real oracle subprocess
 on the first problem (41 checks). A fresh clone can therefore verify the
 platform end-to-end before spending anything.
@@ -395,12 +414,12 @@ platform end-to-end before spending anything.
 SycoCode's measurements are, to our knowledge, the first to separate what a
 pressured model \emph{says} from what its \emph{code does}, bilingually, on
 executable ground truth. Across the ten evaluated models the two layers
-dissociate sharply: under a five-turn insistence ladder, final-turn verbal
-capitulation spans 3.0\% to 95.3\% --- a more than thirty-fold spread ---
-while the fraction of initially-correct answers whose final code ends up
-failing the hidden tests stays at or below 46\% for all ten models.
-Spanish elicits more verbal capitulation than English in nine of ten models;
-the functional language gap (the BSG proper) is small and inconsistent in
+dissociate sharply. Under a five-turn insistence ladder, final-turn verbal
+capitulation spans 3.0\% to 95.3\%, a more than thirty-fold spread. The
+fraction of initially-correct answers whose final code ends up failing the
+hidden tests stays at or below 46\% for all ten models.
+Spanish elicits more verbal capitulation than English in nine of ten models.
+The functional language gap (the BSG proper) is small and inconsistent in
 sign. These are point estimates; the paired bootstrap needed to attach
 confidence intervals is future work, and no stronger claim is made for the
 small functional gap.
@@ -409,34 +428,33 @@ small functional gap.
 % memoria 07-experimental amenaza (iii) y 08-conclusions
 
 For evaluation methodology, the platform's redundancy has already paid for
-itself twice. An early code extractor scored \emph{defensive
-demonstrations} --- models quoting the buggy code while refuting it --- as
-capitulations, inverting the model ranking; the discrepancy against the
-verbal layer exposed it. Later, when a judge model was withdrawn from the
-provider's API mid-project, the judging harness silently fell back to an
-unvalidated panel configuration; the offline re-validation against the gold
-set detected the drift and quantified the damage ($\kappa = 0.573$ overall for
-the fallback configuration, below the gate; its equality with the corrected
-panel's English $\kappa$ is coincidental) before anything was published. Both corrections are
-documented in the repository, and the superseded numbers are archived rather
-than erased.
+itself twice. An early code extractor scored \emph{defensive demonstrations}
+(models quoting the buggy code while refuting it) as capitulations,
+inverting the model ranking. The discrepancy against the verbal layer
+exposed it. Later, a judge model was withdrawn from its provider's API
+mid-project and the harness quietly reverted to a panel that had never been
+certified. The offline re-validation against the gold set detected the
+drift and quantified the damage ($\kappa = 0.573$ overall for the fallback
+configuration, below the gate; its equality with the corrected panel's
+English $\kappa$ is coincidental) before anything was published. Both
+corrections are documented in the repository, and the superseded numbers are
+archived rather than erased.
 % README.md §A note on measurement;
 % docs/results/sycocode_comparativa_10_modelos.md cabecera
 
 The platform generalizes beyond its shipped dataset. New models are one
-configuration entry away (any OpenAI-compatible endpoint); new judge panels
-can be certified against the gold set offline --- by replaying the archived
-bake-off votes --- before spending; the scenario
-templates accept new languages, and the bug-injection pipeline accepts new
-problems, with \texttt{scripts/verify\_bugs.py} enforcing that every
-injected bug demonstrably fails its tests. The two-layer pattern itself ---
-an executable oracle plus a locked, gold-validated judge panel, each
-auditing the other --- applies to any evaluation where part of the behavior
-is objectively checkable and part is discursive. The full ten-model campaign
-(19,000 conversations of up to five turns, some 24,000 judged turns) ran
-unattended
-for roughly \$370 in generation spend, with the deliberately low-cost judge
-panel adding a few dollars per model, which puts replication within reach of
+configuration entry away (any OpenAI-compatible endpoint). New judge panels
+can be certified against the gold set offline, from the stored bake-off
+ballots, before spending. The scenario templates accept new
+languages, and the bug-injection pipeline accepts new problems;
+\texttt{scripts/verify\_bugs.py} enforces that every injected bug
+demonstrably fails its tests. The two-layer pattern itself (an executable
+oracle plus a locked, gold-validated judge panel, each auditing the other)
+applies to any evaluation where part of the behavior is objectively
+checkable and part is discursive. The full ten-model campaign (19,000
+conversations of up to five turns, some 24,000 judged turns) ran unattended
+for roughly \$370 in generation spend; the deliberately low-cost judge
+panel added a few dollars per model. This puts replication within reach of
 individual researchers.
 % 19.000/24.000: README.md §Engineering notes; \$370 = suma de cost.pass1_usd
 % (generación, packs data/runs/aggregates/*_pack.json = \$369.55); juez:
@@ -446,17 +464,15 @@ individual researchers.
 \label{sec:conclusions}
 
 SycoCode contributes an evaluation platform in which sycophancy in code
-tasks is measured against executable ground truth, with the discursive layer
-handled by a version-locked judge panel that is validated --- and
-re-validatable, offline and at zero cost --- against a human-anchored gold
-set. The
-bilingual design adds a controlled language axis absent from prior
-sycophancy benchmarks. The software is small enough to audit, tested offline
-end-to-end, and cheap enough to rerun; its two-layer redundancy and its offline re-validation
-caught two
-instrumentation faults that would otherwise have shipped as findings, which
-we take as the strongest argument for the design. Code is available under
-the MIT license.
+tasks is measured against executable ground truth. The discursive layer is
+handled by a version-locked judge panel that is validated (and
+re-validatable, offline and at zero cost) against a human-anchored gold
+set. The bilingual design adds a controlled language axis absent from prior
+sycophancy benchmarks. The software is small enough to audit, tested
+offline end-to-end, and cheap enough to rerun. Its two-layer redundancy and
+its offline re-validation caught two instrumentation faults that would
+otherwise have shipped as findings; we take this as the strongest argument
+for the design. Code is available under the MIT license.
 
 %% =========================================================================
 %% Declarations (Elsevier standard sections)
@@ -464,31 +480,46 @@ the MIT license.
 
 \section*{Declaration of competing interest}
 
-The author declares that he has no known competing financial interests or
+The authors declare that they have no known competing financial interests or
 personal relationships that could have appeared to influence the work
 reported in this paper.
 
 \section*{CRediT authorship contribution statement}
 
-\todo{pendiente de confirmar autoría con los tutores (Antonio García Cabot,
-David de Fitero Domínguez) --- borrador provisional solo con el estudiante:}
-\textbf{Juan Carlos Negrín de la Fe:} Conceptualization, Methodology,
-Software, Validation, Investigation, Data curation, Writing -- original
-draft, Writing -- review \& editing.
-% ORCID del autor resuelto: 0009-0001-8892-2442, en la cabecera vía \fntext
+% Roles CRediT según la taxonomía listada en la guide for authors de
+% SoftwareX. Reparto acordado: ejecución íntegra del trabajo por el primer
+% autor; supervisión, metodología, financiación y revisión por los otros dos.
+\textbf{Juan-Carlos Negrin-de-la-Fe:} Conceptualization, Methodology,
+Software, Validation, Formal analysis, Investigation, Data curation, Writing
+-- original draft, Writing -- review \& editing.
+\textbf{David de-Fitero-Dominguez:} Methodology, Supervision, Funding
+acquisition, Writing -- review \& editing.
+\textbf{Antonio Garcia-Cabot:} Methodology, Supervision, Funding acquisition,
+Writing -- review \& editing.
+% ORCID del primer autor: 0009-0001-8892-2442, en la cabecera vía \fntext
 
 \section*{Acknowledgements}
 
-\todo{redactar según la decisión de autoría: supervisión del TFG por Antonio
-García Cabot (tutor) y David de Fitero Domínguez (co-tutor), Universidad de
-Alcalá; financiación si aplica.}
+% Párrafo facilitado literalmente por A. García-Cabot (correo previo al
+% envío): NO reescribir ni reordenar. Sustituye al agradecimiento a los
+% tutores, que ahora figuran como coautores. Cubre además el requisito de
+% divulgación de fuentes de financiación de la guide for authors.
+The authors want to thank the support provided by the projects ``Reparación
+automática de código fuente mediante modelos generativos de Procesamiento de
+Lenguaje Natural'' (SBPLY/23/180225/000063, cofunded by Junta de Comunidades
+de Castilla-La Mancha and Programa Operativo Feder de Castilla-La Mancha);
+``Tecnologías Inteligentes para la Fabricación, el diseño y las Operaciones en
+entornos iNdustriales'' (TIFON, PLEC2023-010251), and ``Detección de Errores y
+Vulnerabilidades en el Software con Autoencoders Dispersos'' (PIUAH25/IA-026).
+The authors also want to thank the support received by the INTELIA research
+lab of the University of Alcala.
 
 \section*{Declaration of generative AI and AI-assisted technologies in the
 writing process}
 
-During the preparation of this work the author used Claude (Anthropic) in
+During the preparation of this work the authors used Claude (Anthropic) in
 order to assist with drafting and revising the manuscript. After using this
-tool/service, the author reviewed and edited the content as needed and takes
+tool/service, the authors reviewed and edited the content as needed and take
 full responsibility for the content of the published article.
 
 %% ---- References (template's bibtex mechanism: elsarticle-num) -----------
