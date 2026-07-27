@@ -3,8 +3,8 @@ Borrador para SoftwareX — formato "Original Software Publication".
 ~3.000 palabras (sin contar comentarios ni referencias).
 Cada cifra factual lleva un comentario HTML indicando el fichero del repo
 del que sale. Referencias: solo las 8 verificadas en references_verification.md.
-Autoría, CRediT y Acknowledgements cerrados (indicaciones de A. García-Cabot
-previas al envío). Autor de correspondencia: pendiente de decisión.
+Autoría, CRediT, Acknowledgements y autor de correspondencia cerrados
+(indicaciones de A. García-Cabot previas al envío).
 -->
 
 # SycoCode: a Python platform for execution-grounded evaluation of sycophancy in code-generating LLMs
@@ -14,7 +14,7 @@ TFG ("Dissociating verbal and functional sycophancy in LLM code assistants"). --
 
 **Juan-Carlos Negrin-de-la-Fe**, **David de-Fitero-Dominguez**, **Antonio Garcia-Cabot**
 Departamento de Ciencias de la Computación, Universidad de Alcalá, 28801 Madrid, Spain <!-- afiliación normativa UAH, misma para los tres autores -->
-juan.negrin@edu.uah.es (corresponding, PENDIENTE) — a.garciac@uah.es — ORCID (1er autor): 0009-0001-8892-2442 <!-- email institucional UAH en cabecera; C8 (support) mantiene el Gmail (decisión F11) -->
+juan.negrin@edu.uah.es — a.garciac@uah.es (**corresponding author**) — ORCID (1er autor): 0009-0001-8892-2442 <!-- corresponding = senior, patrón del grupo + elegibilidad de APC gold OA + no se puede cambiar tras la aceptación; C8 (support) mantiene el Gmail (decisión F11) -->
 <!-- Convención de nombres del grupo (sin acentos, guiones): arXiv:2401.03741 / EAAI 2024 -->
 
 ## Abstract

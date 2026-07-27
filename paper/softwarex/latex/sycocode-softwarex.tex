@@ -69,11 +69,18 @@ sycophancy in code-generating LLMs}
 %% compuestos), verificada contra la lista de autores publicada en
 %% arXiv:2401.03741 / EAAI 2024: "David de-Fitero-Dominguez, Eva Garcia-Lopez,
 %% Antonio Garcia-Cabot, Jose-Javier Martinez-Herraiz".
-%% Autor de correspondencia: PENDIENTE DE DECISIÓN (se mantiene el estudiante).
-\author[uah]{Juan-Carlos Negrin-de-la-Fe\corref{cor1}\fnref{orcid1}}
+%% Autor de correspondencia: A. García-Cabot, replicando el patrón del grupo
+%% que ya sigue el paper largo del TFG (estudiante primero, senior
+%% corresponding). Razones adicionales: SoftwareX es gold OA y solo la
+%% afiliación del corresponding decide la elegibilidad del acuerdo de
+%% publicación y el descuento de APC; el corresponding responde consultas
+%% post-publicación de forma indefinida; y la revista NO admite cambios de
+%% corresponding después de la aceptación. El email del primer autor sigue
+%% publicado en la cabecera.
+\author[uah]{Juan-Carlos Negrin-de-la-Fe\fnref{orcid1}}
 \ead{juan.negrin@edu.uah.es}
 \author[uah]{David de-Fitero-Dominguez}
-\author[uah]{Antonio Garcia-Cabot}
+\author[uah]{Antonio Garcia-Cabot\corref{cor1}}
 \ead{a.garciac@uah.es}
 \cortext[cor1]{Corresponding author.}
 % ORCID: elsarticle no tiene campo nativo; se usa su mecanismo estándar de
@@ -497,6 +504,27 @@ acquisition, Writing -- review \& editing.
 \textbf{Antonio Garcia-Cabot:} Methodology, Supervision, Funding acquisition,
 Writing -- review \& editing.
 % ORCID del primer autor: 0009-0001-8892-2442, en la cabecera vía \fntext
+
+%% ---- Data availability (PENDIENTE, activar en el momento del envío) ------
+%% SoftwareX aplica las research data guidelines "Option C": hay que depositar
+%% los datos en un repositorio, citarlos y enlazarlos desde el artículo, o
+%% justificar por qué no se puede. El manuscrito NO lo declara todavía porque
+%% depende de tres cosas fuera del alcance de esta rama: (a) que el repo pase
+%% a público, (b) el DOI del archivo Zenodo de v1.0.0, y (c) la decisión sobre
+%% la co-submission del dataset a Data in Brief (la guía la contempla
+%% explícitamente y enlaza ambos artículos en ScienceDirect).
+%% Elsevier suele renderizar esta sección a partir de lo introducido en
+%% Editorial Manager, así que hay que comprobar que no se duplique.
+%% Plantilla lista para rellenar:
+%
+% \section*{Data availability}
+%
+% The source code is openly available on GitHub (see the code metadata table)
+% and archived at <DOI Zenodo v1.0.0>. The benchmark dataset (problems,
+% injected bugs, scenarios, rendered items and the human-anchored gold set) is
+% distributed with the repository under CC BY 4.0 and described in
+% \texttt{DATASHEET.md}.
+%% -------------------------------------------------------------------------
 
 \section*{Acknowledgements}
 

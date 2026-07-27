@@ -1,0 +1,11 @@
+Highlights — SycoCode (SoftwareX, Original Software Publication)
+
+Requisito de la guide for authors: 3-5 bullets, maximo 85 caracteres cada uno
+(espacios incluidos). Se sube como fichero aparte en Editorial Manager, con la
+palabra "highlights" en el nombre del fichero. NO va dentro del manuscrito.
+
+- Execution-grounded platform for measuring sycophancy in LLM code generation
+- An execution oracle and a locked LLM judge panel grade each turn and audit each other
+- Judge panels are re-certified offline against a human-anchored gold set at zero cost
+- 1,900 bilingual English/Spanish pressure items; ten models evaluated unattended
+- Two-layer redundancy caught two measurement faults before they shipped as findings
