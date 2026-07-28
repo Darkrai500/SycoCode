@@ -80,6 +80,7 @@ sycophancy in code-generating LLMs}
 \author[uah]{Juan-Carlos Negrin-de-la-Fe\fnref{orcid1}}
 \ead{juan.negrin@edu.uah.es}
 \author[uah]{David de-Fitero-Dominguez}
+\ead{david.fitero@edu.uah.es}
 \author[uah]{Antonio Garcia-Cabot\corref{cor1}}
 \ead{a.garciac@uah.es}
 \cortext[cor1]{Corresponding author.}
@@ -100,9 +101,10 @@ Alcalá, 28801 Madrid, Spain}
 Sycophancy --- a model agreeing with a user who is wrong --- is routinely
 measured on open-ended text with LLM judges. SycoCode measures it where it
 has direct engineering consequences: code. The platform instantiates 1,900
-bilingual (English/Spanish) conversational items in which a user pressures a
-model to abandon correct code, alongside matched no-pressure controls, and
-evaluates the outcome on two complementary layers: an execution oracle that runs the model's final code against hidden
+bilingual (English/Spanish) conversational items: 1,500 in which a user
+pressures a model to abandon correct code, and 400 matched no-pressure
+controls. It evaluates the outcome on two complementary layers: an execution
+oracle that runs the model's final code against hidden
 test suites, and a version-locked panel of LLM judges that labels the
 discourse. Because the two layers disagree in practice, the platform
 doubles as an instrumentation check: its two-layer redundancy and its offline
@@ -151,7 +153,7 @@ C4 & Code versioning system used & git \\
 \hline
 C5 & Software code languages, tools, and services used & Python ($\geq$3.11), JavaScript (annotation utilities), HTML; JSON Schema for the dataset contracts; OpenAI-compatible HTTP APIs (OpenRouter, Cerebras; W\&B Inference also supported) for live runs \\ % campaña real: 9 modelos OpenRouter + 1 Cerebras (config/models.json); W&B solo soportado en eval/client.py % conteo LOC: eval/ 4171, scripts/ 4862, tests/ 907 (wc -l)
 \hline
-C6 & Compilation requirements, operating environments \& dependencies & No compilation (pure Python). Tested on macOS and Linux. Pinned dependencies: \texttt{requirements-eval.txt} (httpx 0.28.1, rich 15.0.0, openpyxl 3.1.5, numpy 2.0.2) for the runner/oracle/judge; \texttt{requirements-data.txt} for dataset rebuilds. Tests and dry runs are fully offline; live evaluation runs require API keys via \texttt{.env} \\ % instalación limpia verificada en venv nuevo, Python 3.12.13, 2026-07-19
+C6 & Compilation requirements, operating environments \& dependencies & No compilation (pure Python). Tested on macOS (Apple Silicon) and Linux (x86-64); Python $\geq$3.11, verified on 3.12.13. Pinned dependencies: \texttt{requirements-eval.txt} (httpx 0.28.1, rich 15.0.0, openpyxl 3.1.5, numpy 2.0.2) for the runner/oracle/judge; \texttt{requirements-data.txt} for dataset rebuilds. Tests and dry runs are fully offline; live evaluation runs require API keys via \texttt{.env} \\ % instalación limpia verificada en venv nuevo, Python 3.12.13, 2026-07-19 % macOS: suite completa (6 scripts, 127 checks, exit 0) en macOS 26.5.2 arm64 / Python 3.12.13, 2026-07-28 % Linux x86-64: campaña de 10 modelos en VPS dockerizado (README §Engineering notes) % Windows: SIN evidencia en el repo, por eso no se declara
 \hline
 C7 & If available Link to developer documentation/manual & \texttt{README.md}, \texttt{eval/README.md} and \texttt{docs/methodology/} in the repository \\
 \hline
@@ -397,9 +399,11 @@ grade_code(p["harness"], p["bugs"][0]["buggy_solution"], p["entry_point"])
 
 The same two calls, preceded by \texttt{extract\_code} on a model reply,
 score a full transcript. A reply that says ``You are right, here is the
-corrected function:'' followed by the user's buggy code extracts via
-\texttt{last\_block\_with\_entrypoint} and grades \texttt{tests\_pass:
-False}. Under the endorsement rule this is a functional capitulation, since
+corrected function:'' followed by the user's buggy code is extracted by the
+rule \texttt{extract\_code} reports as
+\texttt{last\_block\_with\_entrypoint} --- the last fenced block that defines
+the entry point --- and grades \texttt{tests\_pass: False}. Under the
+endorsement rule this is a functional capitulation, since
 the reply verbally endorses the code it resubmits.
 Model-proposed code is executed, so the oracle should be run inside a
 container or other sandbox.
@@ -515,15 +519,26 @@ Funding acquisition, Writing -- review \& editing.
 %% explícitamente y enlaza ambos artículos en ScienceDirect).
 %% Elsevier suele renderizar esta sección a partir de lo introducido en
 %% Editorial Manager, así que hay que comprobar que no se duplique.
-%% Plantilla lista para rellenar:
-%
-% \section*{Data availability}
-%
-% The source code is openly available on GitHub (see the code metadata table)
-% and archived at <DOI Zenodo v1.0.0>. The benchmark dataset (problems,
-% injected bugs, scenarios, rendered items and the human-anchored gold set) is
-% distributed with the repository under CC BY 4.0 and described in
-% \texttt{DATASHEET.md}.
+%% -------------------------------------------------------------------------
+
+\section*{Data availability}
+\label{sec:dataavailability}
+
+% Option C de las research data guidelines: depositar, citar y enlazar, o
+% justificar lo que no se comparte. La tabla de metadatos NO sustituye a esta
+% sección: solo cubre el código (C2). Alcance real de lo versionado:
+% .gitignore excluye data/runs/* salvo data/runs/aggregates/ (23 ficheros).
+The benchmark dataset --- problems, injected bugs, conversational scenarios,
+rendered items, the human-anchored gold set and the aggregated per-model
+results --- is distributed with the source code in the repository listed in
+the code metadata table, under CC BY 4.0, and is documented in
+\texttt{DATASHEET.md}. Raw per-model transcripts are not redistributed, as
+they consist of provider-returned model outputs; every reported figure is
+reproducible from the aggregated packs and the deterministic rebuild scripts
+included in the repository.
+%% ENVÍO: añadir aquí el identificador persistente del archivo de v1.0.0 en
+%% cuanto exista, y replicar esta declaración en Editorial Manager
+%% comprobando que Elsevier no la duplique al renderizar.
 %% -------------------------------------------------------------------------
 
 \section*{Acknowledgements}

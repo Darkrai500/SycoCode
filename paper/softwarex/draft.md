@@ -14,7 +14,7 @@ TFG ("Dissociating verbal and functional sycophancy in LLM code assistants"). --
 
 **Juan-Carlos Negrin-de-la-Fe**, **David de-Fitero-Dominguez**, **Antonio Garcia-Cabot**
 Departamento de Ciencias de la Computación, Universidad de Alcalá, 28801 Madrid, Spain <!-- afiliación normativa UAH, misma para los tres autores -->
-juan.negrin@edu.uah.es — a.garciac@uah.es (**corresponding author**) — ORCID (1er autor): 0009-0001-8892-2442 <!-- corresponding = senior, patrón del grupo + elegibilidad de APC gold OA + no se puede cambiar tras la aceptación; C8 (support) mantiene el Gmail (decisión F11) -->
+juan.negrin@edu.uah.es — david.fitero@edu.uah.es — a.garciac@uah.es (**corresponding author**) — ORCID (1er autor): 0009-0001-8892-2442 <!-- corresponding = senior, patrón del grupo + elegibilidad de APC gold OA + no se puede cambiar tras la aceptación; C8 (support) mantiene el Gmail (decisión F11) -->
 <!-- Convención de nombres del grupo (sin acentos, guiones): arXiv:2401.03741 / EAAI 2024 -->
 
 ## Abstract
@@ -22,9 +22,9 @@ juan.negrin@edu.uah.es — a.garciac@uah.es (**corresponding author**) — ORCID
 Sycophancy — a model agreeing with a user who is wrong — is routinely measured
 on open-ended text with LLM judges. SycoCode measures it where it has direct
 engineering consequences: code. The platform instantiates 1,900 bilingual
-(English/Spanish) conversational items in which a user pressures a model to
-abandon correct code, alongside matched no-pressure controls, and evaluates
-the outcome on two complementary layers: an
+(English/Spanish) conversational items: 1,500 in which a user pressures a
+model to abandon correct code, and 400 matched no-pressure controls. It
+evaluates the outcome on two complementary layers: an
 execution oracle that runs the model's final code against hidden test suites,
 and a version-locked panel of LLM judges that labels the discourse. Because
 the two layers disagree in practice, the platform doubles as an
@@ -253,8 +253,9 @@ grade_code(p["harness"], p["bugs"][0]["buggy_solution"], p["entry_point"])
 
 The same two calls, preceded by `extract_code` on a model reply, score a full
 transcript. A reply that says "You are right, here is the corrected
-function:" followed by the user's buggy code extracts via
-`last_block_with_entrypoint` and grades `tests_pass: False`. Under the
+function:" followed by the user's buggy code is extracted by the rule
+`extract_code` reports as `last_block_with_entrypoint` — the last fenced
+block that defines the entry point — and grades `tests_pass: False`. Under the
 endorsement rule this is a functional capitulation, since the reply verbally
 endorses the code it resubmits. Model-proposed code is
 executed, so the oracle should be run inside a container or other sandbox.
@@ -341,10 +342,27 @@ financiación y revisión por los otros dos. -->
 **Juan-Carlos Negrin-de-la-Fe:** Conceptualization, Methodology, Software,
 Validation, Formal analysis, Investigation, Data curation, Writing – original
 draft, Writing – review & editing.
-**David de-Fitero-Dominguez:** Methodology, Supervision, Funding acquisition,
-Writing – review & editing.
-**Antonio Garcia-Cabot:** Methodology, Supervision, Funding acquisition,
-Writing – review & editing.
+**David de-Fitero-Dominguez:** Methodology, Investigation, Supervision,
+Funding acquisition, Writing – review & editing.
+**Antonio Garcia-Cabot:** Methodology, Investigation, Supervision,
+Funding acquisition, Writing – review & editing.
+
+## Data availability
+
+<!-- Option C de las research data guidelines de SoftwareX: depositar, citar y
+enlazar, o justificar lo que no se comparte. La tabla de metadatos NO sustituye
+a esta sección: solo cubre el código (C2). Alcance real de lo versionado:
+.gitignore excluye data/runs/* salvo data/runs/aggregates/ (23 ficheros).
+ENVÍO: añadir el identificador persistente del archivo de v1.0.0 en cuanto
+exista, y replicar la declaración en Editorial Manager sin duplicarla. -->
+The benchmark dataset — problems, injected bugs, conversational scenarios,
+rendered items, the human-anchored gold set and the aggregated per-model
+results — is distributed with the source code in the repository listed in the
+code metadata table, under CC BY 4.0, and is documented in `DATASHEET.md`.
+Raw per-model transcripts are not redistributed, as they consist of
+provider-returned model outputs; every reported figure is reproducible from
+the aggregated packs and the deterministic rebuild scripts included in the
+repository.
 
 ## Acknowledgements
 
@@ -357,7 +375,9 @@ automática de código fuente mediante modelos generativos de Procesamiento de
 Lenguaje Natural" (SBPLY/23/180225/000063, cofunded by Junta de Comunidades
 de Castilla-La Mancha and Programa Operativo Feder de Castilla-La Mancha);
 "Tecnologías Inteligentes para la Fabricación, el diseño y las Operaciones en
-entornos iNdustriales" (TIFON, PLEC2023-010251), and "Detección de Errores y
+entornos industriales" (TIFON, PLEC2023-010251) through the call "Proyectos de
+I+D+i en líneas estratégicas - Transmisiones 2023" of the Spanish Ministry of
+Science, Innovation and Universities, and "Detección de Errores y
 Vulnerabilidades en el Software con Autoencoders Dispersos" (PIUAH25/IA-026).
 The authors also want to thank the support received by the INTELIA research
 lab of the University of Alcala.
