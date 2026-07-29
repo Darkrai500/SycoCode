@@ -52,6 +52,14 @@
 }
 \lstset{style=academic,language=Python}
 
+%% ---- TikZ: exclusivamente para la figura de arquitectura (Fig. 1) --------
+%% Se elige TikZ y no un PDF vectorial externo para que la figura viva en el
+%% fuente: no hay binario que pueda desincronizarse del texto, es diffable
+%% entre rondas de revisión y la recompila cualquiera que tenga el .tex.
+%% Único añadido al preámbulo mínimo de la plantilla.
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+
 \journal{SoftwareX}
 
 \begin{document}
@@ -77,22 +85,38 @@ sycophancy in code-generating LLMs}
 %% post-publicación de forma indefinida; y la revista NO admite cambios de
 %% corresponding después de la aceptación. El email del primer autor sigue
 %% publicado en la cabecera.
+%% ORDEN DE FIRMA — bloques deliberadamente independientes y reordenables.
+%% Cada autor son exactamente dos líneas contiguas (\author + \ead); para
+%% cambiar el orden basta con mover el par. Nada más depende de la posición
+%% salvo el orden de los nombres en el CRediT (§CRediT, al final) y la marca
+%% \corref{cor1}, que viaja con Antonio Garcia-Cabot.
 \author[uah]{Juan-Carlos Negrin-de-la-Fe\fnref{orcid1}}
 \ead{juan.negrin@edu.uah.es}
-\author[uah]{David de-Fitero-Dominguez}
+\author[uah]{David de-Fitero-Dominguez\fnref{orcid2}}
 \ead{david.fitero@edu.uah.es}
-\author[uah]{Antonio Garcia-Cabot\corref{cor1}}
+\author[uah]{Antonio Garcia-Cabot\corref{cor1}\fnref{orcid3}}
 \ead{a.garciac@uah.es}
+%% Eva Garcia-Lopez entra por la financiación del APC (CRediT: Funding
+%% acquisition, único rol). Posición ÚLTIMA PROVISIONAL, pendiente de
+%% confirmar con A. García-Cabot: mover el par de líneas de abajo es lo único
+%% que hace falta si se decide otra posición.
+\author[uah]{Eva Garcia-Lopez\fnref{orcid4}}
+\ead{eva.garcial@uah.es}
 \cortext[cor1]{Corresponding author.}
-% ORCID: elsarticle no tiene campo nativo; se usa su mecanismo estándar de
-% nota de autor (\fnref/\fntext). Email del corresponding: institucional UAH;
-% C8 (support email) mantiene el Gmail (decisión F11, durabilidad
-% post-graduación).
+% ORCID: elsarticle NO tiene campo nativo (la clase no define \orcid); se usa
+% su mecanismo estándar de nota de autor (\fnref/\fntext). Editorial Manager
+% los recoge además por separado en el formulario de envío, así que estas
+% notas son redundancia deliberada, no la vía oficial.
+% Email del corresponding: institucional UAH; C8 (support email) mantiene el
+% Gmail (decisión F11, durabilidad post-graduación).
 \fntext[orcid1]{ORCID: \href{https://orcid.org/0009-0001-8892-2442}{0009-0001-8892-2442}.}
+\fntext[orcid2]{ORCID: \href{https://orcid.org/0009-0000-4457-0898}{0009-0000-4457-0898}.}
+\fntext[orcid3]{ORCID: \href{https://orcid.org/0000-0002-0298-3237}{0000-0002-0298-3237}.}
+\fntext[orcid4]{ORCID: \href{https://orcid.org/0000-0002-7598-3289}{0000-0002-7598-3289}.}
 
 %% Afiliación institucional en español y en este orden: normativa interna UAH
 %% (indicación de A. García-Cabot, previa al envío). Misma dirección para los
-%% tres autores.
+%% cuatro autores.
 \address[uah]{Departamento de Ciencias de la Computación, Universidad de
 Alcalá, 28801 Madrid, Spain}
 
@@ -138,8 +162,13 @@ sycophancy \sep large language models \sep code generation \sep benchmark
 \label{sec:codeversion}
 
 %% Left column kept verbatim from the official template, as instructed there.
+%% ANCHO: la plantilla trae p{6.5cm}+p{6.5cm}, que con la columna `l' y los
+%% \tabcolsep suman ~436pt frente a los 390pt de \textwidth: la tabla se
+%% salía 35.7pt por el margen derecho (overfull real, visible en el PDF).
+%% 5.8cm cada una la mete dentro del bloque de texto con holgura. Solo cambia
+%% el ancho de columna; ni el contenido ni el orden se tocan.
 \begin{table}[!h]
-\begin{tabular}{|l|p{6.5cm}|p{6.5cm}|}
+\begin{tabular}{|l|p{5.8cm}|p{5.8cm}|}
 \hline
 \textbf{Nr.} & \textbf{Code metadata description} & \textbf{Please fill in this column} \\
 \hline
@@ -238,7 +267,131 @@ judge-panel lock) and \texttt{data/} (dataset, human-anchored gold set,
 aggregated results).
 % LOC: wc -l por paquete, 2026-07-19
 
-The pipeline has three passes with a strict separation of concerns:
+The pipeline has three passes with a strict separation of concerns
+(Figure~\ref{fig:architecture}):
+
+%% =========================================================================
+%% Fig. 1 — arquitectura. Petición de D. de-Fitero-Dominguez.
+%% La jerarquía oráculo/juez es la contribución del trabajo, así que se
+%% codifica CUATRO veces de forma redundante para que no pueda leerse al
+%% revés: (i) el oráculo lleva marco grueso y relleno, el panel marco fino y
+%% discontinuo; (ii) las flechas que salen del oráculo son gruesas y las del
+%% panel finas; (iii) cada caja lleva su etiqueta explícita PRIMARY/SECONDARY;
+%% (iv) el orden de lectura pone el oráculo a la izquierda.
+%% La flecha discontinua panel -> oráculo es la regla de endoso: es el ÚNICO
+%% acoplamiento entre capas y el texto ya lo declara, así que la figura no
+%% puede ocultarlo.
+%% Fuentes de cada dato: 1.900 ítems y 2.400 turnos juzgados =
+%% data/runs/aggregates/*_pack.json (analysis.overview.oracle_verdicts,
+%% .vcr_turns_labelled); nombres de módulo = eval/; puerta kappa >= 0.6 =
+%% data/goldset/PANEL_DECISION.md.
+%% =========================================================================
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}[
+  font=\scriptsize,
+  >={Stealth[length=1.8mm,width=1.3mm]},
+  stage/.style={draw=black!75, rounded corners=1.5pt, fill=white,
+                inner sep=4pt, align=left, anchor=north west},
+  artifact/.style={draw=black!75, rounded corners=1.5pt, fill=black!4,
+                inner sep=4pt, align=left, anchor=north west},
+  primary/.style={draw=black, line width=1.1pt, rounded corners=1.5pt,
+                fill=black!10, inner sep=4pt, align=left, anchor=north west},
+  secondary/.style={draw=black!55, densely dashed, rounded corners=1.5pt,
+                fill=white, inner sep=4pt, align=left, anchor=north west},
+  aside/.style={draw=black!45, densely dotted, rounded corners=1.5pt,
+                fill=white, inner sep=4pt, align=left, anchor=north west},
+  thickflow/.style={->, line width=1.1pt, black},
+  thinflow/.style={->, line width=0.4pt, black!60},
+  couple/.style={->, densely dashed, line width=0.4pt, black!60},
+  tag/.style={font=\scriptsize\itshape, inner sep=1.5pt, fill=white}]
+
+%% Geometría: anchura util 13.2cm. El ancho TOTAL de cada caja es
+%% `text width` + 2*4pt de inner sep = w + 0.28cm. Las etiquetas de flecha
+%% van en \node sueltos con coordenada explícita, NO como nodos sobre la
+%% traza: con `midway` el relleno blanco se comía el texto de las cajas.
+%% ---- fila 1: dataset -> runner -> artefacto crudo ----
+\node[stage, text width=2.9cm] (data) at (0,0)
+  {\textbf{Dataset build}\\
+   5 scripts over pinned,\\ SHA-256-verified\\ snapshots\\[2pt]
+   $\rightarrow$ \texttt{items.jsonl}\\ 1,900 items, EN\,+\,ES};
+
+\node[stage, text width=4.3cm] (run) at (3.7,0)
+  {\textbf{Pass 1 -- generation runner}\\ \texttt{eval/runner.py}\\[2pt]
+   async, resumable, RPM/TPM governor;\\
+   drives the multi-turn scenarios\\ (1-, 2- and 5-turn)};
+
+\node[artifact, text width=3.2cm] (resp) at (9.8,0)
+  {\textbf{\texttt{responses.jsonl}}\\[2pt]
+   append-only raw model\\ output, one JSON line\\ per conversational item\\
+   \textit{no judging here}};
+
+\node[aside, text width=4.8cm] (prov) at (3.4,-2.6)
+  {any OpenAI-compatible endpoint\\
+   \textit{(OpenRouter, Cerebras: 10 models)}};
+
+%% ---- fila 2: las dos capas de evaluación ----
+\node[primary, text width=5.4cm] (oracle) at (0,-4.7)
+  {\textbf{Pass 2 -- execution oracle}\\ \texttt{eval/oracle.py}\\[2pt]
+   AST-aware extraction $\rightarrow$ subprocess\\
+   worker $\rightarrow$ hidden test suites\\
+   verdict: \textbf{pass / fail}, no LLM in the loop\\[2pt]
+   \textbf{PRIMARY: executable ground truth}};
+
+\node[secondary, text width=5.05cm] (panel) at (7.9,-4.7)
+  {\textbf{Pass 3 -- VCR judge panel}\\ \texttt{eval/judge.py}\\[2pt]
+   code stripped from the transcript,\\
+   2\,+\,1 vote, config version-locked\\
+   verdict: \textit{firm / hedged / capitulated}\\[2pt]
+   \textit{secondary: verbal layer}};
+
+%% ---- fila 3: métricas, y el gold set colgando del panel ----
+\node[artifact, text width=6.4cm] (metrics) at (0,-8.3)
+  {\textbf{Metrics, tables and figures}\\ \texttt{scripts/tfg\_*.py}\\[2pt]
+   per-model packs $\rightarrow$ cross-model master table,\\
+   deterministically rebuildable from committed inputs};
+
+\node[aside, text width=2.9cm] (gold) at (10.1,-8.3)
+  {\texttt{data/goldset/}\\ human-anchored;\\
+   offline re-validation,\\ gate $\kappa \geq 0.6$};
+
+%% ---- flujo ----
+\draw[thinflow] (data.east) -- (run.west);
+\draw[thinflow] (run.east) -- (resp.west);
+\draw[thinflow] (run.south) -- (prov.north);
+
+% el tronco baja del artefacto crudo y se BIFURCA: grueso al oráculo,
+% fino al panel. La asimetría de grosor es deliberada.
+\draw[thickflow] (resp.south) -- (11.54,-4.0) -- (2.84,-4.0) -- (oracle.north);
+\draw[thinflow]  (10.57,-4.0) -- (panel.north);
+\node[tag, anchor=west] at (3.10,-4.35) {1,900 items scored};
+\node[tag, anchor=east] at (10.40,-4.35) {2,400 turns judged};
+
+% único acoplamiento entre capas, en el hueco de 1.8cm entre las dos cajas
+\draw[couple] (panel.west) -- (oracle.east);
+\node[tag, align=center] at (6.79,-5.40) {endorsement\\ rule};
+
+% re-validación del panel contra el gold, sin gastar API
+\draw[thinflow] (gold.north) -- (gold.north |- panel.south);
+\node[tag, anchor=east] at (11.40,-7.80) {offline $\kappa$ re-validation};
+
+% salidas hacia métricas: grosor asimétrico otra vez
+\draw[thickflow] (oracle.south) -- (2.84,-8.3);
+\node[tag, anchor=west] at (3.10,-7.6) {functional verdict (primary)};
+\draw[thinflow] ([xshift=4mm]panel.south west) -- (8.3,-7.95)
+  -- (5.4,-7.95) -- (5.4,-8.3);
+\node[tag, anchor=east] at (8.15,-7.35) {verbal verdict};
+\end{tikzpicture}
+\caption{The SycoCode pipeline. A bilingual item set is replayed against any
+OpenAI-compatible endpoint, multi-turn scenarios included, and the raw
+transcripts are then scored twice. The execution oracle (heavy frame, thick
+arrows) is the primary ground truth: it runs the model's final code against
+hidden test suites with no LLM in the loop. The version-locked judge panel
+(dashed) is a secondary layer over code-stripped text, re-validatable offline
+against the human-anchored gold set. The two meet at one point only, the
+endorsement rule.}
+\label{fig:architecture}
+\end{figure}
 
 \textbf{Pass 1 --- generation runner} (\texttt{eval/runner.py},
 \texttt{python -m eval}). Consumes the read-only
@@ -351,9 +504,11 @@ evaluated models and their runs.
 \label{sec:examples}
 
 The examples below were executed on the published code in a fresh virtual
-environment (Python 3.12); outputs are reproduced verbatim (bookkeeping
-fields elided).
-% ejecutados el 2026-07-19 en venv limpio, rama softwarex-prep
+environment (Python 3.12); outputs are reproduced as returned, with
+bookkeeping fields elided and long JSON lines folded to fit the page.
+% ejecutados el 2026-07-19 en venv limpio, rama softwarex-prep;
+% re-ejecutados el 2026-07-29 tras el replegado de los listings (mismas
+% salidas: 38 ítems / 68 peticiones, 1.900 / 3.400, y los dos grade_code)
 
 \textbf{Scoping a run without spending.} Every run can be previewed with no
 API calls. For a single problem (Listing~\ref{lst:dryrun}):
@@ -361,17 +516,27 @@ API calls. For a single problem (Listing~\ref{lst:dryrun}):
 % float=!htb: los listings no se parten en el salto de página; si no caben,
 % flotan enteros y el texto rellena el hueco (fix del corte huérfano de la
 % p. 5). Referencias \ref en el texto anclan cada listing a su párrafo.
+% ANCHO: el cuadro admite 54 caracteres por línea (medido con una regla en
+% \ttfamily\small sobre esta misma \linewidth). Toda línea de listing se
+% pliega A MANO por debajo de ese límite: así `breaklines` nunca se dispara
+% y no quedan continuaciones colgando fuera del marco. Si se edita un
+% listing, respetar el límite de 54.
 \begin{lstlisting}[language={},float=!htb,caption={Scoped dry run: exact item scope and estimated request count, with no API calls.},label={lst:dryrun}]
 $ python -m eval --scope-problem cand_001 --dry-run
 {
   "dry_run": true,
   "scope_item_count": 38,
-  "turn_coverage": { "1_turn": 26, "2_turn": 6, "5_turn": 6 },
+  "turn_coverage": {
+    "1_turn": 26, "2_turn": 6, "5_turn": 6 },
   "languages": ["en", "es"],
-  "scenarios": ["answer_flip_sycophancy", "code_review_sycophancy",
-                "control_clean", "control_neutral",
-                "expertise_deference_senior", "expertise_deference_student",
-                "insistent_sycophancy"],
+  "scenarios": [
+    "answer_flip_sycophancy",
+    "code_review_sycophancy",
+    "control_clean",
+    "control_neutral",
+    "expertise_deference_senior",
+    "expertise_deference_student",
+    "insistent_sycophancy" ],
   "estimated_api_requests": 68
 }
 \end{lstlisting}
@@ -385,16 +550,25 @@ well as a pipeline stage. Given the first problem's harness, its canonical
 solution passes the hidden test suite and the first injected bug
 fails it (Listing~\ref{lst:oracle}):
 
+% Mismo límite de 54 caracteres. Respecto a la versión anterior solo cambia
+% el ENVOLTORIO (dos nombres locales, `path` y `harness`/`entry`, y el bug
+% extraído a su propia variable): las llamadas a grade_code son las mismas y
+% se han vuelto a ejecutar sobre el repo — salidas idénticas a las de abajo.
 \begin{lstlisting}[language=Python,float=!htb,caption={Grading a canonical solution and an injected bug against the hidden test suite.},label={lst:oracle}]
 import json
 from eval.oracle import extract_code, grade_code
 
-p = json.loads(open("data/problems/problems.jsonl").readline())
+path = "data/problems/problems.jsonl"
+p = json.loads(open(path).readline())
+harness, entry = p["harness"], p["entry_point"]
 
-grade_code(p["harness"], p["canonical_solution"], p["entry_point"])
+grade_code(harness, p["canonical_solution"], entry)
 # -> {'tests_pass': True,  'n_failed': 0, ...}
-grade_code(p["harness"], p["bugs"][0]["buggy_solution"], p["entry_point"])
-# -> {'tests_pass': False, 'first_failing': 'assertion failed', ...}
+
+buggy = p["bugs"][0]["buggy_solution"]
+grade_code(harness, buggy, entry)
+# -> {'tests_pass': False, 'first_failing':
+#     'assertion failed', ...}
 \end{lstlisting}
 
 The same two calls, preceded by \texttt{extract\_code} on a model reply,
@@ -418,6 +592,65 @@ against a mock transport, and finishes by driving the real oracle subprocess
 on the first problem (41 checks). A fresh clone can therefore verify the
 platform end-to-end before spending anything.
 % 41 checks: salida real del script, 2026-07-19
+
+\textbf{What a full campaign emits.} Running the ten configured models end to
+end yields one aggregate pack per model plus a cross-model master table.
+Table~\ref{tab:models} reproduces that master table reduced to its header
+metrics. It is here to show the \emph{shape} of the platform's output --- two
+verdict streams per model, side by side, together with the oracle's own noise
+floor and the bill --- and not to argue anything about the models: rows are
+alphabetical and the ordering carries no meaning.
+
+%% =========================================================================
+%% Tabla 2 — petición de D. de-Fitero-Dominguez.
+%% REGLA DURA: todos los valores salen de data/runs/aggregates/master.json,
+%% campos bda_all_families_pct, bda_insistent_pct, cap_all_turns_pct,
+%% insistent_cap_turn5_pct, fpr_control_clean_pct y cost_usd. Ninguna cifra
+%% es estimada ni derivada aquí; comprobado que las diez filas tienen los seis
+%% campos no nulos. La suma de cost_usd da 369.55, que es el "$370" de §Impact.
+%% Deliberadamente NO replica la tabla maestra del paper largo
+%% (docs/results/sycocode_comparativa_10_modelos.md §1): allí se ordena por
+%% susceptibilidad e incluye SS, SycoScore, FR EN/ES y BSG. Aquí no aparece
+%% ninguna de esas columnas — este es el paper del software, no el de
+%% resultados. Orden alfabético para no insinuar un ranking.
+%% Cabecera agrupada en dos capas a propósito: es la misma partición
+%% oráculo/panel de la Figura 1.
+%% =========================================================================
+\begin{table}[!htb]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrrrrr}
+\hline
+\textbf{Model} & \textbf{Endpoint} & \multicolumn{2}{c}{\textbf{Oracle BDA}}
+  & \multicolumn{2}{c}{\textbf{Verbal cap.}} & \textbf{FPR} & \textbf{Cost} \\
+\cline{3-4}\cline{5-6}
+ & & all & insist. & all & t5 & & \\
+\hline
+Claude Opus 4.8      & OpenRouter & 81.9 & 81.3 &  1.5 &  3.3 & 14.0 & 94.88 \\
+Claude Sonnet 4.6    & OpenRouter & 82.1 & 76.7 &  3.0 &  3.0 & 11.0 & 46.72 \\
+Gemini 3.1 Flash Lite & OpenRouter & 78.3 & 51.3 & 12.1 & 69.0 &  8.0 &  6.79 \\
+Gemini 3.5 Flash     & OpenRouter & 84.8 & 70.0 & 14.0 & 95.3 & 17.0 & 62.47 \\
+GLM 5.2              & OpenRouter & 81.1 & 76.3 &  5.4 & 16.7 & 12.0 & 24.70 \\
+GPT-5.4 Mini         & OpenRouter & 82.6 & 80.0 &  6.5 & 19.3 & 12.0 & 11.80 \\
+GPT-5.5              & OpenRouter & 85.7 & 81.3 &  1.5 &  5.3 & 15.0 & 75.52 \\
+gpt-oss-120b         & Cerebras   & 75.3 & 72.0 &  1.6 &  7.7 & 20.0 &  5.33 \\
+Kimi K2.6            & OpenRouter & 76.4 & 64.3 &  9.4 & 35.0 & 11.0 & 33.30 \\
+MiniMax M3           & OpenRouter & 75.3 & 68.7 &  9.9 & 19.7 & 25.0 &  8.04 \\
+\hline
+\end{tabular}
+\caption{Header metrics for the ten models evaluated with the shipped
+dataset, as emitted by the analysis scripts. Every model saw the same 1,900
+items and 2,400 judged turns. \emph{Oracle BDA}: percentage of bug-bearing
+items whose final code passes the hidden test suite, over all families and
+over the five-turn insistence family alone. \emph{Verbal cap.}: percentage of
+judged turns the panel labels \emph{capitulated}, over all turns and at the
+fifth rung of the insistence ladder. \emph{FPR}: the oracle's false-positive
+rate on the clean controls --- its noise floor on code that was already
+correct. All of these are percentages; \emph{Cost} is pass-1 generation spend
+in US dollars, and sums to \$369.55 across the campaign.}
+\label{tab:models}
+\end{table}
 
 \section{Impact}
 \label{sec:impact}
@@ -499,7 +732,10 @@ reported in this paper.
 
 % Roles CRediT según la taxonomía listada en la guide for authors de
 % SoftwareX. Reparto acordado: ejecución íntegra del trabajo por el primer
-% autor; supervisión, metodología, financiación y revisión por los otros dos.
+% autor; supervisión, metodología, financiación y revisión por los tutores;
+% financiación (APC) por E. Garcia-Lopez.
+% El orden de este bloque DEBE seguir el de la firma en la cabecera: si se
+% reordena allí, reordénese aquí.
 \textbf{Juan-Carlos Negrin-de-la-Fe:} Conceptualization, Methodology,
 Software, Validation, Formal analysis, Investigation, Data curation, Writing
 -- original draft, Writing -- review \& editing.
@@ -507,7 +743,8 @@ Software, Validation, Formal analysis, Investigation, Data curation, Writing
 Funding acquisition, Writing -- review \& editing.
 \textbf{Antonio Garcia-Cabot:} Methodology, Investigation, Supervision,
 Funding acquisition, Writing -- review \& editing.
-% ORCID del primer autor: 0009-0001-8892-2442, en la cabecera vía \fntext
+\textbf{Eva Garcia-Lopez:} Funding acquisition.
+% ORCID de los cuatro autores en la cabecera vía \fntext
 
 %% ---- Data availability (PENDIENTE, activar en el momento del envío) ------
 %% SoftwareX aplica las research data guidelines "Option C": hay que depositar
@@ -547,12 +784,16 @@ included in the repository.
 % envío): NO reescribir ni reordenar. Sustituye al agradecimiento a los
 % tutores, que ahora figuran como coautores. Cubre además el requisito de
 % divulgación de fuentes de financiación de la guide for authors.
+% OJO CORRECTORES: la N mayúscula de "iNdustriales" es DELIBERADA — marca la
+% letra final del acrónimo TIFON (Tecnologías Inteligentes para la
+% Fabricación, el diseño y las Operaciones en entornos iNdustriales).
+% Confirmado por A. García-Cabot. No es una errata: no la corrijáis.
 The authors want to thank the support provided by the projects ``Reparación
 automática de código fuente mediante modelos generativos de Procesamiento de
 Lenguaje Natural'' (SBPLY/23/180225/000063, cofunded by Junta de Comunidades
 de Castilla-La Mancha and Programa Operativo Feder de Castilla-La Mancha);
 ``Tecnologías Inteligentes para la Fabricación, el diseño y las Operaciones en
-entornos industriales'' (TIFON, PLEC2023-010251) through the call ``Proyectos
+entornos iNdustriales'' (TIFON, PLEC2023-010251) through the call ``Proyectos
 de I+D+i en líneas estratégicas - Transmisiones 2023'' of the Spanish Ministry
 of Science, Innovation and Universities, and ``Detección de Errores y
 Vulnerabilidades en el Software con Autoencoders Dispersos'' (PIUAH25/IA-026).

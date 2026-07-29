@@ -5,6 +5,15 @@ Cada cifra factual lleva un comentario HTML indicando el fichero del repo
 del que sale. Referencias: solo las 8 verificadas en references_verification.md.
 Autoría, CRediT, Acknowledgements y autor de correspondencia cerrados
 (indicaciones de A. García-Cabot previas al envío).
+
+OJO — ESTE FICHERO YA NO ES LA FUENTE AUTORITATIVA.
+El manuscrito vivo es latex/sycocode-softwarex.tex; es el que se compila y el
+que se envía. Este borrador se mantiene sincronizado SOLO en cabecera, CRediT
+y agradecimientos, para que nadie regenere el .tex a partir de aquí y pierda
+cambios. Contenido que existe únicamente en el .tex y NO está reproducido
+abajo: la Figura 1 (arquitectura, TikZ) y la Tabla 2 (los diez modelos con
+las métricas de cabecera), ambas añadidas en la ronda de 2026-07-29 a
+petición de D. de-Fitero-Dominguez.
 -->
 
 # SycoCode: a Python platform for execution-grounded evaluation of sycophancy in code-generating LLMs
@@ -12,9 +21,11 @@ Autoría, CRediT, Acknowledgements y autor de correspondencia cerrados
 <!-- Título orientado al software, deliberadamente disjunto del paper largo del
 TFG ("Dissociating verbal and functional sycophancy in LLM code assistants"). -->
 
-**Juan-Carlos Negrin-de-la-Fe**, **David de-Fitero-Dominguez**, **Antonio Garcia-Cabot**
-Departamento de Ciencias de la Computación, Universidad de Alcalá, 28801 Madrid, Spain <!-- afiliación normativa UAH, misma para los tres autores -->
-juan.negrin@edu.uah.es — david.fitero@edu.uah.es — a.garciac@uah.es (**corresponding author**) — ORCID (1er autor): 0009-0001-8892-2442 <!-- corresponding = senior, patrón del grupo + elegibilidad de APC gold OA + no se puede cambiar tras la aceptación; C8 (support) mantiene el Gmail (decisión F11) -->
+**Juan-Carlos Negrin-de-la-Fe**, **David de-Fitero-Dominguez**, **Antonio Garcia-Cabot**, **Eva Garcia-Lopez**
+Departamento de Ciencias de la Computación, Universidad de Alcalá, 28801 Madrid, Spain <!-- afiliación normativa UAH, misma para los cuatro autores -->
+juan.negrin@edu.uah.es — david.fitero@edu.uah.es — a.garciac@uah.es (**corresponding author**) — eva.garcial@uah.es <!-- corresponding = senior, patrón del grupo + elegibilidad de APC gold OA + no se puede cambiar tras la aceptación; C8 (support) mantiene el Gmail (decisión F11) -->
+ORCID: 0009-0001-8892-2442 (Negrin-de-la-Fe) — 0009-0000-4457-0898 (de-Fitero-Dominguez) — 0000-0002-0298-3237 (Garcia-Cabot) — 0000-0002-7598-3289 (Garcia-Lopez) <!-- elsarticle no tiene campo \orcid nativo: en el .tex van por \fnref/\fntext, y Editorial Manager los recoge aparte en el formulario -->
+<!-- Eva Garcia-Lopez entra por la financiación del APC (CRediT: Funding acquisition). POSICIÓN ÚLTIMA PROVISIONAL, pendiente de confirmar con A. García-Cabot. Misma grafía, correo y ORCID que en el bloque \ifevaauthor del paper largo (TFG_SycoCode/Paper/main.tex). -->
 <!-- Convención de nombres del grupo (sin acentos, guiones): arXiv:2401.03741 / EAAI 2024 -->
 
 ## Abstract
@@ -338,7 +349,8 @@ for the design. Code is available under the MIT license.
 
 <!-- Roles según la taxonomía CRediT listada en la guide for authors de
 SoftwareX. Ejecución íntegra por el primer autor; supervisión, metodología,
-financiación y revisión por los otros dos. -->
+financiación y revisión por los tutores; financiación (APC) por E.
+Garcia-Lopez. El orden DEBE seguir el de la firma en la cabecera. -->
 **Juan-Carlos Negrin-de-la-Fe:** Conceptualization, Methodology, Software,
 Validation, Formal analysis, Investigation, Data curation, Writing – original
 draft, Writing – review & editing.
@@ -346,6 +358,7 @@ draft, Writing – review & editing.
 Funding acquisition, Writing – review & editing.
 **Antonio Garcia-Cabot:** Methodology, Investigation, Supervision,
 Funding acquisition, Writing – review & editing.
+**Eva Garcia-Lopez:** Funding acquisition.
 
 ## Data availability
 
@@ -369,13 +382,15 @@ repository.
 <!-- Párrafo facilitado literalmente por A. García-Cabot: NO reescribir ni
 reordenar. Cubre el requisito de divulgación de financiación de SoftwareX.
 La declaración de IA generativa va en su propia sección del .tex según la
-política de Elsevier. -->
+política de Elsevier.
+OJO CORRECTORES: la N mayúscula de "iNdustriales" es DELIBERADA — es la letra
+final del acrónimo TIFON. Confirmado por A. García-Cabot. No es una errata. -->
 The authors want to thank the support provided by the projects "Reparación
 automática de código fuente mediante modelos generativos de Procesamiento de
 Lenguaje Natural" (SBPLY/23/180225/000063, cofunded by Junta de Comunidades
 de Castilla-La Mancha and Programa Operativo Feder de Castilla-La Mancha);
 "Tecnologías Inteligentes para la Fabricación, el diseño y las Operaciones en
-entornos industriales" (TIFON, PLEC2023-010251) through the call "Proyectos de
+entornos iNdustriales" (TIFON, PLEC2023-010251) through the call "Proyectos de
 I+D+i en líneas estratégicas - Transmisiones 2023" of the Spanish Ministry of
 Science, Innovation and Universities, and "Detección de Errores y
 Vulnerabilidades en el Software con Autoencoders Dispersos" (PIUAH25/IA-026).
