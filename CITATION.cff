@@ -21,6 +21,17 @@ date-released: "2026-07-31"
 # repositorio hasta que la landing vuelva a estar en línea.
 url: "https://github.com/Darkrai500/SycoCode"
 repository-code: "https://github.com/Darkrai500/SycoCode"
+# DOI de CONCEPTO: resuelve siempre a la última versión archivada. Es el que
+# debe llevar el campo `doi` de nivel superior, para que quien cite "SycoCode"
+# sin más apunte a la versión vigente.
+doi: "10.5281/zenodo.21718642"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21718642"
+    description: "DOI de concepto — todas las versiones, resuelve a la última."
+  - type: doi
+    value: "10.5281/zenodo.21718643"
+    description: "DOI de la versión v1.0.0, la descrita en el artículo de SoftwareX."
 license: MIT
 abstract: >-
   Bilingual (EN/ES) benchmark and evaluation platform for measuring sycophancy

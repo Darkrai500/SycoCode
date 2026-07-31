@@ -31,6 +31,24 @@ La plantilla trae además una sección "Current executable software version"
 hay artefacto ejecutable separado, y la tabla C1–C8 ya cubre la release. La
 omisión está comentada en el `.tex`, al final, antes de `\end{document}`.
 
+## Archivo con DOI
+
+`v1.0.0` quedó archivado en Zenodo el 2026-07-31, disparado por la integración
+GitHub–Zenodo al publicar la release.
+
+| | DOI | Uso |
+|---|---|---|
+| Versión | `10.5281/zenodo.21718643` | El que cita §Data availability: es fijo y apunta a v1.0.0, la versión que describe esta tabla. |
+| Concepto | `10.5281/zenodo.21718642` | Insignia del README y campo `doi` de `CITATION.cff`: resuelve siempre a la última versión. |
+
+Metadatos que Zenodo tomó de `CITATION.cff`, verificados contra su API: tipo
+*Software*, licencia `mit-license`, versión `v1.0.0`, autor con ORCID, y
+`isSupplementTo` → `https://github.com/Darkrai500/SycoCode/tree/v1.0.0`.
+
+**C2 sigue siendo el enlace de GitHub al tag, no el DOI**: la fila pide
+literalmente un "Permanent GitHub link". El DOI vive en §Data availability,
+que es donde corresponde.
+
 ## Verificación de la Tabla 2 del manuscrito (los diez modelos)
 
 Re-verificada el 2026-07-31 contra `data/runs/aggregates/master.json`:

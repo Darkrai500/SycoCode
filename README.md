@@ -5,11 +5,15 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.txt)
 [![Dataset License: CC BY 4.0](https://img.shields.io/badge/Dataset%20License-CC%20BY%204.0-lightgrey.svg)](LICENSE-DATASET)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21718642.svg)](https://doi.org/10.5281/zenodo.21718642)
 
 <!-- La insignia y el enlace a https://darkrai500.github.io/TFG_SycoCode/ se
      retiraron el 2026-07-31 al abrir el repo: esa GitHub Pages está
      despublicada y devuelve 404 (comprobado). Restaurarlos si vuelve a
-     publicarse; el mismo enlace estaba en CITATION.cff y también se cambió. -->
+     publicarse; el mismo enlace estaba en CITATION.cff y también se cambió.
+     La insignia de DOI usa el DOI de CONCEPTO (…642), que resuelve siempre a
+     la última versión. El artículo de SoftwareX cita el DOI de VERSIÓN
+     (10.5281/zenodo.21718643), que es fijo y apunta a v1.0.0. -->
 
 ---
 
