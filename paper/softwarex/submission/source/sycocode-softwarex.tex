@@ -176,7 +176,7 @@ sycophancy \sep large language models \sep code generation \sep benchmark
 \hline
 C1 & Current code version & v1.0.0 \\ % tag anotado local en softwarex-prep
 \hline
-C2 & Permanent GitHub link to code/repository used for this code version & \url{https://github.com/Darkrai500/SycoCode} \\ % repo actualmente PRIVADO; debe ser público en el envío (y la guía exige README.md y fichero de licencia en el repo)
+C2 & Permanent GitHub link to code/repository used for this code version & \url{https://github.com/Darkrai500/SycoCode/tree/v1.0.0} \\ % repo PÚBLICO desde el 2026-07-31, con README.md y LICENSE.txt en la raíz como exige la guía (verificado sin token: ambos devuelven 200 en raw.githubusercontent.com sobre el tag). Se enlaza el TAG y no la raíz del repo: la fila pide el enlace "used for this code version", y /tree/v1.0.0 es inmutable mientras que la raíz sigue a main. El ejemplo de la plantilla es una URL de repo pelada, así que esto la cumple con creces
 \hline
 C3 & Legal Code License   & MIT \\ % LICENSE en la raíz del repo; dataset CC BY 4.0 aparte (LICENSE-DATASET)
 \hline
@@ -782,9 +782,17 @@ the code metadata table, under CC BY 4.0, and is documented in
 they consist of provider-returned model outputs; every reported figure is
 reproducible from the aggregated packs and the deterministic rebuild scripts
 included in the repository.
-%% ENVÍO: añadir aquí el identificador persistente del archivo de v1.0.0 en
-%% cuanto exista, y replicar esta declaración en Editorial Manager
-%% comprobando que Elsevier no la duplique al renderizar.
+%% ENVÍO: el repositorio ya es público y C2 apunta al tag inmutable v1.0.0,
+%% así que esta sección NO bloquea el envío. Queda opcionalmente por añadir el
+%% DOI del archivo Zenodo de v1.0.0, que refuerza la declaración pero no lo
+%% exige ni la fila C2 (cuyo ejemplo en la plantilla es una URL de GitHub
+%% pelada) ni las research data guidelines, ya cubiertas al distribuir el
+%% dataset en el propio repositorio bajo CC BY 4.0.
+%% Si se acuña el DOI, insertar aquí una frase del tipo:
+%%   "Version 1.0.0 of the platform and dataset is archived at
+%%    https://doi.org/10.5281/zenodo.XXXXXXX."
+%% y replicar la declaración en Editorial Manager comprobando que Elsevier no
+%% la duplique al renderizar.
 %% -------------------------------------------------------------------------
 
 \section*{Acknowledgements}
