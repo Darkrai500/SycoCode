@@ -2,6 +2,14 @@ cff-version: 1.2.0
 message: "If you use SycoCode, please cite it as below."
 title: "SycoCode: A Bilingual Benchmark for Measuring Sycophancy in LLMs on Code Generation and Review Tasks"
 type: software
+# AUTORÍA DEL SOFTWARE, que no es la misma que la del artículo.
+# El manuscrito de SoftwareX va firmado por cuatro personas, pero su reparto
+# CRediT asigna el rol "Software" a una sola. Este campo describe quién
+# escribió el código, así que se mantiene consistente con ese reparto y no se
+# amplía a los cuatro firmantes: hacerlo atribuiría autoría de software a
+# quien la taxonomía del propio artículo no se la da.
+# La forma correcta de dar crédito a los cuatro es la cita preferente de
+# abajo, que pasará a ser el artículo en cuanto esté publicado.
 authors:
   - family-names: "Negrín"
     given-names: "Juan Carlos"
@@ -26,6 +34,34 @@ keywords:
   - llm-evaluation
   - benchmark
   - code-generation
+# CITA PREFERENTE.
+# Sigue siendo el TFG porque es lo único publicado a día de hoy. El artículo
+# de SoftwareX está enviado pero no aceptado, y poner aquí una referencia que
+# todavía no existe haría que la gente citara algo inlocalizable.
+# AL ACEPTARSE: sustituir el bloque `preferred-citation` entero por el de
+# abajo, rellenando doi, volume, year y number de página. Los cuatro autores
+# van ahí — es el sitio donde se acredita a los coautores del artículo.
+#
+#   preferred-citation:
+#     type: article
+#     title: "SycoCode: a Python platform for execution-grounded evaluation of
+#             sycophancy in code-generating LLMs"
+#     authors:
+#       - family-names: "Negrin-de-la-Fe"
+#         given-names: "Juan-Carlos"
+#         orcid: "https://orcid.org/0009-0001-8892-2442"
+#       - family-names: "de-Fitero-Dominguez"
+#         given-names: "David"
+#         orcid: "https://orcid.org/0009-0000-4457-0898"
+#       - family-names: "Garcia-Cabot"
+#         given-names: "Antonio"
+#         orcid: "https://orcid.org/0000-0002-0298-3237"
+#       - family-names: "Garcia-Lopez"
+#         given-names: "Eva"
+#         orcid: "https://orcid.org/0000-0002-7598-3289"
+#     journal: "SoftwareX"
+#     year: <AÑO>
+#     doi: "<DOI>"
 preferred-citation:
   type: thesis
   title: "SycoCode: A Bilingual Benchmark for Measuring Sycophancy in LLMs on Code Generation and Review Tasks"

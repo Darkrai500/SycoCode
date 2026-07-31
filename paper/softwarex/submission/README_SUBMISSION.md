@@ -21,6 +21,7 @@ SoftwareX solo acepta envíos por Editorial Manager (no admite correo).
 | `GraphicalAbstract.pdf` | Graphical Abstract | 13 × 5 cm exactos, vectorial. |
 | `source/GraphicalAbstract.tex` | LaTeX Source File | Fuente del graphical abstract. |
 | `SycoCode_Highlights.txt` | Highlights | Fichero aparte y editable, con "Highlights" en el nombre. |
+| `CoverLetter.md` | Cover Letter | Opcional (la guía no la exige). Declara la relación con el TFG y con el manuscrito de resultados, y el 0.00% de solape medido. Rellenar fecha y editor antes de enviar. |
 
 **Tablas**: van dentro del manuscrito como texto editable (`tabular`), no como
 imágenes — que es lo que pide la guía. No se suben aparte.
@@ -45,14 +46,18 @@ imágenes — que es lo que pide la guía. No se suben aparte.
   Elsevier ("...in the manuscript preparation process"), colocada al final,
   inmediatamente antes de las referencias.
 
-## Lo que queda fuera del paquete
+## Estado
 
-1. **DOI de archivo (Zenodo).** Es lo único que sigue bloqueando el envío
-   completo: C2 pide un enlace permanente y §Data availability tiene el hueco
-   marcado para el identificador persistente. Requiere vincular la cuenta de
-   Zenodo con GitHub a mano (OAuth en el navegador) ANTES de crear la release,
-   porque Zenodo solo captura releases posteriores a la vinculación.
-2. **Cover letter**: la guía no la exige. Sin decidir.
+**Nada bloquea el envío.** Cerrado el 2026-07-31: repositorio público con
+`README.md` y `LICENSE.txt` en la raíz, tag y release `v1.0.0` publicados, C2
+apuntando al tag inmutable, graphical abstract y cover letter incluidos.
 
-Resueltos el 2026-07-31: repositorio público, `LICENSE.txt` en la raíz,
-graphical abstract incluido.
+Queda **opcional**, no bloqueante:
+
+- **DOI de archivo (Zenodo).** Refuerza §Data availability pero no lo exige ni
+  C2 (cuyo ejemplo en la plantilla es una URL de GitHub pelada) ni las research
+  data guidelines, ya cubiertas al distribuir el dataset en el repositorio bajo
+  CC BY 4.0. Requiere vincular la cuenta de Zenodo con GitHub a mano (OAuth en
+  el navegador). Zenodo solo captura releases **posteriores** a la vinculación,
+  así que para que v1.0.0 tenga DOI hay que vincular primero y luego borrar y
+  recrear la release, o publicar una v1.0.1.
