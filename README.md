@@ -2,12 +2,14 @@
 
 > A bilingual benchmark for measuring sycophancy in LLMs on code generation and code review tasks.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.txt)
 [![Dataset License: CC BY 4.0](https://img.shields.io/badge/Dataset%20License-CC%20BY%204.0-lightgrey.svg)](LICENSE-DATASET)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
-[![Landing](https://img.shields.io/badge/Project%20Page-darkrai500.github.io%2FTFG__SycoCode-2ea44f)](https://darkrai500.github.io/TFG_SycoCode/)
 
-**Project page:** https://darkrai500.github.io/TFG_SycoCode/
+<!-- La insignia y el enlace a https://darkrai500.github.io/TFG_SycoCode/ se
+     retiraron el 2026-07-31 al abrir el repo: esa GitHub Pages está
+     despublicada y devuelve 404 (comprobado). Restaurarlos si vuelve a
+     publicarse; el mismo enlace estaba en CITATION.cff y también se cambió. -->
 
 ---
 
@@ -243,7 +245,7 @@ LLM-evaluation platform built end-to-end by one engineer:
 
 ## Licensing
 
-- **Code** (`eval/`, `scripts/`, `tests/`): [MIT](LICENSE).
+- **Code** (`eval/`, `scripts/`, `tests/`): [MIT](LICENSE.txt).
 - **Original dataset material** (bugs, scenarios, rubric, gold set,
   aggregated metrics, docs): [CC BY 4.0](LICENSE-DATASET).
 - **Upstream benchmark material** (HumanEval — MIT; HumanEval+/MBPP+ —

@@ -3,6 +3,16 @@
 .env.local
 .env.*.local
 
+# ===== Documentos internos de trabajo (NO se publican) =====
+# Notas de proceso, no software: TODOs pendientes, rutas locales y la crítica
+# interna al manuscrito. Siguen en disco y en la historia del repo, pero fuera
+# del árbol público. Decisión del autor al abrir el repo (2026-07-31).
+PUBLICATION_READINESS.md
+paper/softwarex/HANDOFF_COWORK.md
+paper/softwarex/review/
+# Correspondencia con los coautores.
+paper/softwarex/RESPUESTA_ANTONIO.md
+
 # ===== Python =====
 __pycache__/
 *.py[cod]

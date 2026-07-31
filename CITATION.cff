@@ -7,8 +7,11 @@ authors:
     given-names: "Juan Carlos"
     orcid: "https://orcid.org/0009-0001-8892-2442"
 version: 1.0.0
-date-released: "2026-07-08"
-url: "https://darkrai500.github.io/TFG_SycoCode/"
+date-released: "2026-07-31"
+# El campo `url` apuntaba a https://darkrai500.github.io/TFG_SycoCode/, que
+# devuelve 404 desde que se despublicó esa GitHub Pages. Se apunta al propio
+# repositorio hasta que la landing vuelva a estar en línea.
+url: "https://github.com/Darkrai500/SycoCode"
 repository-code: "https://github.com/Darkrai500/SycoCode"
 license: MIT
 abstract: >-

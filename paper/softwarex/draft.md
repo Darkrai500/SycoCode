@@ -349,8 +349,11 @@ for the design. Code is available under the MIT license.
 
 <!-- Roles según la taxonomía CRediT listada en la guide for authors de
 SoftwareX. Ejecución íntegra por el primer autor; supervisión, metodología,
-financiación y revisión por los tutores; financiación (APC) por E.
-Garcia-Lopez. El orden DEBE seguir el de la firma en la cabecera. -->
+financiación y revisión por los tutores; metodología, investigación,
+financiación y revisión por E. Garcia-Lopez (ampliado el 2026-07-31; antes
+tenía solo Funding acquisition). Supervision es lo único que la separa de los
+dos tutores y es correcto: no dirigió el TFG. Ningún otro autor cambia.
+El orden DEBE seguir el de la firma en la cabecera. -->
 **Juan-Carlos Negrin-de-la-Fe:** Conceptualization, Methodology, Software,
 Validation, Formal analysis, Investigation, Data curation, Writing – original
 draft, Writing – review & editing.
@@ -358,7 +361,8 @@ draft, Writing – review & editing.
 Funding acquisition, Writing – review & editing.
 **Antonio Garcia-Cabot:** Methodology, Investigation, Supervision,
 Funding acquisition, Writing – review & editing.
-**Eva Garcia-Lopez:** Funding acquisition.
+**Eva Garcia-Lopez:** Methodology, Investigation, Funding acquisition,
+Writing – review & editing.
 
 ## Data availability
 
@@ -396,6 +400,30 @@ Science, Innovation and Universities, and "Detección de Errores y
 Vulnerabilidades en el Software con Autoencoders Dispersos" (PIUAH25/IA-026).
 The authors also want to thank the support received by the INTELIA research
 lab of the University of Alcala.
+
+## Declaration of generative AI and AI-assisted technologies in the manuscript preparation process
+
+<!-- TÍTULO: la variante "...in the writing process" es la política de LIBROS
+de Elsevier; la de REVISTAS, que es la aplicable, dice "...in the manuscript
+preparation process", y así lo formula también la guide for authors viva de
+SoftwareX. Verificado el 2026-07-31 contra ambas páginas. No revertir.
+COLOCACIÓN: al final, inmediatamente antes de las referencias.
+El primer párrafo es la plantilla oficial de Elsevier palabra por palabra con
+[TOOL/SERVICE] y [REASON] rellenados. El segundo separa la asistencia a la
+escritura de la IA que es objeto e instrumento del trabajo, que va descrita en
+§2 y §3 tal como pide la política de revistas. -->
+During the preparation of this work the authors used Claude (Anthropic),
+accessed through Claude Code, in order to draft and revise the text of this
+manuscript, to prepare its LaTeX source and the source of Figure 1, and to
+cross-check the figures reported here against the outputs committed in the
+repository. After using this tool/service, the authors reviewed and edited
+the content as needed and take full responsibility for the content of the
+publication.
+
+This declaration concerns manuscript preparation only. The language models
+evaluated by SycoCode and the judge models used inside it are the object and
+the instrumentation of the research, not writing aids, and are described in
+Sections 2 and 3.
 
 ## References
 

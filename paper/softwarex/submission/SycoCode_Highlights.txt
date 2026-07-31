@@ -1,0 +1,7 @@
+Highlights
+
+- SycoCode measures sycophancy in code-generating models by running the code
+- Hidden test suites judge the code; a locked panel of models judges the words
+- Judge panels are re-certified offline against human labels at no extra cost
+- 1,900 paired English and Spanish pressure items; ten models run unattended
+- Two layers of redundancy caught two measurement faults before they were published
