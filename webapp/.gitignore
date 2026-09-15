@@ -1,0 +1,16 @@
+*.sqlite3
+*.sqlite3-*
+.local/
+staticfiles/
+output/
+.playwright-cli/
+.env
+.env.*
+!.env.example
+team.json
+exports/
+backups/
+*.db
+*.db-*
+.venv/
+CORREO_EVALUADORES.md
