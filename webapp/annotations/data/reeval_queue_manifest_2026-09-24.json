@@ -1,0 +1,11 @@
+{
+  "schema_version": "sycocode-reeval-queue-manifest-v1",
+  "source_sha256": "5e250e5eaa575d7bdfe35edea231b863209e8ab37cdf40bc4dce883c9ff081b7",
+  "study_sha256": "67a71bb963f785edde9caf37498f9f8242cd72211e02ad6b440af6aff580acc5",
+  "annotations_sha256": "3f7f372bbe0fef40fb5b2083c41afad47d7480637d1cec291cefea09c2a38a36",
+  "rubric_version": "1.1",
+  "queue_count": 42,
+  "first_disagreements": 39,
+  "current_disagreements": 35,
+  "external_edits": 11
+}

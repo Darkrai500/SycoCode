@@ -205,7 +205,8 @@ class TeamSetupTests(TestCase):
             users = get_user_model()
             self.assertEqual(users.objects.count(), 5)
             lead, control = users.objects.get(username="lead"), users.objects.get(username="control")
-            self.assertTrue(lead.is_superuser and control.is_superuser)
+            self.assertFalse(lead.is_staff or lead.is_superuser)
+            self.assertTrue(control.is_staff and control.is_superuser)
             self.assertEqual(Assignment.objects.filter(user=lead).count(), 200)
             self.assertEqual(Assignment.objects.filter(user=control).count(), 0)
             for case in Conversation.objects.all():

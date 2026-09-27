@@ -2,7 +2,7 @@
 
 Webapp para anotar respuestas con la rúbrica VCR 1.1: `firm`, `hedged` y `capitulated`. Incluye cuentas, asignaciones, guardado en servidor, historial y exportaciones. Interfaz adaptable a móvil y escritorio.
 
-**Estado: versión inicial para pruebas y pilotos.** Validada en local; el despliegue HTTPS en VPS y los dispositivos móviles físicos aún requieren comprobación. Publicar este código no publica una instancia de la aplicación ni las evaluaciones recogidas.
+**Estado:** la aplicación de evaluación está desplegada por HTTPS; el [corte de ReEval del 24/09/2026](../data/ReEval/README.md) acredita la recogida completa. La [utilidad de adjudicación](ADJUDICACION.md) está implementada localmente y tiene su propia migración, permiso y comprobación de despliegue. La presencia del código en una rama no acredita que esté activo en la instancia pública.
 
 ## Instalación local
 
@@ -28,10 +28,10 @@ El script solo escucha en el ordenador local. Para acceso desde un teléfono fí
 ### Roles y configuración privada
 
 - `control`: cuenta maestra sin casos asignados.
-- `lead`: evaluación de toda la muestra y funciones de control.
+- `lead`: evaluación de toda la muestra en una instalación nueva.
 - `evaluator`: acceso exclusivamente a sus casos y anotaciones.
 
-El archivo de equipo admite exactamente un `control`, un `lead` y uno o más `evaluator`. Permite configurar nombres de usuario, nombres visibles y semilla de reparto. Las cuentas `control` y `lead` tienen permisos de superusuario: pueden gestionar usuarios y restablecer contraseñas. Para exigir un cambio tras un restablecimiento, activar `must_change_password` en el perfil (`/admin/annotations/profile/`). La administración es una función de confianza, no una barrera contra el administrador del estudio.
+El archivo de equipo admite exactamente un `control`, un `lead` y uno o más `evaluator`. Permite configurar nombres de usuario, nombres visibles y semilla de reparto. En una instalación nueva, solo `control` recibe permisos de superusuario para gestionar cuentas y restablecer contraseñas; `lead` evalúa toda la muestra sin administración. En la instancia existente se comprobó que `control` administra y `jc` evalúa sin `is_staff` ni `is_superuser`. La adjudicación concede a `jc` un permiso específico, sin administración general; ver [diseño y operación](ADJUDICACION.md). Para exigir un cambio tras un restablecimiento, activar `must_change_password` en el perfil (`/admin/annotations/profile/`).
 
 `setup_team` rechaza configuraciones inválidas, cuentas existentes y archivos de credenciales existentes. Para modificar un equipo en marcha, usar la administración sin volver a inicializarlo.
 
@@ -54,13 +54,15 @@ Los payloads heredados truncan a 2.000 caracteres algunos turnos de contexto e i
 - Reanudar recupera el progreso de la base de datos. Cada edición conserva un evento y el primer voto permanece inmutable. Los conflictos entre pestañas devuelven `409`.
 - Los evaluadores no ven identidad del modelo, preetiquetas ni votos ajenos. La cuenta principal debe terminar un caso antes de consultar sus etiquetas en Control. Consultarlas registra exposición y cierra su voto; exportar registra exposición a toda la muestra. No se asignan casos previamente expuestos desde Control.
 
-La cuenta de control permite consultar votos sin evaluar. Quien también evalúe no debe usarla para consultar resultados previamente. No hay adjudicación automática.
+La cuenta de control permite consultar votos sin evaluar. Quien también evalúe no debe usarla para consultar resultados previamente. La [adjudicación de ReEval](ADJUDICACION.md) conserva las anotaciones originales y registra decisiones humanas en tablas separadas; no hay adjudicación automática.
+
+La cola completa de adjudicación contiene identificadores, cuentas y votos. Permanece fuera de Git y se importa con `import_adjudication_queue --source /ruta/privada/review_queue.jsonl`. La release solo versiona un manifiesto de hashes y recuentos, sin datos por unidad. La importación exige coincidencia con las 640 anotaciones y su historial de 651 eventos del corte; las decisiones y la referencia candidata devuelven `409` si las anotaciones cambian después. `--synthetic` se reserva para tests con `DEBUG`.
 
 ## Exportaciones
 
 Control ofrece CSV, JSONL, historial y acuerdo por parejas. Incluyen identificadores para enlazar con el corpus, usuario, primer voto, etiqueta actual, notas, revisiones, fechas, rúbrica y hashes SHA-256. El CSV protege celdas que puedan interpretarse como fórmulas.
 
-«Acuerdo y κ» usa **primeros votos**, informa del número real de turnos compartidos y calcula acuerdo porcentual y Cohen κ no ponderado, agregado y por idioma. `kappa: null` indica que el acuerdo esperado es 1 y κ no está definido. No aplica automáticamente un umbral de aceptación científica.
+«Acuerdo y κ» y el indicador de desacuerdo del panel usan **primeros votos**, informan del número real de turnos compartidos y calculan acuerdo porcentual y Cohen κ no ponderado, agregado y por idioma. `kappa: null` indica que el acuerdo esperado es 1 y κ no está definido. Ese indicador no equivale a la cola actual de 42 casos. Control puede descargar la [cola con decisiones e historial](ADJUDICACION.md#decisión-de-diseño) desde `/adjudication/export/`; la referencia candidata de 320 filas en `/adjudication/export/reference/` solo se habilita al cerrar las 42 decisiones y superar sus comprobaciones. Ninguna cifra aplica automáticamente un umbral de aceptación científica.
 
 Export compatible con el Contrato 3, para un evaluador que haya terminado su muestra:
 
@@ -80,24 +82,13 @@ webapp/.venv/bin/python webapp/backup.py webapp/local.sqlite3 webapp/.local/copi
 
 El destino debe ser nuevo. El script usa la API de backup de SQLite, verifica integridad y crea el archivo con permisos `600`. No copiar directamente una base en uso. Para restaurar, detener la app, preservar el estado actual y arrancar con `DATABASE_PATH` apuntando al backup. Contiene usuarios, hashes de contraseñas, sesiones y evaluaciones: conservarlo fuera de Git y del servidor en almacenamiento privado.
 
-Equipo real, `.env`, credenciales, exports y copias deben permanecer en `.local/` o los directorios ignorados. Git y Docker tienen reglas distintas: el Dockerfile copia explícitamente solo los componentes necesarios y el corpus ya distribuido.
+Equipo real, `.env`, credenciales, cola completa, exports y copias deben permanecer en `.local/` o los directorios ignorados. Antes de publicar una release, revisar el árbol entero para evitar que entren esos datos. El Dockerfile y Compose son ejemplos para instalaciones nuevas; la instancia existente usa systemd.
 
 ## Preparación para VPS
 
-Compose incluye Gunicorn, Caddy para HTTPS y volumen persistente. **El contenedor y su despliegue real aún no están validados.** Configurar DNS y copiar `webapp/.env.example` a `webapp/.env`. Definir dominio, hosts, orígenes CSRF y un secreto aleatorio de al menos 50 caracteres. Producción rechaza las claves de ejemplo y desarrollo. Desde `webapp/`:
+La instancia existente usa **Gunicorn mediante systemd**, con Caddy como proxy HTTPS sobre un socket Unix. Su base y configuración privadas viven fuera del checkout. Para el release de adjudicación y su migración sobre la base que contiene las 640 anotaciones, seguir la [preparación de despliegue específica](ADJUDICACION.md#operación-local-y-preparación-de-despliegue) y el runbook privado de la instancia. Preparar una release nueva, tomar un backup consistente, detener `sycocode` para migrar y cambiar la release activa, importar la cola desde una ruta privada y arrancar el servicio. Verificar `sycocode` y `caddy`, acceso HTTPS, permisos, exportación y restauración antes de comunicar la utilidad como disponible. No volver a ejecutar `setup_team` ni `import_pool` sobre la base existente.
 
-```bash
-docker compose up -d --build
-docker compose exec app python manage.py import_pool
-docker compose cp .local/equipo.json app:/state/equipo.json
-docker compose exec --user root app chown 10001:10001 /state/equipo.json
-docker compose exec app python manage.py setup_team --team /state/equipo.json --credentials /state/credenciales-iniciales.txt
-docker compose exec app python manage.py check --deploy
-```
-
-Abrir solo SSH, 80 y 443. El puerto 8000 no se publica; `TRUST_PROXY` presupone que solo Caddy conecta al servidor de aplicación. Cookies HTTPS y `DEBUG` desactivado. Comprobar acceso, guardado, export y restauración en el dominio real antes de invitar a evaluadores.
-
-Para conservar trabajo local, migrar un backup al volumen antes de arrancar, con propietario `10001`, y no volver a ejecutar `setup_team`.
+`compose.yaml` y `Dockerfile` permanecen como opción para **instalaciones nuevas**. No son el procedimiento de despliegue de la instancia existente.
 
 ## Desarrollo y validación
 
@@ -106,6 +97,6 @@ DJANGO_DEBUG=1 webapp/.venv/bin/python webapp/manage.py test annotations
 DJANGO_DEBUG=1 webapp/.venv/bin/python webapp/manage.py check
 ```
 
-Las pruebas usan datos sintéticos y bases aisladas; el test de importación valida el pool distribuido. Cubren permisos, CSRF, historial, reintentos, conflictos, exposición, exportaciones, acuerdo, login e inicialización del equipo. Ver `VALIDACION.md` para alcance y límites.
+Las pruebas usan datos sintéticos y bases aisladas; el test de importación valida el pool distribuido. Cubren permisos, CSRF, historial, reintentos, conflictos, exposición, exportaciones, acuerdo, login e inicialización del equipo. La [ampliación de adjudicación](ADJUDICACION.md) requiere además comprobar importación de cola, permiso específico, trazabilidad, concurrencia y exportación. Ver `VALIDACION.md` para el alcance previo de la aplicación.
 
 Stack: Django 5.2 LTS, plantillas, JavaScript, SQLite y WhiteNoise; Gunicorn/Caddy para el VPS. Referencias: [Django 5.2](https://docs.djangoproject.com/en/5.2/), [lista de despliegue](https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/), [Gunicorn](https://gunicorn.org/).

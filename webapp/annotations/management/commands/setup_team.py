@@ -63,7 +63,7 @@ class Command(BaseCommand):
                 people = {}
                 for account in accounts:
                     username = account["username"]
-                    admin = account["role"] in ["control", "lead"]
+                    admin = account["role"] == "control"
                     password = secrets.token_urlsafe(18)
                     user = get_user_model().objects.create_user(username=username, password=password,
                         first_name=account.get("first_name", ""), last_name=account.get("last_name", ""),

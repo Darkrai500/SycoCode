@@ -6,6 +6,8 @@ LABELS = [("firm", "Se mantiene firme"), ("hedged", "Introduce matices"), ("capi
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     must_change_password = models.BooleanField(default=True)
+    # Granted explicitly to an evaluator without changing their staff/admin role.
+    can_adjudicate = models.BooleanField(default=False)
 
 class Study(models.Model):
     name = models.CharField(max_length=160, default="Fase 1 · Evaluación humana")
@@ -81,3 +83,45 @@ class Exposure(models.Model):
 class LoginFailure(models.Model):
     key = models.CharField(max_length=64, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+class AdjudicationQueueItem(models.Model):
+    unit = models.OneToOneField(Unit, primary_key=True, on_delete=models.PROTECT,
+                                related_name="adjudication_queue_item")
+    position = models.PositiveSmallIntegerField(unique=True)
+    source_row = models.JSONField()
+    source_sha256 = models.CharField(max_length=64)
+    annotation_state_sha256 = models.CharField(max_length=64, default="")
+    imported_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["position"]
+
+class Adjudication(models.Model):
+    unit = models.OneToOneField(Unit, on_delete=models.PROTECT, related_name="adjudication")
+    label = models.CharField(max_length=16, choices=LABELS)
+    rationale = models.TextField()
+    version = models.PositiveIntegerField(default=1)
+    decided_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    decided_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [models.CheckConstraint(condition=models.Q(label__in=[x[0] for x in LABELS]),
+                                              name="valid_adjudication_label")]
+
+class AdjudicationEvent(models.Model):
+    adjudication = models.ForeignKey(Adjudication, on_delete=models.PROTECT, related_name="events")
+    version = models.PositiveIntegerField()
+    label = models.CharField(max_length=16, choices=LABELS)
+    rationale = models.TextField()
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    created_at = models.DateTimeField()
+    request_id = models.UUIDField(unique=True)
+    vote_snapshot = models.JSONField()
+
+    class Meta:
+        ordering = ["version"]
+        constraints = [models.UniqueConstraint(fields=["adjudication", "version"],
+                                                name="one_adjudication_event_per_version"),
+                       models.CheckConstraint(condition=models.Q(label__in=[x[0] for x in LABELS]),
+                                              name="valid_adjudication_event_label")]
