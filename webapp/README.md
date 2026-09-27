@@ -2,7 +2,7 @@
 
 Webapp para anotar respuestas con la rúbrica VCR 1.1: `firm`, `hedged` y `capitulated`. Incluye cuentas, asignaciones, guardado en servidor, historial y exportaciones. Interfaz adaptable a móvil y escritorio.
 
-**Estado:** la aplicación de evaluación está desplegada por HTTPS; el [corte de ReEval del 24/09/2026](../data/ReEval/README.md) acredita la recogida completa. La [utilidad de adjudicación](ADJUDICACION.md) está implementada localmente y tiene su propia migración, permiso y comprobación de despliegue. La presencia del código en una rama no acredita que esté activo en la instancia pública.
+**Estado (27/09/2026):** la aplicación de evaluación y la [utilidad de adjudicación](ADJUDICACION.md) están desplegadas en `https://sycocode.tech/`. La release `917eae5` incorporó las migraciones 0002/0003, importó las 42 unidades de la cola y habilitó el permiso específico de `jc`; al verificar el despliegue había cero decisiones. La revisión manual de JC de las 320 respuestas ya estaba completa. Las decisiones de adjudicación y la confirmación documental pendiente se gestionan por separado.
 
 ## Instalación local
 
@@ -84,9 +84,9 @@ El destino debe ser nuevo. El script usa la API de backup de SQLite, verifica in
 
 Equipo real, `.env`, credenciales, cola completa, exports y copias deben permanecer en `.local/` o los directorios ignorados. Antes de publicar una release, revisar el árbol entero para evitar que entren esos datos. El Dockerfile y Compose son ejemplos para instalaciones nuevas; la instancia existente usa systemd.
 
-## Preparación para VPS
+## Operación en VPS
 
-La instancia existente usa **Gunicorn mediante systemd**, con Caddy como proxy HTTPS sobre un socket Unix. Su base y configuración privadas viven fuera del checkout. Para el release de adjudicación y su migración sobre la base que contiene las 640 anotaciones, seguir la [preparación de despliegue específica](ADJUDICACION.md#operación-local-y-preparación-de-despliegue) y el runbook privado de la instancia. Preparar una release nueva, tomar un backup consistente, detener `sycocode` para migrar y cambiar la release activa, importar la cola desde una ruta privada y arrancar el servicio. Verificar `sycocode` y `caddy`, acceso HTTPS, permisos, exportación y restauración antes de comunicar la utilidad como disponible. No volver a ejecutar `setup_team` ni `import_pool` sobre la base existente.
+La instancia existente usa **Gunicorn mediante systemd**, con Caddy como proxy HTTPS sobre un socket Unix. Su base y configuración privadas viven fuera del checkout. El [procedimiento de despliegue](ADJUDICACION.md#operación-local-y-preparación-de-despliegue) registra la migración y las comprobaciones de la utilidad; se reutiliza para futuras releases. El 27/09/2026 se verificaron en el VPS los servicios, HTTPS, permisos, los 42 casos, el hash de procedencia y la generación de 42 filas exportables sin decisiones. La referencia candidata respondió `409` como corresponde mientras falten adjudicaciones. No volver a ejecutar `setup_team` ni `import_pool` sobre la base existente.
 
 `compose.yaml` y `Dockerfile` permanecen como opción para **instalaciones nuevas**. No son el procedimiento de despliegue de la instancia existente.
 
