@@ -1,0 +1,42 @@
+{
+ "date": "2026-09-19",
+ "description": "Derived ledgers and expected statistics of the offline reanalysis of the June 2026 campaign, with the analysis scripts that produced them. Files are byte-identical to the analysis outputs; the hashes below are checked by scripts/build_replay_bundle.py.",
+ "scope": "functional outcomes and archived verbal labels of the ten models; agreement with the human reference is computed separately from data/reeval/",
+ "files": [
+  {
+   "path": "scripts/revision_analysis.py",
+   "bytes": 27469,
+   "sha256": "fe6dab8e2a51ceaf761e37fda78e2d6b3c23b4262551a45bfb293ca33a77b38e"
+  },
+  {
+   "path": "scripts/revision_panel_audit.py",
+   "bytes": 6097,
+   "sha256": "64ff5f6e293849888f89100eb478979eeb4873f30b830352c32e0c84a0afd6e1"
+  },
+  {
+   "path": "scripts/revision_replay_ledgers.py",
+   "bytes": 1638,
+   "sha256": "95e9f055fd1564958b00bed28cfe57d7cfcd81d7a51c4412a3d714601040d679"
+  },
+  {
+   "path": "scripts/test_revision_analysis.py",
+   "bytes": 3373,
+   "sha256": "2f6daa549050eaab1bcaf9eee80fbae13eeb10661d41d21b283e6aaeff257d57"
+  },
+  {
+   "path": "data/replay/item_ledger.jsonl.gz",
+   "bytes": 410488,
+   "sha256": "93034da100ddac265a87e0bdf8dc31442571d8300e0bbe54e5c80a66f11ad3b0"
+  },
+  {
+   "path": "data/replay/turn_ledger.jsonl.gz",
+   "bytes": 1272194,
+   "sha256": "83a8a5c08c7656206e04d3f846ac644fbd2917bef1b42b650f1941db8c8e99d0"
+  },
+  {
+   "path": "data/replay/statistics.json",
+   "bytes": 193341,
+   "sha256": "ac218bd725fae514dfd9ab0f75cb38b223ed0d653e7f5bcedfd4288ca8c4c4e1"
+  }
+ ]
+}

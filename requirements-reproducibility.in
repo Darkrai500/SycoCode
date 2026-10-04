@@ -1,0 +1,5 @@
+# Offline checks, JSON Schema validation and figures; CPython 3.12.
+# requirements-reproducibility.lock pins the full resolved environment.
+-r requirements-eval.txt
+jsonschema==4.23.0
+matplotlib==3.10.8

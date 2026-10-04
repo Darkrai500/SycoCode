@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Adjudicación · SycoCode{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="pill">ReEval · cola del 24/09/2026</span><h1>Adjudicación por respuesta</h1><p>{{ resolved }} resueltos · {{ pending }} pendientes · {{ total }} en la cola</p></div></div>
+<p class="notice">La cola reúne desacuerdos iniciales, desacuerdos actuales y cambios históricos. El indicador del panel de Control usa primeros votos y no representa esta cola. Cada decisión identifica a su autor; una decisión de JC se registra como «adjudicación de JC».</p>
+<nav class="adjudication-filters" aria-label="Filtrar adjudicaciones">
+  <a href="{% url 'adjudication_dashboard' %}?status=all" {% if status == 'all' %}aria-current="page"{% endif %}>Todos ({{ total }})</a>
+  <a href="{% url 'adjudication_dashboard' %}?status=pending" {% if status == 'pending' %}aria-current="page"{% endif %}>Pendientes ({{ pending }})</a>
+  <a href="{% url 'adjudication_dashboard' %}?status=resolved" {% if status == 'resolved' %}aria-current="page"{% endif %}>Resueltos ({{ resolved }})</a>
+</nav>
+{% if user.is_staff %}<div class="button-row"><a class="secondary" href="{% url 'adjudication_export' %}">Exportar cola y procedencia (JSONL)</a><a class="secondary" href="{% url 'adjudication_reference' %}">Referencia candidata 320 (al completar 42)</a></div>{% endif %}
+<div class="table-wrap adjudication-table-wrap"><table class="adjudication-table"><thead><tr><th>N.º</th><th>Unidad</th><th>Caso y turno</th><th>Votos en el corte</th><th>Estado</th><th>Acción</th></tr></thead><tbody>
+{% for row in rows %}<tr><td>{{ row.item.position }}</td><td><strong>{{ row.item.unit_id }}</strong></td><td>{{ row.item.unit.conversation_id }} · {{ row.item.unit.judged_turn }}</td><td><span class="small">JC: {{ row.item.source_row.jc_reviewed }}<br>{{ row.item.source_row.external_annotator }}: {{ row.item.source_row.external_first }} → {{ row.item.source_row.external_current }}</span></td><td>{% if row.decision %}<span class="adjudication-status resolved">{% if row.decision.decided_by.username == 'jc' %}Adjudicación de JC{% else %}Adjudicación de {{ row.decision.decided_by.username }}{% endif %}</span>{% else %}<span class="adjudication-status pending">Pendiente</span>{% endif %}</td><td><a href="{% url 'adjudication_detail' row.item.unit_id %}">Abrir</a></td></tr>
+{% empty %}<tr><td colspan="6">No hay casos con este filtro.</td></tr>{% endfor %}
+</tbody></table></div>
+<div class="adjudication-cards">{% for row in rows %}<article class="adjudication-card"><div class="adjudication-card-head"><div><span class="small muted">{{ row.item.position }} de {{ total }} · {{ row.item.unit.conversation_id }} · turno {{ row.item.unit.judged_turn }}</span><h2>{{ row.item.unit_id }}</h2></div><span class="adjudication-status {% if row.decision %}resolved{% else %}pending{% endif %}">{% if row.decision %}Resuelto{% else %}Pendiente{% endif %}</span></div><p class="small">JC: <strong>{{ row.item.source_row.jc_reviewed }}</strong><br>{{ row.item.source_row.external_annotator }}: {{ row.item.source_row.external_first }} → {{ row.item.source_row.external_current }}</p><a class="secondary" href="{% url 'adjudication_detail' row.item.unit_id %}">Abrir {{ row.item.unit_id }}</a></article>{% empty %}<p>No hay casos con este filtro.</p>{% endfor %}</div>
+<p class="small muted">La confirmación de recepción y aplicación de la aclaración de rúbrica por dos colaboradores externos sigue pendiente de documentación. Una decisión aquí no cierra esa cuestión.</p>
+{% endblock %}

@@ -17,6 +17,7 @@ paper/softwarex/RESPUESTA_ANTONIO.md
 __pycache__/
 *.py[cod]
 .venv/
+.venv-repro/
 venv/
 .pytest_cache/
 
@@ -46,3 +47,6 @@ Desktop.ini
 *~
 *.bak
 *.swp
+
+# Generated replay packages and local verification output.
+artifacts/reproducibility/

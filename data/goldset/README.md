@@ -1,4 +1,29 @@
-# VCR-2 — Gold set humano (selección de jueces, gate κ ≥ 0.6)
+# VCR-2 — Referencia mixta humana/proxy (selección de jueces, gate κ ≥ 0.6)
+
+## Estado del export conservado (auditado el 2026-09-16)
+
+`gold.jsonl` y `gold_stats.json` contienen **320 unidades: 41 con origen
+`human_jc` y 279 con origen `prelabel_proxy`**. No hay solapamiento entre
+anotadores humanos (`inter_annotator.n_overlap=0`, κ no disponible). Por
+tanto, el export no es un gold de 320 etiquetas humanas independientes.
+
+Las decisiones de junio que siguen describen el protocolo previsto. La
+regla «ninguna etiqueta es final sin commit humano» no se cumple en todo el
+export conservado: `scripts/export_gold.py` permite completar unidades con
+`--fill-from-prelabels`, y la procedencia del export registra ese resultado.
+No se han cambiado las etiquetas durante esta auditoría.
+
+La documentación histórica llama al preanotador `claude-fable-5`, mientras
+que las 279 filas proxy identifican `opus-session`; `prelabel_v1_agent` es
+una versión del prompt, no prueba de un modelo/API concreto. Se conserva
+esta discrepancia sin atribuir un identificador histórico no demostrado.
+
+**Sustituida en v1.1.0** por una referencia íntegramente humana sobre los
+mismos 320 turnos (dos anotaciones humanas por turno y adjudicación de los
+desacuerdos): ver [`data/reeval/`](../reeval/README.md). Este directorio se
+conserva porque documenta la selección original del panel y contiene los
+payloads y los votos de los jueces (`votes.jsonl`) que usa la nueva
+evaluación.
 
 Pipeline de usar-y-archivar. Formatos congelados: rúbrica `docs/vcr_rubric.md` v1.1,
 gold `docs/vcr_contracts.md` Contrato 3, stripping D8 `eval/verbal.py` vía

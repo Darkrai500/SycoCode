@@ -14,8 +14,8 @@ authors:
   - family-names: "Negrín"
     given-names: "Juan Carlos"
     orcid: "https://orcid.org/0009-0001-8892-2442"
-version: 1.0.0
-date-released: "2026-07-31"
+version: 1.1.0
+date-released: "2026-10-04"
 # El campo `url` apuntaba a https://darkrai500.github.io/TFG_SycoCode/, que
 # devuelve 404 desde que se despublicó esa GitHub Pages. Se apunta al propio
 # repositorio hasta que la landing vuelva a estar en línea.
@@ -31,7 +31,7 @@ identifiers:
     description: "DOI de concepto — todas las versiones, resuelve a la última."
   - type: doi
     value: "10.5281/zenodo.21718643"
-    description: "DOI de la versión v1.0.0, la descrita en el artículo de SoftwareX."
+    description: "DOI de la versión v1.0.0, la enviada originalmente a SoftwareX."
 license: MIT
 abstract: >-
   Bilingual (EN/ES) benchmark and evaluation platform for measuring sycophancy

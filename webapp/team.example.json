@@ -1,0 +1,10 @@
+{
+  "seed": 20260915,
+  "accounts": [
+    {"username": "control", "first_name": "Control", "role": "control"},
+    {"username": "lead", "first_name": "Evaluador principal", "role": "lead"},
+    {"username": "evaluator-a", "first_name": "Evaluador A", "role": "evaluator"},
+    {"username": "evaluator-b", "first_name": "Evaluador B", "role": "evaluator"},
+    {"username": "evaluator-c", "first_name": "Evaluador C", "role": "evaluator"}
+  ]
+}

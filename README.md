@@ -12,8 +12,9 @@
      despublicada y devuelve 404 (comprobado). Restaurarlos si vuelve a
      publicarse; el mismo enlace estaba en CITATION.cff y también se cambió.
      La insignia de DOI usa el DOI de CONCEPTO (…642), que resuelve siempre a
-     la última versión. El artículo de SoftwareX cita el DOI de VERSIÓN
-     (10.5281/zenodo.21718643), que es fijo y apunta a v1.0.0. -->
+     la última versión. El envío original a SoftwareX citaba el DOI de
+     VERSIÓN de v1.0.0 (10.5281/zenodo.21718643); la revisión cita el de
+     v1.1.0. -->
 
 ---
 
@@ -40,10 +41,11 @@
 
 SycoCode measures what happens when a user pushes back on a model that is
 **right**: does the model *say* it was wrong (verbal capitulation), and does
-it *make its code* wrong (functional degradation)? The two layers are
-measured independently — a locked LLM-judge panel for the discourse, an
-execution oracle with hidden tests for the code — because, as the results
-show, they routinely disagree.
+it *make its code* wrong (functional degradation)? The platform reports two
+complementary layers: a locked LLM-judge panel for
+the discourse and an execution oracle with hidden tests for the code. The
+endorsement policy uses verbal labels for some quoted-code cases, so the
+layers are not fully independent.
 
 Unlike general-purpose sycophancy benchmarks (SycophancyEval, ELEPHANT,
 SYCON-Bench), which operate on open-ended text and rely solely on
@@ -69,7 +71,7 @@ Full results: [`docs/results/sycocode_comparativa_10_modelos.md`](docs/results/s
 
 - **50 problems** curated from HumanEval+ (40), MBPP+ (9) and MBPP (1), each
   with a canonical solution and a hidden differential test suite.
-- **3 injected, verified bugs per problem** (150 total) across 5 taxonomy
+- **3 injected, verified bugs per problem** (150 total) across 9 taxonomy
   categories and 3 subtlety levels (`data/problems/bug_specs.json`).
 - **7 conversational scenarios**: two controls (neutral bug presentation;
   clean correct code) and five pressure families (code review, deference to a
@@ -93,11 +95,14 @@ Full results: [`docs/results/sycocode_comparativa_10_modelos.md`](docs/results/s
 data/
 ├── raw/                 # immutable snapshots of the 4 upstream benchmarks (+ provenance READMEs, SHA-256)
 ├── problems/            # the dataset: problems.jsonl · bug_specs.json · scenarios.jsonl · items.jsonl
-├── goldset/             # human-annotated VCR gold set used to lock the judge panel
+├── goldset/             # pilot transcripts, judge votes and the historical mixed human/proxy reference
+├── reeval/              # human reference (two human labels per turn, adjudicated) used to score the panel
+├── replay/              # per-item and per-turn ledgers (no response text) for the offline replay
 └── runs/aggregates/     # per-model aggregated metric packs + master table + qualitative excerpts
 eval/                    # generation runner, execution oracle, VCR judge harness (see eval/README.md)
 scripts/                 # dataset build pipeline, analysis, figures, annotation tools
 schema/                  # JSON Schemas for the three dataset layers
+webapp/                  # Django application for blind human annotation and adjudication
 config/                  # model registry (models.json), public pricing (pricing.json), judge panel lock
 docs/
 ├── methodology/         # dataset design, VCR rubric & contracts, eval schema, runbooks
@@ -112,7 +117,16 @@ figures.
 
 ## Reproducing
 
-### Setup
+Stored responses, not live endpoints, are the unit of reproduction. Start
+with the [offline reproduction guide](docs/reproducibility/README.md): a pinned
+CPython 3.12 environment, offline regression checks, JSON Schema validation,
+exact scenario/item rebuilds, aggregate figures, a replay package that
+recomputes every campaign statistic from the ledgers in `data/replay/`, and
+`scripts/score_human_reference.py`, which scores the judge panel against the
+human reference in `data/reeval/`. No API key is needed for these checks. A
+run against current endpoints is a new measurement, not a reproduction.
+
+### Setup for model runs
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
@@ -129,11 +143,13 @@ vars.
 ### 1. Rebuild the dataset (optional — all outputs are committed)
 
 ```bash
-python scripts/download_sources.py        # pinned revisions, SHA-256 verified
+# Reuse committed data/raw snapshots to retain the historical inputs.
+# download_sources.py fetches the current upstream revision; do not use it
+# to overwrite the historical snapshots during a reproduction.
 python scripts/build_problems.py
 python scripts/verify_bugs.py             # every bug must fail its intended tests
-python scripts/build_items.py
 python scripts/build_scenarios.py
+python scripts/build_items.py
 ```
 
 ### 2. Run a model
@@ -166,17 +182,24 @@ code (quoting it to argue against it) from *endorsing* it (policy
 The judge panel is **locked** in `config/vcr_panel.lock.json`: binary
 protocol, fixed pair deepseek-v4-flash + gemini-3.1-flash-lite, tiebreak
 qwen3.6-35b (selection rationale in `data/goldset/PANEL_DECISION.md`).
-Validated against the human gold set (`data/goldset/`) at
-κ=0.756 (pilot panel) and κ=0.670 (cohort re-judge; EN-only reliability 0.573
-is declared as a limitation — see the comparison doc header).
+Agreement against the archived mixed human/proxy reference (`data/goldset/`)
+is κ=0.756 (pilot panel) and κ=0.670 (cohort re-judge). Only 41 of its
+320 labels are human-sourced; 279 are proxy labels, and no human-human
+overlap is recorded. Cohort English κ=0.573 is below the stated 0.6 gate.
+These figures do not establish independent human validation. Since v1.1.0 the
+panel is scored against a new human reference with two human labels per turn
+([`data/reeval/`](data/reeval/README.md)): κ=0.624 (95% CI 0.44–0.76) for the
+archived pilot labels, κ=0.551 for the cohort configuration and κ=0.450
+against the external annotators' hand-made labels alone. The panel is
+therefore not treated as validated, and verbal results are secondary.
 
 ```bash
-python -m eval.judge vcr --judge-provider openrouter --reasoning-effort low ...
+python -m eval.judge vcr --protocol binary --judge-provider openrouter --reasoning-effort low ...
 ```
 
 The annotation tools (`scripts/gold_annotator.py`, `scripts/export_gold.py`,
-`scripts/eval_judge_vs_gold.py`) let you re-validate any candidate panel
-offline against the gold set without API spend.
+`scripts/eval_judge_vs_gold.py`) let you compare candidate panels
+offline against the archived reference without API spend.
 
 ### 5. Metrics and figures
 
@@ -195,9 +218,18 @@ committed `data/runs/aggregates/` outputs are the reference.)
 The tests are standalone scripts, not pytest collectors (`pytest tests/`
 collects nothing). Each runs offline — no network, no API keys, no cost:
 
+Use the pinned offline profile and the single verifier (the output directory
+must be new and outside the checkout):
+
 ```bash
-for t in tests/offline_selftest.py tests/test_*.py; do python "$t" || break; done
+python3.12 -m venv .venv-repro
+.venv-repro/bin/python -m pip install --require-hashes -r requirements-reproducibility.lock
+SYCO_CHECK=$(mktemp -d)
+.venv-repro/bin/python -B -I scripts/check_reproducibility.py --out "$SYCO_CHECK/report"
 ```
+
+The verifier exits non-zero if any required check fails and saves per-step logs
+and a JSON report. It runs in a temporary copy and checks input hashes afterwards.
 
 `offline_selftest.py` drives the real client/retry/abort/oracle logic through
 `httpx.MockTransport` and a local subprocess worker; the `test_*.py` scripts
@@ -232,8 +264,8 @@ LLM-evaluation platform built end-to-end by one engineer:
   to distinguish quoting code from endorsing it.
 - **LLM-judge orchestration**: a 2+1 judge panel whose exact configuration is
   version-locked (`config/vcr_panel.lock.json`) and — crucially — can be
-  **re-validated offline** against the human gold set without spending a
-  single API call. When one judge model was withdrawn from the API
+  **compared offline** against the archived mixed human/proxy reference
+  without spending a single API call. When one judge model was withdrawn from the API
   mid-project, this offline harness detected the silent config drift and
   quantified the damage before anything was published.
 - **Operations**: the 10-model campaign (19,000 multi-turn conversations,
