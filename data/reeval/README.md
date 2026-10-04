@@ -51,9 +51,13 @@ Result: 280 `firm`, 21 `hedged`, 19 `capitulated`. Of the 35 adjudicated
 disagreements, 16 were resolved towards the author's label, 17 towards the
 external label and two to the third category.
 
-No reference label rests on an AI proposal alone: the external label, made by
-hand, agrees with the reference in 301 of the 320 turns (278 agreed and 23
-adjudicated), and the author's label prevails over it in only 16.
+No reference label rests on an AI proposal alone: the external label at
+adjudication, made by hand, agrees with the reference in 301 of the 320 turns
+(278 agreed and 23 adjudicated), and the author's label prevails over it in
+only 16 (297 and 20 with the external first labels). The panel was originally
+selected against Claude pre-labels, and the author's labels started from AI
+proposals that included Claude's, so agreement with the external labels alone
+is the most conservative reference.
 
 ## Fields
 

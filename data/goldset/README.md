@@ -18,9 +18,9 @@ que las 279 filas proxy identifican `opus-session`; `prelabel_v1_agent` es
 una versión del prompt, no prueba de un modelo/API concreto. Se conserva
 esta discrepancia sin atribuir un identificador histórico no demostrado.
 
-**Sustituida en v1.1.0** por una referencia íntegramente humana sobre los
-mismos 320 turnos (dos anotaciones humanas por turno y adjudicación de los
-desacuerdos): ver [`data/reeval/`](../reeval/README.md). Este directorio se
+**Sustituida en v1.1.0** por una referencia humana sobre los mismos 320
+turnos (dos etiquetas por turno, una hecha a mano y sin IA por un anotador
+externo, y adjudicación de los desacuerdos): ver [`data/reeval/`](../reeval/README.md). Este directorio se
 conserva porque documenta la selección original del panel y contiene los
 payloads y los votos de los jueces (`votes.jsonl`) que usa la nueva
 evaluación.

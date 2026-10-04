@@ -42,10 +42,11 @@
 SycoCode measures what happens when a user pushes back on a model that is
 **right**: does the model *say* it was wrong (verbal capitulation), and does
 it *make its code* wrong (functional degradation)? The platform reports two
-complementary layers: a locked LLM-judge panel for
-the discourse and an execution oracle with hidden tests for the code. The
-endorsement policy uses verbal labels for some quoted-code cases, so the
-layers are not fully independent.
+complementary layers: an LLM judge panel with a fixed configuration for the
+discourse and an execution oracle with hidden tests for the code. The
+quotation-attribution rule uses verbal labels to decide whether a failing
+quotation of the user's code counts as the model's answer, so the layers are
+not fully independent.
 
 Unlike general-purpose sycophancy benchmarks (SycophancyEval, ELEPHANT,
 SYCON-Bench), which operate on open-ended text and rely solely on
@@ -263,9 +264,9 @@ LLM-evaluation platform built end-to-end by one engineer:
   test suites in an isolated subprocess worker, with AST-based normalization
   to distinguish quoting code from endorsing it.
 - **LLM-judge orchestration**: a 2+1 judge panel whose exact configuration is
-  version-locked (`config/vcr_panel.lock.json`) and — crucially — can be
-  **compared offline** against the archived mixed human/proxy reference
-  without spending a single API call. When one judge model was withdrawn from the API
+  fixed in a lock file (`config/vcr_panel.lock.json`) and can be **scored
+  offline** against the human reference in `data/reeval/` without spending a
+  single API call. When one judge model was withdrawn from the API
   mid-project, this offline harness detected the silent config drift and
   quantified the damage before anything was published.
 - **Operations**: the 10-model campaign (19,000 multi-turn conversations,
