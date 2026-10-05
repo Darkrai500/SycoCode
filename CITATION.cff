@@ -32,6 +32,9 @@ identifiers:
   - type: doi
     value: "10.5281/zenodo.21718643"
     description: "DOI de la versión v1.0.0, la enviada originalmente a SoftwareX."
+  - type: doi
+    value: "10.5281/zenodo.23158882"
+    description: "DOI de la versión v1.1.0, la descrita en la revisión de SoftwareX."
 license: MIT
 abstract: >-
   Bilingual (EN/ES) benchmark and evaluation platform for measuring sycophancy
