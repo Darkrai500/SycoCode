@@ -13,7 +13,8 @@ from annotations.models import Assignment, Conversation, Profile
 from annotations.services import progress
 
 class Command(BaseCommand):
-    help = "Crea el equipo de un archivo privado y reparte el pool por conversación y estrato."
+    help = ("Crea el equipo de un archivo privado y reparte el pool por conversación y estrato. "
+            "Con design=crossed, cada evaluador recibe todas las conversaciones y puede haber un adjudicador sin asignaciones.")
 
     def add_arguments(self, parser):
         parser.add_argument("--team", required=True, help="JSON privado con accounts y seed; consulta team.example.json.")
@@ -25,8 +26,11 @@ class Command(BaseCommand):
         try:
             config = json.loads(Path(options["team"]).read_text())
             accounts, seed = config["accounts"], config["seed"]
+            design = config.get("design", "partitioned")
             if not isinstance(accounts, list) or not accounts or type(seed) is not int:
                 raise ValueError("Se requieren accounts (lista) y seed (entero).")
+            if design not in ["partitioned", "crossed"]:
+                raise ValueError("Diseño inválido: usa partitioned o crossed.")
             usernames = []
             for account in accounts:
                 if not isinstance(account, dict) or set(account) - {"username", "first_name", "last_name", "role"}:
@@ -35,19 +39,27 @@ class Command(BaseCommand):
                 if not isinstance(username, str) or not username:
                     raise ValueError("Nombre de usuario vacío o inválido.")
                 get_user_model()._meta.get_field("username").clean(username, None)
-                if account["role"] not in ["control", "lead", "evaluator"]:
-                    raise ValueError("Rol inválido: usa control, lead o evaluator.")
+                if account["role"] not in ["control", "lead", "evaluator", "adjudicator"]:
+                    raise ValueError("Rol inválido: usa control, lead, evaluator o adjudicator.")
                 for field in ["first_name", "last_name"]:
                     get_user_model()._meta.get_field(field).clean(account.get(field, ""), None)
                 usernames.append(username)
             if len(set(u.casefold() for u in usernames)) != len(usernames):
                 raise ValueError("Hay nombres de usuario duplicados.")
-            if any(sum(a["role"] == role for a in accounts) != 1 for role in ["control", "lead"]):
-                raise ValueError("Se requiere exactamente una cuenta control y una lead.")
+            count = lambda role: sum(a["role"] == role for a in accounts)
             evaluator_names = [a["username"] for a in accounts if a["role"] == "evaluator"]
-            lead_name = next(a["username"] for a in accounts if a["role"] == "lead")
-            if not evaluator_names:
-                raise ValueError("Se requiere al menos un evaluador.")
+            if design == "partitioned":
+                if count("control") != 1 or count("lead") != 1 or count("adjudicator"):
+                    raise ValueError("Se requiere exactamente una cuenta control y una lead, sin adjudicador.")
+                if not evaluator_names:
+                    raise ValueError("Se requiere al menos un evaluador.")
+                lead_name = next(a["username"] for a in accounts if a["role"] == "lead")
+            else:
+                # Every evaluator labels every unit; nobody labels everything as lead.
+                if count("control") != 1 or count("lead") or count("adjudicator") > 1 or len(evaluator_names) < 2:
+                    raise ValueError("El diseño cruzado requiere una cuenta control, al menos dos evaluadores, "
+                                     "ninguna lead y como mucho un adjudicador.")
+                lead_name = None
         except (OSError, ValueError, KeyError, TypeError, ValidationError) as exc:
             raise CommandError(f"Configuración de equipo inválida: {exc}") from exc
         if get_user_model().objects.filter(username__in=usernames).exists():
@@ -68,7 +80,7 @@ class Command(BaseCommand):
                     user = get_user_model().objects.create_user(username=username, password=password,
                         first_name=account.get("first_name", ""), last_name=account.get("last_name", ""),
                         is_staff=admin, is_superuser=admin)
-                    Profile.objects.create(user=user)
+                    Profile.objects.create(user=user, can_adjudicate=account["role"] == "adjudicator")
                     people[username] = user
                     out.write(f"{username}: {password}\n")
                 groups = list(Conversation.objects.all())
@@ -76,15 +88,18 @@ class Command(BaseCommand):
                 for case in groups:
                     by_stratum[(case.scenario, case.language)].append(case)
                 assigned = {name: [] for name in evaluator_names}
-                # Rotate continuously across strata, keeping conversations (and their turns) together.
-                cycle = itertools.cycle(assigned)
-                rng = random.Random(seed)
-                for key in sorted(by_stratum):
-                    cases = sorted(by_stratum[key], key=lambda g: g.id)
-                    rng.shuffle(cases)
-                    for case in cases:
-                        assigned[next(cycle)].append(case)
-                assigned[lead_name] = groups
+                if design == "crossed":
+                    assigned = {name: list(groups) for name in evaluator_names}
+                else:
+                    # Rotate continuously across strata, keeping conversations (and their turns) together.
+                    cycle = itertools.cycle(assigned)
+                    rng = random.Random(seed)
+                    for key in sorted(by_stratum):
+                        cases = sorted(by_stratum[key], key=lambda g: g.id)
+                        rng.shuffle(cases)
+                        for case in cases:
+                            assigned[next(cycle)].append(case)
+                    assigned[lead_name] = groups
                 for name, cases in assigned.items():
                     random.Random("sycocode-phase1-"+name).shuffle(cases)
                     Assignment.objects.bulk_create([Assignment(user=people[name], conversation=case, position=i) for i, case in enumerate(cases)])
@@ -94,6 +109,6 @@ class Command(BaseCommand):
             path.unlink(missing_ok=True)
             raise
         self.stdout.write(f"Equipo creado. Contraseñas iniciales solo en {path} (permisos 600). Cambio obligatorio al entrar.")
-        for name in [lead_name, *evaluator_names]:
+        for name in [n for n in [lead_name, *evaluator_names] if n]:
             p = progress(people[name])
             self.stdout.write(f"{name}: {p['groups']} conversaciones, {p['total']} respuestas")

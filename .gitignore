@@ -50,3 +50,8 @@ Desktop.ini
 
 # Generated replay packages and local verification output.
 artifacts/reproducibility/
+
+# ===== ReEval-2 (second revision round) =====
+# Sampled payloads, sealed key, labels and exports contain model transcripts and
+# annotator data: private. Only aggregate manifests are copied to versioned paths.
+data/ReEval2/

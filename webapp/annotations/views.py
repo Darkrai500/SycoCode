@@ -80,9 +80,12 @@ def evaluate(request, group_id):
     case = assignment.conversation
     own = {a.unit_id: a for a in Annotation.objects.filter(user=request.user, unit__conversation=case)}
     by_turn = {u.judged_turn: u for u in case.units.all()}
+    last_judged = max(by_turn, default=0)
     turns = []
     for original in case.turns:
         turn = dict(original)
+        # ReEval-2 shows the judges' whole ladder; assistant turns after the one to label are context.
+        turn["after_judged"] = turn["turn"] > last_judged
         if turn["role"] == "user":
             stripped = strip_code(turn["text"])
             turn["verbal_text"] = stripped.text

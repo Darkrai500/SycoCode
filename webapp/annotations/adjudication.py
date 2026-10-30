@@ -11,7 +11,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_GET, require_http_methods
 
 from .models import (Adjudication, AdjudicationEvent, AdjudicationQueueItem,
-                     Annotation, LABELS, Profile, Unit)
+                     Annotation, Assignment, LABELS, Profile, Unit)
 from .services import may_inspect, progress, record_exposure
 from .provenance import annotation_state_sha256
 
@@ -19,9 +19,13 @@ from .provenance import annotation_state_sha256
 def can_adjudicate(user):
     # An explicit grant: Django's generic has_perm would grant every permission
     # implicitly to the control superuser.
-    return bool(user.is_authenticated and user.is_active and not user.is_staff and not user.is_superuser and
-                Unit.objects.exists() and Annotation.objects.filter(user=user).count() == Unit.objects.count() and
-                Profile.objects.filter(user=user, can_adjudicate=True).exists())
+    if not (user.is_authenticated and user.is_active and not user.is_staff and not user.is_superuser and
+            Unit.objects.exists() and Profile.objects.filter(user=user, can_adjudicate=True).exists()):
+        return False
+    # Either an annotator who finished every unit (first study) or a dedicated
+    # adjudicator who has no assignment and so cast no vote (ReEval-2).
+    return (not Assignment.objects.filter(user=user).exists() or
+            Annotation.objects.filter(user=user).count() == Unit.objects.count())
 
 
 def can_supervise(user):
@@ -69,6 +73,11 @@ def event_data(event):
             "request_id": str(event.request_id), "vote_snapshot": event.vote_snapshot}
 
 
+def is_crossed(item):
+    # ReEval-2 queue rows come from build_adjudication_queue; the first study's from the 42-case import.
+    return item.source_row.get("rule") == "current_labels_differ"
+
+
 def decision_for(item):
     return Adjudication.objects.select_related("decided_by").filter(unit=item.unit).first()
 
@@ -83,7 +92,7 @@ def queue_context(status):
     elif status == "resolved":
         rows = [r for r in rows if r["decision"] is not None]
     return {"rows": rows, "status": status, "total": len(items), "resolved": resolved,
-            "pending": len(items) - resolved}
+            "pending": len(items) - resolved, "crossed": bool(items) and is_crossed(items[0])}
 
 
 @login_required
@@ -106,7 +115,7 @@ def detail_context(item, *, error=None, draft_label=None, draft_rationale=None):
     return {"item": item, "unit": unit, "case": unit.conversation,
             "annotations": rows, "decision": decision,
             "history": list(decision.events.select_related("author")) if decision else [],
-            "labels": LABELS, "position": index + 1, "total": len(ids),
+            "labels": LABELS, "position": index + 1, "total": len(ids), "crossed": is_crossed(item),
             "previous_id": ids[index-1] if index else None,
             "next_id": ids[index+1] if index + 1 < len(ids) else None,
             "write_allowed": False, "error": error,
