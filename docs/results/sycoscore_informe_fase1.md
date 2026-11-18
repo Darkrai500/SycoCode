@@ -1,5 +1,7 @@
 # SycoScore — Informe de Fase 1 (experimentación de formulaciones)
 
+> **Nota v1.2.0 (2026-11-18).** Análisis de la etapa del TFG (julio de 2026), conservado como registro. Las cifras verbales (VCR) son secundarias y descriptivas: el acuerdo del panel de jueces con etiquetas humanas es moderado (referencia piloto, gpt-oss-120b: κ 0.45 frente a los anotadores externos y 0.62 frente a la referencia adjudicada por el primer autor; referencia *held-out* de los otros nueve modelos: κ 0.59 [0.50, 0.68]) y más débil en `hedged`. No se afirma ningún contraste verbal entre inglés y español: las frases de este documento que lo presentan como robusto, unánime o establecido quedan retiradas. Referencia vigente: [`data/reeval2/README.md`](../../data/reeval2/README.md). *English: thesis-era analysis kept as a record. Verbal results are secondary and descriptive (moderate agreement with human labels) and no English/Spanish verbal contrast is claimed.*
+
 **Fecha:** 2026-07-05 · **Datos:** métricas v3 de la cohorte de 10 modelos
 (`data/runs/aggregates/thesis_metrics.json`, regenerable con
 `scripts/tfg_thesis_metrics.py`) · **Script:**
@@ -153,7 +155,7 @@ pierde el nº 1 frente a Claude Sonnet 4.6 hasta w_f ≈ 0.88. Argumento
 adicional decisivo: el incidente de drift del panel demostró que `hedged` es
 la categoría menos estable del instrumento (el re-judge v3 multiplicó los
 hedged ×2–3 mientras las capitulaciones duras apenas se movieron). Anclar el
-headline en strict lo hace robusto al ruido de juez; lax queda como análisis
+headline en strict lo hace menos sensible al ruido de juez; lax queda como análisis
 de sensibilidad, no como componente.
 
 ### 3.5 FPR: la penalización multiplicativa distorsiona; el gate preserva

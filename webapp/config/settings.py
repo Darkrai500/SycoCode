@@ -22,7 +22,7 @@ MIDDLEWARE = ["django.middleware.security.SecurityMiddleware", "whitenoise.middl
               "django.contrib.sessions.middleware.SessionMiddleware", "django.middleware.common.CommonMiddleware",
               "django.middleware.csrf.CsrfViewMiddleware", "django.contrib.auth.middleware.AuthenticationMiddleware",
               "django.contrib.messages.middleware.MessageMiddleware", "django.middleware.clickjacking.XFrameOptionsMiddleware",
-              "annotations.middleware.PrivateMiddleware"]
+              "annotations.middleware.PrivateMiddleware", "annotations.middleware.CrossedStudyGuard"]
 ROOT_URLCONF = "config.urls"
 TEMPLATES = [{"BACKEND": "django.template.backends.django.DjangoTemplates", "DIRS": [BASE_DIR / "templates"],
               "APP_DIRS": True, "OPTIONS": {"context_processors": [

@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from annotations.models import Assignment, Conversation, Profile
+from annotations.models import Annotation, Assignment, Conversation, Profile, Study
 from annotations.services import progress
 
 class Command(BaseCommand):
@@ -56,14 +56,19 @@ class Command(BaseCommand):
                 lead_name = next(a["username"] for a in accounts if a["role"] == "lead")
             else:
                 # Every evaluator labels every unit; nobody labels everything as lead.
-                if count("control") != 1 or count("lead") or count("adjudicator") > 1 or len(evaluator_names) < 2:
-                    raise ValueError("El diseño cruzado requiere una cuenta control, al menos dos evaluadores, "
-                                     "ninguna lead y como mucho un adjudicador.")
+                if count("control") != 1 or count("lead") or count("adjudicator") != 1 or len(evaluator_names) != 2:
+                    raise ValueError("El diseño cruzado requiere una cuenta control, dos evaluadores, "
+                                     "ninguna lead y un adjudicador.")
+                # Pseudonymous accounts only: exports are released, and the first study keys logic on the name "jc".
+                if any(a.get("first_name") or a.get("last_name") or a["username"].casefold() == "jc" for a in accounts):
+                    raise ValueError("El diseño cruzado usa cuentas seudónimas: sin nombre, sin apellidos y sin la cuenta jc.")
                 lead_name = None
         except (OSError, ValueError, KeyError, TypeError, ValidationError) as exc:
             raise CommandError(f"Configuración de equipo inválida: {exc}") from exc
         if get_user_model().objects.filter(username__in=usernames).exists():
             raise CommandError("El equipo ya existe; gestiona las cuentas en /admin/. No se cambió nada.")
+        if design == "crossed" and (Annotation.objects.exists() or Assignment.objects.exists()):
+            raise CommandError("Esta base de datos ya tiene asignaciones o anotaciones. El diseño cruzado requiere una nueva.")
         path = Path(options["credentials"]).resolve()
         path.parent.mkdir(parents=True, exist_ok=True)
         try:
@@ -76,11 +81,13 @@ class Command(BaseCommand):
                 for account in accounts:
                     username = account["username"]
                     admin = account["role"] == "control"
+                    crossed = design == "crossed"
                     password = secrets.token_urlsafe(18)
                     user = get_user_model().objects.create_user(username=username, password=password,
                         first_name=account.get("first_name", ""), last_name=account.get("last_name", ""),
-                        is_staff=admin, is_superuser=admin)
-                    Profile.objects.create(user=user, can_adjudicate=account["role"] == "adjudicator")
+                        is_staff=admin, is_superuser=admin and not crossed)
+                    Profile.objects.create(user=user, can_adjudicate=account["role"] == "adjudicator",
+                                           study_role=account["role"] if crossed else "")
                     people[username] = user
                     out.write(f"{username}: {password}\n")
                 groups = list(Conversation.objects.all())
@@ -103,6 +110,8 @@ class Command(BaseCommand):
                 for name, cases in assigned.items():
                     random.Random("sycocode-phase1-"+name).shuffle(cases)
                     Assignment.objects.bulk_create([Assignment(user=people[name], conversation=case, position=i) for i, case in enumerate(cases)])
+                if design == "crossed":
+                    Study.objects.update(design="crossed")
                 out.flush()
                 os.fsync(out.fileno())
         except Exception:

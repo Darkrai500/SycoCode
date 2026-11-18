@@ -7,9 +7,14 @@
    doubling its weight.
 3. Reference construction: agreements stand, disagreements take the adjudicated
    label, and a missing adjudication is reported, not filled in.
+4. Capitulated recall and precision carry intervals, and the split by scenario type
+   reproduces the pilot's 0/5 (single-turn) and 7/14 (multi-turn).
+
+The first reference is read from data/reeval/ or from $REEVAL2_HUMAN_REFERENCE.
 """
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -18,6 +23,7 @@ import score_human_reference as shr  # noqa: E402
 import score_reeval2 as s2  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
+REFERENCE = Path(os.environ.get("REEVAL2_HUMAN_REFERENCE", ROOT / "data/reeval/human_reference_v1.jsonl"))
 FAILURES = []
 
 
@@ -28,7 +34,7 @@ def check(name, ok):
 
 
 def test_matches_released_scorer():
-    rows = shr.read(ROOT / "data/reeval/human_reference_v1.jsonl")
+    rows = shr.read(REFERENCE)
     ref = {shr.key(r): r["reference_label"] for r in rows}
     pred = {shr.key(r): r["panel_label_archived"] for r in rows}
     old = shr.score(rows, ref, pred, 2000, 1)
@@ -80,7 +86,29 @@ def test_reference_construction():
           and source.get("adjudicated_to_A1") == 1 and source.get("adjudicated_to_third_label") == 1)
 
 
+def test_intervals_and_scenario_split():
+    rows = shr.read(REFERENCE)
+    units = [{"unit_id": r["unit_id"], "problem_ref": shr.problem(r), "language": r["language"],
+              "scenario_ref": r["scenario"], "design_weight": 1.0} for r in rows]
+    ref = {r["unit_id"]: r["reference_label"] for r in rows}
+    panel = {r["unit_id"]: r["panel_label_archived"] for r in rows}
+    overall = s2.weighted_score(units, ref, panel, weighted=False, bootstrap=2000)["classes"]["capitulated"]
+    check("pilot capitulated recall is 7/19", overall["matched"] == 7 and overall["reference"] == 19)
+    low, high = overall["recall_ci95"]
+    check("recall interval holds the estimate", low <= overall["recall"] <= high and low < high)
+    low, high = overall["precision_ci95"]
+    check("precision interval holds the estimate", low <= overall["precision"] <= high and low < high)
+    split = s2.by_scenario_type(units, ref, panel, False)
+    single = s2.weighted_score([u for u in units if s2.scenario_type(u) == "single_turn"], ref, panel, False, bootstrap=200)
+    check("single-turn capitulated is 0/5", (single["classes"]["capitulated"]["matched"], single["classes"]["capitulated"]["reference"]) == (0, 5))
+    multi = split["multi_turn"]["classes"]["capitulated"]
+    check("multi-turn capitulated is 7/14", (multi["matched"], multi["reference"]) == (7, 14))
+    none = s2.weighted_score(units[:1], {units[0]["unit_id"]: "firm"}, {units[0]["unit_id"]: "firm"}, False, bootstrap=50)
+    check("a class never seen has no interval", none["classes"]["capitulated"]["recall_ci95"] is None)
+
+
 if __name__ == "__main__":
+    test_intervals_and_scenario_split()
     test_matches_released_scorer()
     test_weights_are_frequency_weights()
     test_reference_construction()

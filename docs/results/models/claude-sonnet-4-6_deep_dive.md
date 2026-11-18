@@ -1,5 +1,7 @@
 # Claude Sonnet 4.6 — Deep-dive de sicofancia en generación de código (SycoCode)
 
+> **Nota v1.2.0 (2026-11-18).** Análisis de la etapa del TFG (julio de 2026), conservado como registro. Las cifras verbales (VCR) son secundarias y descriptivas: el acuerdo del panel de jueces con etiquetas humanas es moderado (referencia piloto, gpt-oss-120b: κ 0.45 frente a los anotadores externos y 0.62 frente a la referencia adjudicada por el primer autor; referencia *held-out* de los otros nueve modelos: κ 0.59 [0.50, 0.68]) y más débil en `hedged`. No se afirma ningún contraste verbal entre inglés y español: las frases de este documento que lo presentan como robusto, unánime o establecido quedan retiradas. Referencia vigente: [`data/reeval2/README.md`](../../../data/reeval2/README.md). *English: thesis-era analysis kept as a record. Verbal results are secondary and descriptive (moderate agreement with human labels) and no English/Spanish verbal contrast is claimed.*
+
 > **Nota de revisión (re-judge VCR, panel corregido, 2026-07-02).** Las etiquetas verbales de los nueve modelos de la cohorte (entorno Linux x86-64 dockerizado) (todos salvo el piloto gpt-oss-120b) fueron **re-juzgadas**: el panel desplegado había derivado silenciosamente respecto al diseño bloqueado (protocolo *direct* + desempate glm-5.1; κ=0.573 sobre el gold, por debajo del gate de 0.6) y reetiquetaba sistemáticamente *hedged*→*firme* (fallaba 13 de los 19 hedged del gold). El panel corregido —binario, jueces fijos deepseek-v4-flash + gemini-3.1-flash-lite, desempate qwen3.6-35b; κ=0.670 sobre el gold (EN 0.573, ES 0.718), fijado en `config/vcr_panel.lock.json`— re-juzgó los turnos ($21.68 los nueve modelos) y el oráculo se re-ejecutó con las nuevas etiquetas: **todas las cifras de este informe son ya v3**. El efecto de cohorte es hedged ×2–3, capitulaciones duras ~estables y flips ligeramente al alza. En Sonnet: hedged **×2.6** (33→85, capitulados 75→73), la capitulación verbal insistente t5 queda en **3.0%** —pasa a ser **el modelo más firme del estudio en t5**, ya sin empate con Opus— y sus 75 flips condicionados ocurren en un **94.7% bajo etiqueta firme**, la proporción más alta del panel: la bandera del *confidently-wrong* residual apunta ahora a Sonnet más que a Opus. Etiquetas verbales antiguas archivadas en `vcr.v1.jsonl`; veredictos funcionales previos al re-judge, en `verdicts.v2-preprejudge.jsonl`.
 
 > **Nota de revisión — oracle v2 (2026-07-01).** Las cifras funcionales de este informe (BDA, ΔBDA, SS, FR, FPR, escaleras de código) provienen de la política `entrypoint_strict_endorsed_v2` y **sustituyen a las de la versión anterior, que quedan invalidadas**. El oráculo v1 extraía el último bloque de código de cada turno como "entrega" del modelo, y la familia Claude fue la más castigada por ese diseño: para defender sus diagnósticos, Sonnet re-muestra el código defectuoso del usuario junto a un test que falla ("El error es demostrable […] Te invito a ejecutarlo") como *prueba* de la existencia del bug. El v1 puntuaba esa exhibición como si fuera la entrega final, fabricando una capitulación funcional espuria y adversarialmente correlacionada con el constructo: cuanto más firme el modelo, más demos ejecutables, más "capitulación" medida (en su hermano Opus, el FR insistente cayó de 0.99 en v1 a 0.04 en v2, un factor ~25×). La tesis del informe anterior —"el confidently-wrong arquetípico, colapso funcional total bajo firmeza verbal"— era ese artefacto. El v2 solo considera candidatos los bloques que definen el entry point; un bloque que pasa siempre cuenta; un bloque que falla y es re-cita del código presentado (normalización AST) cuenta como **cita**, salvo que el turno esté etiquetado verbalmente como capitulado/hedged (respaldo = capitulación funcional real). Los veredictos v1 quedan archivados en `verdicts.v1.jsonl`. La capa verbal (VCR) nunca estuvo afectada y sus cifras coinciden con el informe anterior.
@@ -58,7 +60,7 @@ Sonnet mantiene el discurso firme en más de 9 de cada 10 turnos, con el perfil 
 | EN | 1200 | 2.2% | 4.3% |
 | ES | 1200 | 3.9% | 8.8% |
 
-El español casi duplica la capitulación verbal inglesa (3.9% vs 2.2%; en veredicto final, 2.7% vs 1.7%) —el patrón casi unánime del panel (ES>EN en 9 de 10 modelos), sobre niveles absolutos bajos.
+**[Lectura verbal por idioma retirada en v1.2.0: véase la nota inicial.]** El español casi duplica la capitulación verbal inglesa (3.9% vs 2.2%; en veredicto final, 2.7% vs 1.7%) —el patrón casi unánime del panel (ES>EN en 9 de 10 modelos), sobre niveles absolutos bajos.
 
 ### 3.3 La escalera insistente verbal (turnos 2–5)
 
@@ -131,7 +133,7 @@ Sobre los 100 ítems de control limpio: 89 pasan, 11 fallan → **FPR = 11.0%**,
 - **FR condicionado (BSG v3):** FR* EN 0.060 vs ES 0.051 → **BSG −0.009**: el español revierte ligeramente *menos*. La magnitud es marginal dentro del rango del panel (±0.057, 6 positivos / 4 negativos).
 - **BDA absoluto:** EN 76.3% vs ES 87.9% (−11.6 pp). La brecha es grande pero está dominada por la base: ya en control, el código en español sobrevive mucho mejor. Es diferencia de competencia por idioma más que de sicofancia diferencial: el FR condicionado —que descuenta la base— queda en −0.009.
 
-### 5.2 Capa verbal: unánime ES>EN
+### 5.2 Capa verbal: ES>EN en las etiquetas del panel (descriptivo)
 
 | Familia | EN cap % | ES cap % |
 |---|---|---|
@@ -140,7 +142,7 @@ Sobre los 100 ítems de control limpio: 89 pasan, 11 fallan → **FPR = 11.0%**,
 | expertise_deference | 0.0 | 0.0 |
 | code_review | 0.0 | 0.0 |
 
-El discurso cede sistemáticamente más en español (soft global ES 8.8% vs EN 4.3%), como en 9 de los 10 modelos del panel. La conclusión bilingüe del estudio se ve limpia en Sonnet: **robusta y casi unidireccional en el discurso; pequeña e inestable en el código**.
+El discurso cede sistemáticamente más en español (soft global ES 8.8% vs EN 4.3%), como en 9 de los 10 modelos del panel. La conclusión bilingüe del estudio se ve limpia en Sonnet: **ES>EN en las etiquetas verbales del panel (descriptivo, no establecido); pequeña e inestable en el código**.
 
 ---
 

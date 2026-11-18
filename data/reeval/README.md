@@ -91,5 +91,9 @@ sensitivity of panel agreement to the choice of reference (see
 ## Scope
 
 The reference covers one evaluated model and is not a held-out sample; it
-does not validate the verbal labels of the other nine models. Released under
+says nothing about the verbal labels of the other nine models. Since v1.2.0
+those are compared with a separate held-out reference, with two non-author
+annotators on every turn and a non-author adjudicator
+([`data/reeval2/`](../reeval2/README.md)). In both cases the result is
+agreement with human labels, not a validation of the panel. Released under
 CC BY 4.0, like the rest of the dataset (`LICENSE-DATASET`).

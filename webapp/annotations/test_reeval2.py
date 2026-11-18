@@ -11,8 +11,9 @@ from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.test import TestCase, override_settings
 
+from . import reeval2
 from .models import (Adjudication, AdjudicationQueueItem, Annotation, AnnotationEvent, Assignment,
-                     Conversation, Profile, Study, Unit)
+                     Conversation, Profile, Study, Submission, Unit)
 
 
 @override_settings(
@@ -54,6 +55,10 @@ class CrossedDesignTests(TestCase):
             a = Annotation.objects.create(user=user, unit=unit, label=label, first_label=label)
             AnnotationEvent.objects.create(annotation=a, label=label, version=1)
 
+    def hand_in(self, user):
+        Submission.objects.create(user=user, annotations_sha256="0" * 64, declaration_version="t", declaration={})
+        reeval2.advance_after_submission(Study.objects.get())
+
     def test_every_evaluator_gets_every_conversation_and_the_adjudicator_none(self):
         a1, a2, adj = self.crossed_team()
         for user in (a1, a2):
@@ -75,27 +80,24 @@ class CrossedDesignTests(TestCase):
                             design="partitioned")
         self.assertFalse(get_user_model().objects.exists())
 
-    def test_queue_holds_current_disagreements_only_after_both_finish(self):
+    def test_queue_holds_current_disagreements_only_after_both_hand_in(self):
         a1, a2, adj = self.crossed_team()
         self.label(a1, ["firm", "hedged", "capitulated"])
-        with self.assertRaises(CommandError):
-            call_command("build_adjudication_queue", stdout=io.StringIO())
+        self.hand_in(a1)
+        self.assertFalse(AdjudicationQueueItem.objects.exists())
         self.label(a2, ["firm", "firm", "capitulated"])
-        out = io.StringIO()
-        call_command("build_adjudication_queue", stdout=out)
+        self.hand_in(a2)
         self.assertEqual(list(AdjudicationQueueItem.objects.values_list("unit_id", flat=True)), ["r2u0001"])
         row = AdjudicationQueueItem.objects.get().source_row
         self.assertEqual(row["rule"], "current_labels_differ")
         self.assertEqual([a["annotator"] for a in row["annotations"]], ["a1", "a2"])
-        self.assertIn("1 de 3", out.getvalue())
-        with self.assertRaises(CommandError):
-            call_command("build_adjudication_queue", stdout=io.StringIO())
 
     def test_dedicated_adjudicator_decides_without_seeing_the_model(self):
         a1, a2, adj = self.crossed_team()
         self.label(a1, ["firm", "hedged", "capitulated"])
         self.label(a2, ["firm", "firm", "capitulated"])
-        call_command("build_adjudication_queue", stdout=io.StringIO())
+        self.hand_in(a1)
+        self.hand_in(a2)
         Profile.objects.update(must_change_password=False)  # new accounts must change it on first login
         self.client.force_login(adj)
         listing = self.client.get("/adjudication/")
@@ -104,6 +106,7 @@ class CrossedDesignTests(TestCase):
         detail = self.client.get("/adjudication/r2u0001/")
         self.assertEqual(detail.status_code, 200)
         self.assertNotContains(detail, "gpt-5-5")
+        self.assertNotContains(detail, "JC")
         self.assertContains(detail, "dos evaluaciones independientes")
         response = self.client.post("/adjudication/r2u0001/", {
             "label": "hedged", "rationale": "Mantiene el diagnóstico con una salvedad.",

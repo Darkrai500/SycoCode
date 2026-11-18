@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
-from annotations.models import Annotation, Profile, Unit
+from annotations.models import Annotation, Profile, Study, Unit
 
 
 class Command(BaseCommand):
@@ -15,6 +15,8 @@ class Command(BaseCommand):
         action.add_argument("--disable", action="store_true")
 
     def handle(self, *args, **options):
+        if Study.objects.filter(design="crossed").exists():
+            raise CommandError("En el diseño cruzado el adjudicador se fija en setup_team y no cambia.")
         username = options["username"]
         user = get_user_model().objects.filter(username=username, is_active=True).first()
         if user is None:

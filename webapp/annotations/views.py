@@ -12,8 +12,10 @@ from django.db import transaction
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from django.views.decorators.http import require_POST
-from .models import Annotation, AnnotationEvent, Assignment, Conversation, Exposure, LABELS, LoginFailure, Profile, Unit
+from django.views.decorators.http import require_http_methods, require_POST
+from . import reeval2
+from .models import (Annotation, AnnotationEvent, Assignment, Conversation, ExportRecord,
+                     Exposure, LABELS, LoginFailure, Profile, StudyEvent, Submission, Unit)
 from .services import agreement_report, may_inspect, progress, queue, record_exposure
 from eval.verbal import strip_code
 
@@ -62,22 +64,36 @@ def password(request):
 
 @login_required
 def home(request):
+    study = reeval2.crossed_study()
+    if study:
+        role = reeval2.study_role(request.user)
+        if role == reeval2.ADJUDICATOR:
+            return redirect("adjudication_dashboard")
+        if role == reeval2.CONTROL:
+            return redirect("control")
     items = queue(request.user)
     pending = [i for i in items if not i["complete"]]
     completed = [i for i in items if i["complete"]]
     if not items and request.user.is_staff:
         return redirect("control")
-    return render(request, "home.html", {"progress": progress(request.user), "next": pending[0] if pending else None,
+    template = "home_reeval2.html" if study else "home.html"
+    return render(request, template, {"progress": progress(request.user), "next": pending[0] if pending else None,
+                                        "submission": Submission.objects.filter(user=request.user).first(),
                                         "pending": pending, "completed": completed})
 
 @login_required
 def guide(request):
-    return render(request, "guide.html")
+    return render(request, "guide_reeval2.html" if reeval2.crossed_study() else "guide.html")
+
+@login_required
+def adjudicator_guide(request):
+    return render(request, "guide_adjudicator.html")
 
 @login_required
 def evaluate(request, group_id):
     assignment = get_object_or_404(Assignment.objects.select_related("conversation"), user=request.user, conversation_id=group_id)
     case = assignment.conversation
+    submitted = Submission.objects.filter(user=request.user).exists()
     own = {a.unit_id: a for a in Annotation.objects.filter(user=request.user, unit__conversation=case)}
     by_turn = {u.judged_turn: u for u in case.units.all()}
     last_judged = max(by_turn, default=0)
@@ -101,7 +117,36 @@ def evaluate(request, group_id):
     return render(request, "evaluate.html", {"case": case, "turns": turns, "labels": LABELS,
         "progress": progress(request.user), "position": index+1, "group_count": len(items),
         "next_case": next_pending, "complete": len(own) == len(by_turn),
-        "locked": Exposure.objects.filter(user=request.user, conversation=case).exists()})
+        "submitted": submitted, "single_turn": bool(reeval2.crossed_study()) and last_judged == 1,
+        "locked": submitted or Exposure.objects.filter(user=request.user, conversation=case).exists()})
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def submit(request):
+    """Final hand-in of the crossed design: requires every unit, a dated declaration, and locks the labels."""
+    study = reeval2.crossed_study()
+    if study is None or reeval2.study_role(request.user) != reeval2.EVALUATOR:
+        return HttpResponse(status=403)
+    context = {"progress": progress(request.user), "declaration": reeval2.DECLARATION,
+               "submission": Submission.objects.filter(user=request.user).first()}
+    if request.method == "GET":
+        return render(request, "submit.html", context)
+    accepted = all(request.POST.get(key) == "on" for key in [*reeval2.DECLARATION, "final"])
+    with transaction.atomic():
+        if Submission.objects.filter(user=request.user).exists():
+            return redirect("home")
+        if progress(request.user)["remaining"]:
+            context["error"] = "Faltan respuestas por etiquetar. Termínalas antes de entregar."
+            return render(request, "submit.html", context, status=409)
+        if not accepted:
+            context["error"] = "Para entregar debes marcar todas las casillas."
+            return render(request, "submit.html", context, status=400)
+        Submission.objects.create(user=request.user, annotations_sha256=reeval2.own_annotations_sha256(request.user),
+                                  declaration_version=reeval2.DECLARATION_VERSION, declaration=reeval2.DECLARATION)
+        reeval2.advance_after_submission(study)
+    # The same message for both annotators: it must not reveal whether the study moved on.
+    messages.success(request, "Entrega registrada. Tus etiquetas ya no se pueden cambiar. Gracias.")
+    return redirect("home")
 
 @login_required
 @require_POST
@@ -119,6 +164,8 @@ def save(request, unit_id):
     with transaction.atomic():
         if not Assignment.objects.filter(user=request.user, conversation=unit.conversation).exists():
             return JsonResponse({"error": "Esta conversación ya no está asignada a tu cuenta."}, status=403)
+        if Submission.objects.filter(user=request.user).exists():
+            return JsonResponse({"error": "Ya has entregado. Tus etiquetas no se pueden cambiar."}, status=403)
         if Exposure.objects.filter(user=request.user, conversation=unit.conversation).exists():
             return JsonResponse({"error": "Ya has consultado otras evaluaciones de este caso. Tu evaluación independiente está cerrada."}, status=403)
         current = Annotation.objects.select_for_update().filter(user=request.user, unit=unit).first()
@@ -138,6 +185,9 @@ def save(request, unit_id):
 
 @staff_required
 def control(request):
+    study = reeval2.crossed_study()
+    if study:
+        return control_crossed(request, study)
     people = [{"user": user, "progress": progress(user)} for user in get_user_model().objects.order_by("id")]
     language = request.GET.get("language", "")
     state = request.GET.get("state", "")
@@ -162,8 +212,19 @@ def control(request):
         "unit_count": Unit.objects.count(), "language": language, "state": state,
         "export_allowed": own_complete})
 
+def control_crossed(request, study):
+    """Progress only until closure: per annotator, plus the overall state. Nothing per case or per adjudication."""
+    submissions = {s.user_id: s for s in Submission.objects.all()}
+    people = [{"user": user, "progress": progress(user), "submission": submissions.get(user.id)}
+              for user in reeval2.evaluators()]
+    closed = bool(study.closed_at)
+    return render(request, "control_reeval2.html", {"people": people, "state": reeval2.state(study), "study": study,
+        "exports": ExportRecord.objects.select_related("user") if closed else [], "kinds": CROSSED_EXPORTS if closed else []})
+
 @staff_required
 def inspect_case(request, group_id):
+    if reeval2.crossed_study():
+        return HttpResponse(status=403)
     case = get_object_or_404(Conversation, pk=group_id)
     with transaction.atomic():
         if not may_inspect(request.user, case):
@@ -175,6 +236,8 @@ def inspect_case(request, group_id):
 @staff_required
 @require_POST
 def assign(request):
+    if reeval2.crossed_study():
+        return HttpResponse(status=403)
     try:
         user_id = int(request.POST.get("user", ""))
     except (ValueError, TypeError):
@@ -198,9 +261,29 @@ def assign(request):
             return HttpResponse(status=400)
     return redirect("control")
 
+# (kind, button label). Decisions are served by adjudication_export; "gold" belongs to the first study.
+CROSSED_EXPORTS = [("jsonl", "Etiquetas (JSONL)"), ("csv", "Etiquetas (CSV)"), ("events", "Historial de cambios"),
+                   ("agreement", "Acuerdo y κ"), ("audit", "Registro del estudio")]
+
+def audit_rows():
+    """Hand-ins, exposures, study timeline and earlier downloads: the evidence of who touched what and when."""
+    rows = [{"type": "submission", "account": s.user.username, "at": s.submitted_at.isoformat(),
+             "annotations_sha256": s.annotations_sha256, "declaration_version": s.declaration_version,
+             "declaration": s.declaration} for s in Submission.objects.select_related("user").order_by("id")]
+    rows += [{"type": "exposure", "account": e.user.username, "conversation": e.conversation_id, "at": e.created_at.isoformat()}
+             for e in Exposure.objects.select_related("user").order_by("id")]
+    rows += [{"type": "study_event", "kind": e.kind, "actor": e.actor, "detail": e.detail, "at": e.created_at.isoformat()}
+             for e in StudyEvent.objects.all()]
+    rows += [{"type": "export", "account": e.user.username, "kind": e.kind, "sha256": e.sha256, "at": e.created_at.isoformat()}
+             for e in ExportRecord.objects.select_related("user")]
+    return rows
+
 @staff_required
 def export(request, kind):
-    if kind not in ["csv", "jsonl", "events", "agreement", "gold"]:
+    study = reeval2.crossed_study()
+    if study and not study.closed_at:
+        return HttpResponse("Las descargas se abren al cerrar el estudio.", status=403)
+    if kind not in ([k for k, _ in CROSSED_EXPORTS] if study else ["csv", "jsonl", "events", "agreement", "gold"]):
         return HttpResponse(status=404)
     username = request.GET.get("annotator", "")
     selected_user = get_object_or_404(get_user_model(), username=username) if kind == "gold" else None
@@ -235,6 +318,8 @@ def export(request, kind):
                     for e in AnnotationEvent.objects.select_related("annotation__user").order_by("id")]
         if kind == "agreement":
             rows = agreement_report()
+        if kind == "audit":
+            rows = audit_rows()
     if kind == "csv":
         out = io.StringIO()
         fields = list(rows[0]) if rows else ["unit_id", "annotator", "label", "first_label"]
@@ -246,6 +331,8 @@ def export(request, kind):
     else:
         content = "".join(json.dumps(r, ensure_ascii=False)+"\n" for r in rows)
         mime, ext = "application/x-ndjson", "jsonl"
+    if study:
+        ExportRecord.objects.create(user=request.user, kind=kind, sha256=reeval2.export_sha256(content))
     response = HttpResponse(content, content_type=mime)
     response["Content-Disposition"] = f'attachment; filename="sycocode-{kind}.{ext}"'
     return response

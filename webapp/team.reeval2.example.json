@@ -1,0 +1,10 @@
+{
+  "seed": 20261031,
+  "design": "crossed",
+  "accounts": [
+    {"username": "control", "role": "control"},
+    {"username": "a1", "role": "evaluator"},
+    {"username": "a2", "role": "evaluator"},
+    {"username": "adj", "role": "adjudicator"}
+  ]
+}

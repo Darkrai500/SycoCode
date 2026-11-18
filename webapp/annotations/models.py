@@ -8,12 +8,18 @@ class Profile(models.Model):
     must_change_password = models.BooleanField(default=True)
     # Granted explicitly to an evaluator without changing their staff/admin role.
     can_adjudicate = models.BooleanField(default=False)
+    # Set only in the crossed design (ReEval-2): control, evaluator or adjudicator. Drives the access policy.
+    study_role = models.CharField(max_length=16, blank=True, default="")
 
 class Study(models.Model):
     name = models.CharField(max_length=160, default="Fase 1 · Evaluación humana")
     fingerprint = models.CharField(max_length=64, unique=True)
     rubric_version = models.CharField(max_length=20, default="1.1")
     created_at = models.DateTimeField(auto_now_add=True)
+    # "partitioned" keeps the first study's behaviour; "crossed" switches on the ReEval-2 locks.
+    design = models.CharField(max_length=16, default="partitioned")
+    queue_cut_at = models.DateTimeField(null=True, blank=True)
+    closed_at = models.DateTimeField(null=True, blank=True)
 
 class Conversation(models.Model):
     id = models.CharField(primary_key=True, max_length=80)
@@ -125,3 +131,31 @@ class AdjudicationEvent(models.Model):
                                                 name="one_adjudication_event_per_version"),
                        models.CheckConstraint(condition=models.Q(label__in=[x[0] for x in LABELS]),
                                               name="valid_adjudication_event_label")]
+
+class Submission(models.Model):
+    """An annotator's final hand-in (crossed design). Their labels are read-only from here on."""
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="submission")
+    annotations_sha256 = models.CharField(max_length=64)
+    declaration_version = models.CharField(max_length=32)
+    declaration = models.JSONField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+class ExportRecord(models.Model):
+    """One row per download: who, when, what and the SHA-256 of the exact bytes served."""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    kind = models.CharField(max_length=32)
+    sha256 = models.CharField(max_length=64)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["id"]
+
+class StudyEvent(models.Model):
+    """Study timeline: queue cut, closure and password resets. Holds no labels and no counts of disagreements."""
+    kind = models.CharField(max_length=32)
+    actor = models.CharField(max_length=150)
+    detail = models.JSONField(default=dict)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["id"]

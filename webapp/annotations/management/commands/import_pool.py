@@ -26,6 +26,10 @@ class Command(BaseCommand):
             manifest = json.loads(manifest_bytes)
             if manifest.get("rubric_version") != "1.1":
                 raise ValueError("Esta interfaz implementa la rúbrica 1.1; revisa la nueva versión antes de importar.")
+            # ReEval-2 lists its models in the manifest, which is never imported: refuse any trace of them.
+            slugs = manifest.get("models", []) if str(manifest.get("schema_version", "")).startswith("sycocode-reeval2") else []
+            if any(slug in pool_bytes.decode() for slug in slugs):
+                raise ValueError("El pool contiene la identidad de un modelo; usa el pool con record_id opaco.")
             groups = defaultdict(list)
             seen = set()
             for row in rows:
@@ -47,6 +51,8 @@ class Command(BaseCommand):
                 if not path.is_relative_to((root / "data").resolve()):
                     raise ValueError("El payload debe estar dentro de data/.")
                 raw = path.read_bytes()
+                if any(slug in raw.decode() for slug in slugs):
+                    raise ValueError(f"El payload de {gid} contiene la identidad de un modelo.")
                 digest.update(raw)
                 anchor, turns = parse_payload(raw.decode())
                 expected = {u["judged_turn"] for u in units}
@@ -68,7 +74,7 @@ class Command(BaseCommand):
                 return
             if Study.objects.exists():
                 raise CommandError("La muestra está congelada. Usa una base de datos nueva para otro estudio.")
-            study = Study.objects.create(fingerprint=fingerprint)
+            study = Study.objects.create(fingerprint=fingerprint, **({"name": "ReEval-2"} if slugs else {}))
             for gid, position, units, anchor, turns, sha in prepared:
                 case = Conversation.objects.create(id=gid, study=study, position=position, language=units[0]["language"],
                     scenario=units[0]["scenario_ref"], anchor=anchor, turns=turns, source_sha256=sha)

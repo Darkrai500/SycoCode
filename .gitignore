@@ -51,7 +51,14 @@ Desktop.ini
 # Generated replay packages and local verification output.
 artifacts/reproducibility/
 
-# ===== ReEval-2 (second revision round) =====
-# Sampled payloads, sealed key, labels and exports contain model transcripts and
-# annotator data: private. Only aggregate manifests are copied to versioned paths.
+# ===== ReEval-2 (held-out study) =====
+# The released files live in data/reeval2/ (lower case). The working copies the
+# scripts write (data/ReEval2/sample/ with the conversation payloads, and the
+# rehearsal pool in data/ReEval2/ensayo/) stay private. On a case-insensitive file
+# system (macOS default, core.ignorecase=true) data/ReEval2/ and data/reeval2/ are
+# the same directory, so the released directory is re-included and only the
+# private subdirectories are ignored there.
 data/ReEval2/
+!data/reeval2/
+data/reeval2/sample/
+data/reeval2/ensayo/

@@ -8,15 +8,20 @@ from django.db.models import F
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from django.views.decorators.http import require_GET, require_http_methods
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
+from . import reeval2
 from .models import (Adjudication, AdjudicationEvent, AdjudicationQueueItem,
-                     Annotation, Assignment, LABELS, Profile, Unit)
+                     Annotation, Assignment, ExportRecord, LABELS, Profile, Unit)
 from .services import may_inspect, progress, record_exposure
 from .provenance import annotation_state_sha256
 
 
 def can_adjudicate(user):
+    study = reeval2.crossed_study()
+    if study:
+        return (user.is_authenticated and user.is_active and reeval2.study_role(user) == reeval2.ADJUDICATOR and
+                bool(study.queue_cut_at) and not study.closed_at)
     # An explicit grant: Django's generic has_perm would grant every permission
     # implicitly to the control superuser.
     if not (user.is_authenticated and user.is_active and not user.is_staff and not user.is_superuser and
@@ -29,16 +34,25 @@ def can_adjudicate(user):
 
 
 def can_supervise(user):
+    study = reeval2.crossed_study()
+    if study:
+        return reeval2.study_role(user) == reeval2.CONTROL and bool(study.closed_at)
     return bool(user.is_authenticated and user.is_active and user.is_staff and
                 progress(user)["remaining"] == 0)
 
 
 def can_view(user):
+    study = reeval2.crossed_study()
+    if study:
+        # Read-only once closed. Before the cut the page says only that the queue is not ready.
+        return reeval2.study_role(user) == reeval2.ADJUDICATOR
     return can_supervise(user) or can_adjudicate(user)
 
 
 def nav_access(request):
-    return {"can_view_adjudication": can_view(request.user)}
+    study = reeval2.crossed_study()
+    return {"can_view_adjudication": can_view(request.user), "crossed_study": study,
+            "study_role": reeval2.study_role(request.user) if study else ""}
 
 
 def forbidden():
@@ -74,7 +88,7 @@ def event_data(event):
 
 
 def is_crossed(item):
-    # ReEval-2 queue rows come from build_adjudication_queue; the first study's from the 42-case import.
+    # ReEval-2 queue rows come from reeval2.queue_rows; the first study's from the 42-case import.
     return item.source_row.get("rule") == "current_labels_differ"
 
 
@@ -91,8 +105,11 @@ def queue_context(status):
         rows = [r for r in rows if r["decision"] is None]
     elif status == "resolved":
         rows = [r for r in rows if r["decision"] is not None]
+    study = reeval2.crossed_study()
     return {"rows": rows, "status": status, "total": len(items), "resolved": resolved,
-            "pending": len(items) - resolved, "crossed": bool(items) and is_crossed(items[0])}
+            "pending": len(items) - resolved, "crossed": bool(study) or (bool(items) and is_crossed(items[0])),
+            "study_state": reeval2.state(study) if study else "",
+            "can_close": bool(study) and reeval2.state(study) == "adjudication" and resolved == len(items)}
 
 
 @login_required
@@ -104,6 +121,22 @@ def dashboard(request):
     if status not in {"all", "pending", "resolved"}:
         return HttpResponse("Filtro inválido.", status=400)
     return render(request, "adjudication_list.html", queue_context(status))
+
+
+@login_required
+@require_POST
+def close(request):
+    """The adjudicator's last step: it requires every decision, and it opens control's downloads."""
+    study = reeval2.crossed_study()
+    if study is None or not can_adjudicate(request.user):
+        return forbidden()
+    with transaction.atomic():
+        if reeval2.pending_decisions():
+            messages.error(request, "Quedan casos sin decisión. Resuélvelos antes de cerrar.")
+            return redirect("adjudication_dashboard")
+        reeval2.close_study(study, request.user.username)
+    messages.success(request, "Adjudicación cerrada. Las decisiones ya no se pueden cambiar. Gracias.")
+    return redirect("adjudication_dashboard")
 
 
 def detail_context(item, *, error=None, draft_label=None, draft_rationale=None):
@@ -245,13 +278,17 @@ def export_decisions(request):
         for case_id in {i.unit.conversation_id for i in items}:
             record_exposure(request.user, next(i.unit.conversation for i in items if i.unit.conversation_id == case_id))
         rows = [export_row(i, current_digest) for i in items]
+    if reeval2.crossed_study():
+        content = "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows)
+        ExportRecord.objects.create(user=request.user, kind="decisions", sha256=reeval2.export_sha256(content))
     return jsonl_response(rows, "sycocode-reeval-adjudications.jsonl")
 
 
 @login_required
 @require_GET
 def export_reference(request):
-    if not can_supervise(request.user):
+    # The 42 + 278 candidate is the first study's reference; ReEval-2 builds its own in score_reeval2.py.
+    if reeval2.crossed_study() or not can_supervise(request.user):
         return forbidden()
     with transaction.atomic():
         items = list(AdjudicationQueueItem.objects.select_related("unit__conversation__study"))

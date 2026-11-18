@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
-from annotations.models import AdjudicationQueueItem, Annotation, Unit
+from annotations.models import AdjudicationQueueItem, Annotation, Study, Unit
 from annotations.provenance import annotation_state_sha256
 
 
@@ -28,6 +28,8 @@ class Command(BaseCommand):
                             help="Solo para pruebas con DEBUG: omite el manifiesto real de 42 casos.")
 
     def handle(self, *args, **options):
+        if Study.objects.filter(design="crossed").exists():
+            raise CommandError("En el diseño cruzado la cola se corta sola con la segunda entrega.")
         synthetic = options["synthetic"]
         if synthetic and not settings.DEBUG:
             raise CommandError("--synthetic solo está permitido con DJANGO_DEBUG=1.")

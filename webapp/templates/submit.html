@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block title %}Entregar · SycoCode{% endblock %}{% block content %}<section class="narrow panel"><a href="{% url 'home' %}" class="back-link">Volver a mi evaluación</a><h1>Entregar tu evaluación</h1>
+{% if submission %}<p>Ya entregaste el {{ submission.submitted_at|date:'d/m/Y H:i' }}. Tus etiquetas no se pueden cambiar.</p>{% elif progress.remaining %}<p class="notice">Te quedan {{ progress.remaining }} respuestas por etiquetar. Podrás entregar cuando termines.</p>{% else %}
+<p class="notice"><strong>La entrega es definitiva.</strong> Después no podrás cambiar ninguna etiqueta ni nota, y nadie podrá reabrirla desde la aplicación. Revisa tus respuestas antes de continuar.</p>
+{% if error %}<div class="error" role="alert">{{ error }}</div>{% endif %}
+<form method="post">{% csrf_token %}<fieldset><legend>Declaración</legend>{% for key, text in declaration.items %}<p><label><input type="checkbox" name="{{ key }}" required> {{ text }}</label></p>{% endfor %}<p><label><input type="checkbox" name="final" required> Entiendo que la entrega es definitiva.</label></p></fieldset><button class="primary" type="submit">Entregar</button></form>
+<p class="small muted">Se guardan esta declaración, la fecha y una huella (SHA-256) de tus etiquetas.</p>{% endif %}</section>{% endblock %}

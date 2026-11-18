@@ -14,8 +14,10 @@ authors:
   - family-names: "Negrín"
     given-names: "Juan Carlos"
     orcid: "https://orcid.org/0009-0001-8892-2442"
-version: 1.1.0
-date-released: "2026-10-05"
+# La fecha debe coincidir con el día real de publicación de la release en
+# GitHub/Zenodo: v1.2.0 se publica el 2026-11-20.
+version: 1.2.0
+date-released: "2026-11-20"
 # El campo `url` apuntaba a https://darkrai500.github.io/TFG_SycoCode/, que
 # devuelve 404 desde que se despublicó esa GitHub Pages. Se apunta al propio
 # repositorio hasta que la landing vuelva a estar en línea.
@@ -35,6 +37,9 @@ identifiers:
   - type: doi
     value: "10.5281/zenodo.23158882"
     description: "DOI de la versión v1.1.0, la descrita en la revisión de SoftwareX."
+  # TODO(v1.2.0): añadir aquí el DOI de versión de v1.2.0 cuando Zenodo lo asigne
+  # al publicar la release (no existe todavía). El `doi` de nivel superior es el
+  # de concepto y no cambia.
 license: MIT
 abstract: >-
   Bilingual (EN/ES) benchmark and evaluation platform for measuring sycophancy

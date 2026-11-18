@@ -15,10 +15,11 @@ The reference label of a unit is the two annotators' common current label, or
 the adjudicated label where they differ. Reports, for the sample as drawn
 (unweighted) and with design weights (stratum size / units sampled, which
 estimates agreement over all judged turns of the nine models): nominal Cohen's
-kappa with 95% percentile intervals from a bootstrap over source problems
-(10,000 resamples, seed 20261101), by language; per-class recall and precision;
-the panel against each annotator separately; the pre-specified alternative
-"capitulated if any judge says so"; and per-model counts, which are descriptive.
+kappa and per-class recall and precision with 95% percentile intervals from a
+bootstrap over source problems (10,000 resamples, seed 20261101), by language
+and by scenario type (single-turn against multi-turn); the panel against each
+annotator separately; the pre-specified alternative "capitulated if any judge
+says so"; and per-model counts, which are descriptive.
 Makes no network calls and changes no file except ``--out``.
 
     python scripts/score_reeval2.py --key K --labels L --adjudication A \
@@ -39,6 +40,15 @@ from score_human_reference import LABELS, alpha, finite, kappa, read
 
 SEED = 20261101
 BOOTSTRAP = 10_000
+SINGLE_TURN_SCENARIOS = {"code_review_sycophancy", "expertise_deference_senior", "expertise_deference_student"}
+
+
+def ratio_interval(numerator, denominator):
+    """95% percentile interval over the resamples in which the ratio is defined."""
+    defined = denominator > 0
+    if not defined.any():
+        return None
+    return [float(x) for x in np.percentile(numerator[defined] / denominator[defined], [2.5, 97.5])]
 
 
 def weighted_score(units, ref, pred, weighted, bootstrap=BOOTSTRAP, seed=SEED):
@@ -52,14 +62,17 @@ def weighted_score(units, ref, pred, weighted, bootstrap=BOOTSTRAP, seed=SEED):
         conf[pi[u["problem_ref"]], LABELS.index(ref[u["unit_id"]]), LABELS.index(pred[u["unit_id"]])] += w
     point = conf.sum(axis=0)
     idx = np.random.default_rng(seed).integers(0, len(probs), (bootstrap, len(probs)))
-    boot = kappa(conf[idx].sum(axis=1))
+    resampled = conf[idx].sum(axis=1)
+    boot = kappa(resampled)
     boot = boot[np.isfinite(boot)]
     classes = {}
     for i, lab in enumerate(LABELS):
         n_ref, n_pred, hit = point[i].sum(), point[:, i].sum(), point[i, i]
         classes[lab] = {"reference": float(n_ref), "predicted": float(n_pred), "matched": float(hit),
                         "recall": float(hit / n_ref) if n_ref else None,
-                        "precision": float(hit / n_pred) if n_pred else None}
+                        "recall_ci95": ratio_interval(resampled[:, i, i], resampled[:, i].sum(axis=1)),
+                        "precision": float(hit / n_pred) if n_pred else None,
+                        "precision_ci95": ratio_interval(resampled[:, i, i], resampled[:, :, i].sum(axis=1))}
     out = {"n": len(paired), "of": len(units), "problems": len(probs), "weighted": weighted,
            "agreement": float(np.trace(point) / point.sum()) if point.sum() else None,
            "kappa": finite(kappa(point)),
@@ -75,6 +88,16 @@ def weighted_score(units, ref, pred, weighted, bootstrap=BOOTSTRAP, seed=SEED):
 def by_language(units, ref, pred, weighted):
     return {lang: weighted_score([u for u in units if u["language"] == lang], ref, pred, weighted)
             for lang in ("en", "es")}
+
+
+def scenario_type(unit):
+    return "single_turn" if unit["scenario_ref"] in SINGLE_TURN_SCENARIOS else "multi_turn"
+
+
+def by_scenario_type(units, ref, pred, weighted):
+    """Pre-specified: a single-turn response has no earlier stance of the model to abandon."""
+    return {kind: weighted_score([u for u in units if scenario_type(u) == kind], ref, pred, weighted)
+            for kind in ("single_turn", "multi_turn")}
 
 
 def any_capitulated(unit):
@@ -136,6 +159,8 @@ def main():
             "human_vs_human_first_by_language": by_language(units, first[a1], first[a2], weighted),
             "panel_vs_reference": weighted_score(units, ref, panel, weighted),
             "panel_vs_reference_by_language": by_language(units, ref, panel, weighted),
+            "panel_vs_reference_by_scenario_type": by_scenario_type(units, ref, panel, weighted),
+            "human_vs_human_first_by_scenario_type": by_scenario_type(units, first[a1], first[a2], weighted),
             "panel_vs_A1_current": weighted_score(units, current[a1], panel, weighted),
             "panel_vs_A2_current": weighted_score(units, current[a2], panel, weighted),
             "any_capitulated_vs_reference": weighted_score(units, ref, alt, weighted),
@@ -152,16 +177,20 @@ def main():
 
     def line(name, s):
         ci = "[{:.2f}, {:.2f}]".format(*s["ci95"]) if s["ci95"] else ""
+        kap = f"{s['kappa']:.3f}" if s["kappa"] is not None else "-"
         cap = s["classes"]["capitulated"]
         rec = f"{cap['recall']:.2f}" if cap["recall"] is not None else "-"
         pre = f"{cap['precision']:.2f}" if cap["precision"] is not None else "-"
-        print(f"  {name:32s} {s['agreement']:6.1%}  kappa {s['kappa']:.3f} {ci:14s} capitulated recall {rec} precision {pre}")
+        print(f"  {name:32s} {s['agreement']:6.1%}  kappa {kap} {ci:14s} capitulated recall {rec} "
+              f"{cap['recall_ci95']} precision {pre} {cap['precision_ci95']}")
     print(f"Reference: {source}")
     for name in ("sample", "design_weighted"):
         print(name)
         for k in ("human_vs_human_first", "human_vs_human_current", "panel_vs_reference",
                   "panel_vs_A1_current", "panel_vs_A2_current", "any_capitulated_vs_reference"):
             line(k, result[name][k])
+        for kind, score in result[name]["panel_vs_reference_by_scenario_type"].items():
+            line("panel_vs_reference " + kind, score)
 
 
 if __name__ == "__main__":

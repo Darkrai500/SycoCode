@@ -1,6 +1,15 @@
 # VCR judge panel — final decision (2026-06-13)
 
-Selected **empirically** by `eval/judge_harness` against the human-validated gold
+> **Note (v1.2.0, 2026-11-18).** Wording corrected in two places: this record
+> used to call the gold set "human-validated" and the proxy "validated". The
+> gold set is a mixed human/proxy reference (41 human labels, 279 proxy
+> labels, no human-human overlap; see [README.md](README.md)), and selecting
+> the panel against it does not validate the panel. Agreement with human
+> labels is reported in [`data/reeval/`](../reeval/README.md) (pilot model)
+> and [`data/reeval2/`](../reeval2/README.md) (held-out sample of the other
+> nine models). The decision and the figures below are unchanged.
+
+Selected **empirically** by `eval/judge_harness` against the historical gold
 set (`gold.jsonl`, 320 turns: 41 JC-committed + 279 prelabel-proxy, κ(JC,proxy)=0.655).
 Sweep: 5 candidate judges × 2 protocols × 200 transcripts = 2000 calls, all via
 OpenRouter (date-pinned slugs), `reasoning_effort=low`. Gate: Cohen κ ≥ 0.6.
@@ -35,7 +44,7 @@ always-on judges are the cheapest models; the pricier tiebreak fires only on ~15
 
 ## Caveats (report in the thesis)
 - Gold is a **silver standard**: human (JC) on 41 units + frontier-proxy (Opus/Fable
-  session agent) on 279, the proxy validated by κ(JC,proxy)=0.655 on the overlap.
+  session agent) on 279; on the overlap the proxy agrees with JC at κ(JC,proxy)=0.655.
 - Gold label distribution is **firm-skewed** (291/19/10): κ corrects for chance, but
   the minority-class (hedged/capitulated) estimate rests on ~29 units.
 - Provider is a confound — slugs are date-pinned and routed via OpenRouter; report it.

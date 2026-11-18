@@ -4,6 +4,8 @@ Webapp para anotar respuestas con la rúbrica VCR 1.1: `firm`, `hedged` y `capit
 
 Incluye además una [utilidad de adjudicación](ADJUDICACION.md) para resolver desacuerdos entre anotaciones.
 
+El estudio ReEval-2 (la referencia *held-out* de v1.2.0) usa el diseño cruzado (`design: crossed`), con flujo y permisos propios: ver [Estudio ReEval-2](#estudio-reeval-2-diseño-cruzado).
+
 ## Instalación local
 
 Python 3.12. Desde la raíz del repositorio:
@@ -58,6 +60,20 @@ La cuenta de control permite consultar votos sin evaluar. Quien también evalúe
 
 La cola completa de adjudicación contiene identificadores, cuentas y votos. Permanece fuera de Git y se importa con `import_adjudication_queue --source /ruta/privada/review_queue.jsonl`. La release solo versiona un manifiesto de hashes y recuentos, sin datos por unidad. La importación exige coincidencia con las anotaciones y su historial en el momento del corte; las decisiones y la referencia candidata devuelven `409` si las anotaciones cambian después. `--synthetic` se reserva para tests con `DEBUG`.
 
+## Estudio ReEval-2 (diseño cruzado)
+
+La referencia *held-out* de v1.2.0 ([`data/reeval2/`](../data/reeval2/README.md)) se anotó con esta aplicación en diseño cruzado, según el protocolo [`docs/methodology/reeval2_protocol.md`](../docs/methodology/reeval2_protocol.md) y su [registro de desviaciones](../docs/methodology/reeval2_protocol_record.md). Las tres personas que anotaron y adjudicaron son investigadoras del grupo de los autores, no son autoras y aparecen solo con seudónimo. El diseño cruzado activa un flujo y unos permisos propios:
+
+- Cuentas seudónimas fijas: un `control`, dos `evaluator` (`a1`, `a2`) y un `adjudicator` (`adj`), como en `team.reeval2.example.json`. `setup_team` rechaza nombres y apellidos reales y la cuenta `jc`, exige una base nueva y no da a `control` permisos de superusuario.
+- Cada anotador etiqueta todas las respuestas en su propio orden determinista. Antes puede hacer una calibración de 11 turnos de la referencia piloto (`annotations/data/reeval2_calibration.json`, generada por `scripts/build_reeval2_calibration.py`), que muestra la etiqueta de referencia y no guarda ninguna respuesta.
+- La entrega (`/submit/`) exige todas las etiquetas y una declaración (trabajo individual, sin IA, sin hablar de los casos), guarda su fecha y una huella SHA-256 de las etiquetas, y las bloquea. No hay forma de reabrirla.
+- La segunda entrega corta la cola de adjudicación en la misma transacción: las respuestas cuyas etiquetas actuales difieren. El adjudicador solo ve esas respuestas, decide cada una con una justificación obligatoria y cierra la adjudicación, lo que cierra el estudio.
+- Hasta el cierre, `control` solo ve el avance de cada anotador. Cada rol tiene una lista de rutas permitidas (`annotations/reeval2.py`, aplicada por `CrossedStudyGuard`); cualquier otra devuelve 403, `/admin/` incluido. Las descargas se abren con el cierre y cada una queda registrada con cuenta, fecha, tipo y SHA-256.
+- «Registro del estudio» (`/control/export/audit/`) reúne entregas con su declaración y huella, exposiciones, eventos del estudio (restablecimientos de contraseña con `reset_study_password`, corte de la cola y cierre) y descargas anteriores.
+- `import_pool` rechaza un pool o un payload que contenga el identificador de un modelo; `set_adjudicator` e `import_adjudication_queue` no actúan en este diseño.
+
+Los bloqueos son de aplicación, no criptográficos: quien administra el servidor puede leer o cambiar la base fuera de la aplicación (protocolo, «Limit of the locks»). El runbook de despliegue de la instancia del estudio no se publica porque describe la configuración de un servidor concreto; lo necesario para interpretar los datos está en el protocolo, su registro y este código. `scripts/build_reeval2_rehearsal.py` prepara un ensayo con tres conversaciones de la referencia piloto, para recorrer el flujo completo sin abrir ningún turno de la muestra.
+
 ## Exportaciones
 
 Control ofrece CSV, JSONL, historial y acuerdo por parejas. Incluyen identificadores para enlazar con el corpus, usuario, primer voto, etiqueta actual, notas, revisiones, fechas, rúbrica y hashes SHA-256. El CSV protege celdas que puedan interpretarse como fórmulas.
@@ -97,6 +113,6 @@ DJANGO_DEBUG=1 webapp/.venv/bin/python webapp/manage.py test annotations
 DJANGO_DEBUG=1 webapp/.venv/bin/python webapp/manage.py check
 ```
 
-Las pruebas usan datos sintéticos y bases aisladas; el test de importación valida el pool distribuido. Cubren permisos, CSRF, historial, reintentos, conflictos, exposición, exportaciones, acuerdo, login e inicialización del equipo. La [ampliación de adjudicación](ADJUDICACION.md) requiere además comprobar importación de cola, permiso específico, trazabilidad, concurrencia y exportación.
+Las pruebas usan datos sintéticos y bases aisladas; el test de importación valida el pool distribuido. Cubren permisos, CSRF, historial, reintentos, conflictos, exposición, exportaciones, acuerdo, login e inicialización del equipo. `test_reeval2.py` y `test_reeval2_flow.py` cubren el diseño cruzado: rutas por rol y fase, ceguera, entrega, corte de cola, cierre, registros y descargas; la prueba que importa la muestra real se omite si `data/ReEval2/sample/` no está en el checkout, y la que pasa las exportaciones por `scripts/score_reeval2.py` se omite sin NumPy. La [ampliación de adjudicación](ADJUDICACION.md) requiere además comprobar importación de cola, permiso específico, trazabilidad, concurrencia y exportación.
 
 Stack: Django 5.2 LTS, plantillas, JavaScript, SQLite y WhiteNoise; Gunicorn/Caddy para el VPS. Referencias: [Django 5.2](https://docs.djangoproject.com/en/5.2/), [lista de despliegue](https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/), [Gunicorn](https://gunicorn.org/).

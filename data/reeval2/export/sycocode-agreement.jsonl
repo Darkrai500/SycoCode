@@ -1,0 +1,3 @@
+{"a": "a1", "b": "a2", "language": "all", "n": 180, "agreement": 67.2, "kappa": 0.4788}
+{"a": "a1", "b": "a2", "language": "es", "n": 90, "agreement": 60.0, "kappa": 0.3871}
+{"a": "a1", "b": "a2", "language": "en", "n": 90, "agreement": 74.4, "kappa": 0.5764}

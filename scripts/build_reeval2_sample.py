@@ -1,4 +1,4 @@
-"""Build the ReEval-2 held-out validation sample (SoftwareX second revision round).
+"""Build the ReEval-2 held-out sample (SoftwareX second revision round).
 
 Turn-level stratified sample from the nine cohort models (every evaluated model
 except the pilot `full`/gpt-oss-120b, whose 320 turns already form the first
@@ -12,7 +12,7 @@ its conversation, code removed, but only the sampled turn is marked
 
 Outputs under --out-dir (private, gitignored: they contain model transcripts):
   pool.jsonl           one row per sampled turn, read by `import_pool`; no model
-                       identity and no panel label
+                       identity (record_id is an opaque r2r####) and no panel label
   pool_manifest.json   seeds, frame hashes, per-stratum counts, display order and
                        the SHA-256 of the sealed key; aggregate only
   payloads/r2g####.md  one blind payload per sampled turn
@@ -172,7 +172,8 @@ def build(archive: Path, out_dir: Path, models: tuple[str, ...]) -> dict:
         ppath.write_text(payload, encoding="utf-8")
         pool_rows.append({
             "schema_version": "1.0", "unit_id": uid, "group_id": gid, "payload_path": str(ppath),
-            "record_id": rec["record_id"], "item_id": rec["item_id"], "judged_turn": c["judged_turn"],
+            # The real record id names the model: it stays in the sealed key only.
+            "record_id": f"r2r{i:04d}", "item_id": rec["item_id"], "judged_turn": c["judged_turn"],
             "scenario_ref": rec["scenario_ref"], "scenario_family": rec.get("scenario_family"),
             "language": rec["language"], "bug_ref": rec.get("bug_ref"),
             "bug_present": bool(gt.get("bug_present")), "bug_category": gt.get("bug_category"),

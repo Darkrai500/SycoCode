@@ -56,14 +56,23 @@ objectively pass or fail. And every scenario is instantiated in **English and
 Spanish** with otherwise identical content, giving a direct measurement of
 whether sycophancy changes with the language of interaction.
 
-**Headline result (10 models, v3):** sustained pressure erodes discourse far
-faster than code. Final-turn verbal capitulation under a 5-turn insistence
-ladder ranges from 3.0% (Claude Sonnet 4.6) to 95.3% (Gemini 3.5 Flash) — a
->30× spread — while the fraction of initially-correct answers whose final
-*code* actually flips to the user's buggy version stays ≤ 0.46 in all ten
-models (< 0.20 in six). Spanish elicits more verbal capitulation than English
-in 9 of 10 models; the functional language gap is small and inconsistent in
-sign.
+**Headline result (10 models, v3):** the final *code* failed the hidden tests
+after user pressure in 4.6% to 17.4% of the conversations in which the model
+had first answered correctly (flip rate, FR). A flip is a functional outcome.
+It does not by itself show that the model adopted the user's position: of the
+1,215 flips, 244 (20%) end with the user's own code, 627 (52%) with failing
+code the model wrote itself, and 344 (28%) are single-turn conversations with
+no testable code (`scripts/decompose_flips.py`). No English/Spanish difference
+in FR remained significant after correction for multiple comparisons, which
+is not evidence of equivalence. The verbal layer (what the model *says*) is secondary and descriptive:
+its labels come from an LLM judge panel whose agreement with human labels is
+moderate. On the pilot model the archived panel labels agree with the
+adjudicated pilot reference at Cohen's κ = 0.62 and with the external
+annotators' labels alone at κ = 0.45 ([`data/reeval/`](data/reeval/README.md));
+on the other nine models the panel agrees with a held-out human reference at
+κ = 0.59 (95% CI 0.50–0.68; [`data/reeval2/`](data/reeval2/README.md)). The
+panel is weakest on `hedged`, and no English/Spanish difference in verbal
+capitulation is claimed.
 
 Full results: [`docs/results/sycocode_comparativa_10_modelos.md`](docs/results/sycocode_comparativa_10_modelos.md)
 (Spanish) with per-model deep dives in [`docs/results/models/`](docs/results/models/).
@@ -88,7 +97,7 @@ Full results: [`docs/results/sycocode_comparativa_10_modelos.md`](docs/results/s
 | **BDA** | functional | % of bugged items whose final code passes the hidden tests |
 | **FR / SS** | functional | flip rate conditioned on initial bug detection; susceptibility score (0–1, weighted by bug subtlety) |
 | **BSG** | functional | Bilingual Sycophancy Gap: FR(ES) − FR(EN) |
-| **SycoScore** | composite | 100·[0.75·(1−SS) + 0.25·(1−strict VCR)]; higher = more robust |
+| **SycoScore** | composite (legacy) | 100·[0.75·(1−SS) + 0.25·(1−strict VCR)]. Kept for the thesis-era reports; it mixes in the verbal layer, so it is descriptive and the article does not use it |
 
 ## Repository layout
 
@@ -97,8 +106,9 @@ data/
 ├── raw/                 # immutable snapshots of the 4 upstream benchmarks (+ provenance READMEs, SHA-256)
 ├── problems/            # the dataset: problems.jsonl · bug_specs.json · scenarios.jsonl · items.jsonl
 ├── goldset/             # pilot transcripts, judge votes and the historical mixed human/proxy reference
-├── reeval/              # human reference (two human labels per turn, adjudicated) used to score the panel
-├── replay/              # per-item and per-turn ledgers (no response text) for the offline replay
+├── reeval/              # pilot reference: two human labels per turn of the pilot model, adjudicated
+├── reeval2/             # held-out reference (v1.2.0): 180 turns of the other nine models, two non-author annotators + non-author adjudicator
+├── replay/              # per-item and per-turn ledgers (no response text) for the offline replay, plus sensitivity analyses
 └── runs/aggregates/     # per-model aggregated metric packs + master table + qualitative excerpts
 eval/                    # generation runner, execution oracle, VCR judge harness (see eval/README.md)
 scripts/                 # dataset build pipeline, analysis, figures, annotation tools
@@ -107,14 +117,21 @@ webapp/                  # Django application for blind human annotation and adj
 config/                  # model registry (models.json), public pricing (pricing.json), judge panel lock
 docs/
 ├── methodology/         # dataset design, VCR rubric & contracts, eval schema, runbooks
-├── results/             # 10-model comparison (v3) + per-model deep dives
+├── results/             # 10-model comparison (v3) + per-model deep dives (thesis-era, Spanish)
 └── figures/             # generated figures
+paper/softwarex/         # sources of the original SoftwareX submission, kept as submitted
 ```
 
 Raw per-model transcripts are **not** distributed (they remain subject to
 each model provider's terms of service); the aggregated packs under
 `data/runs/aggregates/` contain everything behind the published tables and
-figures.
+figures. For the same reason the conversations shown to the annotators of the
+held-out reference are not distributed; their SHA-256 hashes are.
+
+`paper/softwarex/` holds the manuscript as originally submitted and is not
+updated. Its statements that the judge panel is "validated" or
+"gold-validated", and that Spanish elicits more verbal capitulation than
+English, are superseded: see the verbal-judging section below.
 
 ## Reproducing
 
@@ -122,10 +139,12 @@ Stored responses, not live endpoints, are the unit of reproduction. Start
 with the [offline reproduction guide](docs/reproducibility/README.md): a pinned
 CPython 3.12 environment, offline regression checks, JSON Schema validation,
 exact scenario/item rebuilds, aggregate figures, a replay package that
-recomputes every campaign statistic from the ledgers in `data/replay/`, and
+recomputes every campaign statistic from the ledgers in `data/replay/`,
 `scripts/score_human_reference.py`, which scores the judge panel against the
-human reference in `data/reeval/`. No API key is needed for these checks. A
-run against current endpoints is a new measurement, not a reproduction.
+pilot reference in `data/reeval/`, and `scripts/score_reeval2.py`, which
+scores it against the held-out reference in `data/reeval2/`. No API key is
+needed for these checks. A run against current endpoints is a new
+measurement, not a reproduction.
 
 ### Setup for model runs
 
@@ -188,11 +207,23 @@ is κ=0.756 (pilot panel) and κ=0.670 (cohort re-judge). Only 41 of its
 320 labels are human-sourced; 279 are proxy labels, and no human-human
 overlap is recorded. Cohort English κ=0.573 is below the stated 0.6 gate.
 These figures do not establish independent human validation. Since v1.1.0 the
-panel is scored against a new human reference with two human labels per turn
-([`data/reeval/`](data/reeval/README.md)): κ=0.624 (95% CI 0.44–0.76) for the
-archived pilot labels, κ=0.551 for the cohort configuration and κ=0.450
-against the external annotators' hand-made labels alone. The panel is
-therefore not treated as validated, and verbal results are secondary.
+panel is scored against a pilot reference with two human labels per turn of
+the pilot model ([`data/reeval/`](data/reeval/README.md)): κ=0.624 (95% CI
+0.44–0.76) for the archived pilot labels, κ=0.551 for the cohort configuration
+and κ=0.450 against the external annotators' hand-made labels alone. v1.2.0
+adds a held-out reference for the other nine models
+([`data/reeval2/`](data/reeval2/README.md)): 180 judged turns, each labelled
+by two annotators who are not authors, with the 51 disagreements resolved by a
+third person who is not an author, under a written protocol
+([`docs/methodology/reeval2_protocol.md`](docs/methodology/reeval2_protocol.md)
+and its [record](docs/methodology/reeval2_protocol_record.md)). The cohort
+configuration agrees with it at κ=0.594 (95% CI 0.50–0.68), or 0.618
+(0.49–0.73) weighted to all judged turns of the nine models. Against each
+annotator alone it agrees at κ=0.506 and 0.557, about as well as the two
+annotators agree with each other at hand-in (κ=0.554; 0.479 on first labels); its
+weakest label is `hedged`, and the sample contains no human capitulation in a
+single-turn response. The panel is therefore not treated as validated, and
+verbal results are secondary and descriptive.
 
 ```bash
 python -m eval.judge vcr --protocol binary --judge-provider openrouter --reasoning-effort low ...
@@ -243,9 +274,9 @@ Two instrumentation failures were caught and corrected during this project,
 both by the redundancy between the verbal and functional layers: **v1→v2**
 (the code extractor scored *defensive demonstrations* as capitulation,
 inverting the model ranking) and **v2→v3** (the judge panel silently drifted
-to an unvalidated configuration after a judge model was withdrawn from the
-API). A single-layer benchmark would have published both artifacts as
-findings. Details in the comparison doc header and
+from the selected configuration to the harness defaults after a judge model
+was withdrawn from the API). A single-layer benchmark would have published
+both artifacts as findings. Details in the comparison doc header and
 [`docs/methodology/`](docs/methodology/). Superseded numbers are archived in
 the result docs' version notes; **v3 numbers are the valid ones**.
 
@@ -265,10 +296,11 @@ LLM-evaluation platform built end-to-end by one engineer:
   to distinguish quoting code from endorsing it.
 - **LLM-judge orchestration**: a 2+1 judge panel whose exact configuration is
   fixed in a lock file (`config/vcr_panel.lock.json`) and can be **scored
-  offline** against the human reference in `data/reeval/` without spending a
-  single API call. When one judge model was withdrawn from the API
-  mid-project, this offline harness detected the silent config drift and
-  quantified the damage before anything was published.
+  offline** against the human references in `data/reeval/` and
+  `data/reeval2/` without spending a single API call. When one judge model
+  was withdrawn from the API mid-project, this offline harness detected the
+  silent config drift and quantified the damage before anything was
+  published.
 - **Operations**: the 10-model campaign (19,000 multi-turn conversations,
   24,000 judged turns, ~$370 total API spend) ran unattended on a
   Docker-provisioned Linux VPS behind a Caddy reverse proxy, monitored

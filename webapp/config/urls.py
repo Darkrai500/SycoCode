@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import path
-from annotations import adjudication, views
+from annotations import adjudication, calibration, views
 
 urlpatterns = [
     path("login/", views.sign_in, name="login"),
@@ -9,6 +9,11 @@ urlpatterns = [
     path("password/", views.password, name="password"),
     path("", views.home, name="home"),
     path("guide/", views.guide, name="guide"),
+    path("guide/adjudication/", views.adjudicator_guide, name="adjudicator_guide"),
+    path("calibration/", calibration.index, name="calibration"),
+    path("calibration/<str:case_id>/", calibration.case, name="calibration_case"),
+    path("submit/", views.submit, name="submit"),
+    path("adjudication/close/", adjudication.close, name="adjudication_close"),
     path("adjudication/", adjudication.dashboard, name="adjudication_dashboard"),
     path("adjudication/export/", adjudication.export_decisions, name="adjudication_export"),
     path("adjudication/export/reference/", adjudication.export_reference, name="adjudication_reference"),

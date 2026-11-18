@@ -1,0 +1,349 @@
+{
+ "note": "Exploratory: not in the analysis plan of docs/methodology/reeval2_protocol.md.",
+ "first_label_disagreements": 59,
+ "hand_in_label_disagreements": 51,
+ "converged_before_hand_in": 13,
+ "diverged_before_hand_in": 5,
+ "adjudicated_label_equals_panel": 30,
+ "capitulations_both_annotators": {
+  "n": 27,
+  "panel_found": 25
+ },
+ "capitulations_from_adjudication": {
+  "n": 23,
+  "panel_found": 16
+ },
+ "missed_capitulations_by_panel_label": {
+  "hedged": 9
+ },
+ "reference_by_panel_label": {
+  "firm": {
+   "firm": 71,
+   "hedged": 3
+  },
+  "hedged": {
+   "firm": 24,
+   "hedged": 21,
+   "capitulated": 9
+  },
+  "capitulated": {
+   "capitulated": 41,
+   "firm": 2,
+   "hedged": 9
+  }
+ },
+ "panel_firm_design_weight": 17581.0,
+ "total_design_weight": 21600.0,
+ "single_turn": {
+  "n": 47,
+  "reference": {
+   "firm": 42,
+   "hedged": 5
+  },
+  "panel": {
+   "firm": 42,
+   "hedged": 5
+  },
+  "a2_capitulated_at_hand_in": 4
+ },
+ "tiebreak_turns": 43,
+ "checks": {
+  "agreed_turns_only": {
+   "sample": {
+    "n": 129,
+    "agreement": 0.7984496124031008,
+    "kappa": 0.65994119436277,
+    "ci95": [
+     0.5428300440400099,
+     0.7713740599268679
+    ],
+    "capitulated_recall": 0.9259259259259259,
+    "capitulated_recall_ci95": [
+     0.7647058823529411,
+     1.0
+    ],
+    "capitulated_precision": 0.7352941176470589
+   },
+   "design_weighted": {
+    "n": 129,
+    "agreement": 0.9256757693854625,
+    "kappa": 0.6683334242579146,
+    "ci95": [
+     0.535823955217755,
+     0.7944642623852509
+    ],
+    "capitulated_recall": 0.8824324324324324,
+    "capitulated_recall_ci95": [
+     0.6559543738967266,
+     1.0
+    ],
+    "capitulated_precision": 0.834238262535931
+   },
+   "panel_equals_reference": 103
+  },
+  "adjudicated_turns_only": {
+   "sample": {
+    "n": 51,
+    "agreement": 0.5882352941176471,
+    "kappa": 0.3949152542372881,
+    "ci95": [
+     0.1854139525129533,
+     0.5929415313395683
+    ],
+    "capitulated_recall": 0.6956521739130435,
+    "capitulated_recall_ci95": [
+     0.47368421052631576,
+     0.9
+    ],
+    "capitulated_precision": 0.8888888888888888
+   },
+   "design_weighted": {
+    "n": 51,
+    "agreement": 0.6816115268937539,
+    "kappa": 0.4437607313473473,
+    "ci95": [
+     0.14215533458991444,
+     0.694785949177024
+    ],
+    "capitulated_recall": 0.67345948568656,
+    "capitulated_recall_ci95": [
+     0.43362025338545296,
+     0.8897348029816805
+    ],
+    "capitulated_precision": 0.9754040758959943
+   },
+   "panel_equals_reference": 30
+  },
+  "fixed_judges_agreed": {
+   "sample": {
+    "n": 137,
+    "agreement": 0.8248175182481752,
+    "kappa": 0.6968467637838835,
+    "ci95": [
+     0.588229624811272,
+     0.7959279740108158
+    ],
+    "capitulated_recall": 0.8888888888888888,
+    "capitulated_recall_ci95": [
+     0.7727272727272727,
+     0.975609756097561
+    ],
+    "capitulated_precision": 0.8888888888888888
+   },
+   "design_weighted": {
+    "n": 137,
+    "agreement": 0.9245092378752886,
+    "kappa": 0.6519186744122643,
+    "ci95": [
+     0.509115659718429,
+     0.7899568225263736
+    ],
+    "capitulated_recall": 0.8864103316700911,
+    "capitulated_recall_ci95": [
+     0.76,
+     0.9785503806222778
+    ],
+    "capitulated_precision": 0.9148742805210542
+   },
+   "panel_equals_reference": 113
+  },
+  "tiebreak_decided": {
+   "sample": {
+    "n": 43,
+    "agreement": 0.46511627906976744,
+    "kappa": 0.1422376409366869,
+    "ci95": [
+     -0.06122635696547588,
+     0.323313799203892
+    ],
+    "capitulated_recall": 0.6428571428571429,
+    "capitulated_recall_ci95": [
+     0.3333333333333333,
+     0.9230769230769231
+    ],
+    "capitulated_precision": 0.5625
+   },
+   "design_weighted": {
+    "n": 43,
+    "agreement": 0.4946295669824086,
+    "kappa": 0.22919593984185282,
+    "ci95": [
+     -0.152633469888635,
+     0.5413235749990958
+    ],
+    "capitulated_recall": 0.6071871127633209,
+    "capitulated_recall_ci95": [
+     0.2925647742451264,
+     0.95172243240429
+    ],
+    "capitulated_precision": 0.782122905027933
+   },
+   "panel_equals_reference": 20
+  },
+  "without_provider_error_turn": {
+   "sample": {
+    "n": 179,
+    "agreement": 0.7430167597765364,
+    "kappa": 0.6003882552778452,
+    "ci95": [
+     0.5044290048307116,
+     0.6870379867511487
+    ],
+    "capitulated_recall": 0.82,
+    "capitulated_recall_ci95": [
+     0.6744186046511628,
+     0.9365079365079365
+    ],
+    "capitulated_precision": 0.803921568627451
+   },
+   "design_weighted": {
+    "n": 179,
+    "agreement": 0.8858224857553157,
+    "kappa": 0.6191075487224766,
+    "ci95": [
+     0.4919083224557138,
+     0.7355531519267894
+    ],
+    "capitulated_recall": 0.7966540529774946,
+    "capitulated_recall_ci95": [
+     0.6280893372635817,
+     0.9388715303486062
+    ],
+    "capitulated_precision": 0.8859357696566998
+   },
+   "panel_equals_reference": 133
+  },
+  "panel_vs_a1_first_labels": {
+   "sample": {
+    "n": 180,
+    "agreement": 0.6611111111111111,
+    "kappa": 0.46930884485258584,
+    "ci95": [
+     0.37262688046783765,
+     0.5655776666941786
+    ],
+    "capitulated_recall": 0.92,
+    "capitulated_recall_ci95": [
+     0.75,
+     1.0
+    ],
+    "capitulated_precision": 0.4423076923076923
+   },
+   "design_weighted": {
+    "n": 180,
+    "agreement": 0.8646759259259261,
+    "kappa": 0.5325597587560349,
+    "ci95": [
+     0.41420663459717033,
+     0.6437001597971583
+    ],
+    "capitulated_recall": 0.8722466960352423,
+    "capitulated_recall_ci95": [
+     0.6327790419720474,
+     1.0
+    ],
+    "capitulated_precision": 0.5217391304347826
+   },
+   "panel_equals_reference": 119
+  },
+  "panel_vs_a2_first_labels": {
+   "sample": {
+    "n": 180,
+    "agreement": 0.7166666666666667,
+    "kappa": 0.5649289099526067,
+    "ci95": [
+     0.46043673881656705,
+     0.6714589057790888
+    ],
+    "capitulated_recall": 0.7,
+    "capitulated_recall_ci95": [
+     0.5681818181818182,
+     0.8269230769230769
+    ],
+    "capitulated_precision": 0.8076923076923077
+   },
+   "design_weighted": {
+    "n": 180,
+    "agreement": 0.8293634259259259,
+    "kappa": 0.5181436532692814,
+    "ci95": [
+     0.3861022480656967,
+     0.660207024138677
+    ],
+    "capitulated_recall": 0.547085201793722,
+    "capitulated_recall_ci95": [
+     0.39200175950609834,
+     0.7578793779767168
+    ],
+    "capitulated_precision": 0.870663153271849
+   },
+   "panel_equals_reference": 129
+  },
+  "bound_annotator_label_equal_to_panel": {
+   "sample": {
+    "n": 180,
+    "agreement": 0.8222222222222222,
+    "kappa": 0.7245337159253945,
+    "ci95": [
+     0.6413920999180385,
+     0.803479460733124
+    ],
+    "capitulated_recall": 0.9555555555555556,
+    "capitulated_recall_ci95": [
+     0.85,
+     1.0
+    ],
+    "capitulated_precision": 0.8269230769230769
+   },
+   "design_weighted": {
+    "n": 180,
+    "agreement": 0.9181867283950615,
+    "kappa": 0.7280614917426478,
+    "ci95": [
+     0.6226504625003612,
+     0.8219971020952862
+    ],
+    "capitulated_recall": 0.920602327173169,
+    "capitulated_recall_ci95": [
+     0.7550108051779544,
+     1.0
+    ],
+    "capitulated_precision": 0.886034255599473
+   },
+   "panel_equals_reference": 148
+  },
+  "bound_annotator_label_different_from_panel": {
+   "sample": {
+    "n": 180,
+    "agreement": 0.5722222222222222,
+    "kappa": 0.33601609657947684,
+    "ci95": [
+     0.23900902628855106,
+     0.438082805576948
+    ],
+    "capitulated_recall": 0.6756756756756757,
+    "capitulated_recall_ci95": [
+     0.5151515151515151,
+     0.8333333333333334
+    ],
+    "capitulated_precision": 0.4807692307692308
+   },
+   "design_weighted": {
+    "n": 180,
+    "agreement": 0.7725,
+    "kappa": 0.3419536054262168,
+    "ci95": [
+     0.22271063867255014,
+     0.47166138404981034
+    ],
+    "capitulated_recall": 0.6383186705767352,
+    "capitulated_recall_ci95": [
+     0.4431368169207815,
+     0.8376381662807324
+    ],
+    "capitulated_precision": 0.5735617039964866
+   },
+   "panel_equals_reference": 103
+  }
+ }
+}
