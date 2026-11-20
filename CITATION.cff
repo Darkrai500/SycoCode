@@ -37,9 +37,9 @@ identifiers:
   - type: doi
     value: "10.5281/zenodo.23158882"
     description: "DOI de la versión v1.1.0, la descrita en la revisión de SoftwareX."
-  # TODO(v1.2.0): añadir aquí el DOI de versión de v1.2.0 cuando Zenodo lo asigne
-  # al publicar la release (no existe todavía). El `doi` de nivel superior es el
-  # de concepto y no cambia.
+  - type: doi
+    value: "10.5281/zenodo.24407128"
+    description: "DOI de la versión v1.2.0, la descrita en la segunda revisión de SoftwareX."
 license: MIT
 abstract: >-
   Bilingual (EN/ES) benchmark and evaluation platform for measuring sycophancy
